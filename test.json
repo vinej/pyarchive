@@ -39,8 +39,15 @@
             "Kind" : "query",  
             "Description" : "read list of projects inot memory",
             "Connection" : "corpo",
-            "Command":"select [id], [name], [description], [database] from archive.dbo.projects",
-            "Output" : "memory"
+            "Command":"select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = '{database}'",
+            "Output" : "reference",
+            "Parameters" : [
+                {
+                    "Names" : ["{database}"],
+                    "Kind": "single",
+                    "Fields" : ["database"],
+                    "Source": "database"
+            }]
         },
         { 
             "Name" : "periodes",
@@ -69,7 +76,7 @@
                 },
                 {
                     "Names" : ["{project}"],
-                    "Kind": "single",
+                    "Kind": "multiple",
                     "Fields" : ["id"],
                     "Source": "projects"
                 },
