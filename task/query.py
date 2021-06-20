@@ -37,11 +37,12 @@ class Query:
         if self.output == 'reference':
             mapref[self.name] = self
         else:
-            self.run_internal(self, mapmem, mapref, con, position)
+            self.run_internal(self, mapmem, mapref, con, position, 0)
         #if
     #def
 
-    def run_internal(self, query, mapmem, mapref, con, position):
+    def run_internal(self, query, mapmem, mapref, con, position, skip):
+        _ = position # not use for now
         connection = con.get_con(query.connection).connection
         if len(query.parameters) == 0:
             m = Odbc().run(connection, query.command)
@@ -50,8 +51,9 @@ class Query:
             else:
                 Excel().save(m, query.file)
             #if
+            return True
         else:
-            self.run_recursive(con, mapmem, mapref, query.command, query.file, query, 0, None)
+            return self.run_recursive(con, mapmem, mapref, query.command, query.file, query, 0, None, skip)
         #if
     #def
 
@@ -84,22 +86,44 @@ class Query:
         return (cmd, file)
     #def
 
-    def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row):
+    def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row, skip):
         param = query.parameters[level]
         if param.kind == 'child':
-            self.query_reference(con, mapmem, mapref, query.parameters[level-1], param, row)
-        #if
+            self.query_reference(con, mapmem, mapref, query.parameters[level-1], param, row, skip)
+            return self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip)
+        elif param.kind == "multiple":
+            tmpquery = mapref[param.source]
+            for i in range(10000000):
+                done = self.run_internal(tmpquery, mapmem, mapref, con, 1, i)
+                if done == False:
+                    break
+                #if
+                self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip)
+            #for
+            return True
+        else:
+            return self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip)
+        #if    
+    #def
 
+    def run_mem(self, param, con, mapmem, mapref, cmd, file, query, level, skip):
         mem = mapmem[param.source]
-
         first = True
         for r in range(len(mem.rows)):
+            if skip >= len(mem.rows):
+                #no more multiple to do
+                return False
+            #if
+            if skip > 0:
+                skip = skip - 1
+                continue
+            #if
             tmpcmd = cmd
             tmpfile = file
-            skip = False
+            iskip = False
             for i in range(len(param.fields)):
-                if skip:
-                    skip = False
+                if iskip:
+                    iskip = False
                     continue
                 #if
                 if i+1 < len(param.fields) and param.fields[i] == param.fields[i+1] :
@@ -109,7 +133,7 @@ class Query:
                     #if
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i+1)
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r-1], i)
-                    skip = True
+                    iskip = True
                 else :
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i)
                 #if
@@ -118,18 +142,19 @@ class Query:
             if level == len(query.parameters) - 1:
                 self.save_output(query, tmpcmd, tmpfile, con, mapmem, mapref)
             else:
-                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, mem.rows[r])
+                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, mem.rows[r], skip)
             #if
         #for
+        return True
     #def
     
-    def query_reference(self, con, mapmem, mapref, p1, p2, row):
+    def query_reference(self, con, mapmem, mapref, p1, p2, row, skip):
         query = mapref[p2.source]
         cmd = self.adjust_cmd_all(query.command, p1, row)
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
         querytmp.output = 'memory'
-        self.run_internal(querytmp, mapmem, mapref, con, 1)
+        self.run_internal(querytmp, mapmem, mapref, con, 1, skip)
     #def
 
     def save_output(self, query, cmd, file, con, mapmem, mapref):
@@ -137,6 +162,6 @@ class Query:
         querytmp.command = cmd
         querytmp.file = file
         querytmp.parameters = []
-        self.run_internal(querytmp, mapmem, mapref, con, 0)
+        self.run_internal(querytmp, mapmem, mapref, con, 0, 0)
     #def
 #class
