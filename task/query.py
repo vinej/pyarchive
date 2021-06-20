@@ -74,27 +74,28 @@ class Query:
 	    return cmd
     #def
 
-    def adjust_cmd_out_index(self,cmd, output, param, row, index):
+    def adjust_cmd_out_index(self,cmd, file, param, row, index):
         paramvalue = self.adjust_quote(str(row[param.fields[index]]))
         cmd = cmd.replace(param.names[index], paramvalue.strip())
-        if output != "":
-            path = output.split('.')
-            output = path[0] + "_p" + paramvalue.strip() + '.' + path[1]
+        if file != "":
+            path = file.split('.')
+            file = path[0] + "_p" + paramvalue.strip() + '.' + path[1]
         #if
-        return (cmd, output)
+        return (cmd, file)
     #def
 
-    def run_recursive(self, con, mapmem, mapref, cmd, output, query, level, row):
+    def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row):
         param = query.parameters[level]
         if param.kind == 'child':
             self.query_reference(con, mapmem, mapref, query.parameters[level-1], param, row)
         #if
+
         mem = mapmem[param.source]
 
         first = True
         for r in range(len(mem.rows)):
-            cmd2 = cmd
-            output2 = output
+            tmpcmd = cmd
+            tmpfile = file
             skip = False
             for i in range(len(param.fields)):
                 if skip:
@@ -106,22 +107,18 @@ class Query:
                         r = r + 1
                         first = False
                     #if
-                    (cmd2, output2) = self.adjust_cmd_out_index(cmd2, output2, param, mem.rows[r], i+1)
-                    (cmd2, output2) = self.adjust_cmd_out_index(cmd2, output2, param, mem.rows[r-1], i)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i+1)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r-1], i)
                     skip = True
                 else :
-                    (cmd2, output2) = self.adjust_cmd_out_index(cmd2, output2, param, mem.rows[r], i)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i)
                 #if
             #for
 
             if level == len(query.parameters) - 1:
-                querytmp = copy.deepcopy(query)
-                querytmp.command = cmd2
-                querytmp.file = output2
-                querytmp.parameters = []
-                self.run_internal(querytmp, mapmem, mapref, con, 0)
+                self.save_output(query, tmpcmd, tmpfile, con, mapmem, mapref)
             else:
-                self.run_recursive(con, mapmem, mapref, cmd2, output2, query, level+1, mem.rows[r])
+                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, mem.rows[r])
             #if
         #for
     #def
@@ -133,5 +130,13 @@ class Query:
         querytmp.command = cmd
         querytmp.output = 'memory'
         self.run_internal(querytmp, mapmem, mapref, con, 1)
+    #def
+
+    def save_output(self, query, cmd, file, con, mapmem, mapref):
+        querytmp = copy.deepcopy(query)
+        querytmp.command = cmd
+        querytmp.file = file
+        querytmp.parameters = []
+        self.run_internal(querytmp, mapmem, mapref, con, 0)
     #def
 #class
