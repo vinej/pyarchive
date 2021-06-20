@@ -20,11 +20,9 @@ class Query:
         self.description = get_dict_value(data,'Description')
         self.connection = get_dict_value(data,'Connection')
         self.command = get_dict_value(data,'Command')
-        self.outputtype = get_dict_value(data,'OutputType')
-        if self.outputtype == "excel" or self.outputtype == "csv":
-            self.filename = get_dict_value(data,'FileName')
-        else:
-            self.filename = ""
+        self.output = get_dict_value(data,'Output')
+        if self.output == "excel" or self.output == "csv":
+            self.file = get_dict_value(data,'File')
         #if
         self.parameters = []
         params = get_dict_value(data,'Parameters')
@@ -36,7 +34,7 @@ class Query:
     #def
 
     def run(self, mapmem, mapref, con, position):
-        if self.outputtype == 'reference':
+        if self.output == 'reference':
             mapref[self.name] = self
         else:
             self.run_internal(self, mapmem, mapref, con, position)
@@ -44,16 +42,16 @@ class Query:
     #def
 
     def run_internal(self, query, mapmem, mapref, con, position):
-        connectionString = con.get_con(query.connection).connectionString
+        connection = con.get_con(query.connection).connection
         if len(query.parameters) == 0:
-            m = Odbc().run(connectionString, query.command)
-            if query.outputtype == 'memory' :
+            m = Odbc().run(connection, query.command)
+            if query.output == 'memory' :
                 mapmem[query.name] = m
             else:
-                Excel().save(m, query.filename)
+                Excel().save(m, query.file)
             #if
         else:
-            self.run_recursive(con, mapmem, mapref, query.command, query.filename, query, 0, None)
+            self.run_recursive(con, mapmem, mapref, query.command, query.file, query, 0, None)
         #if
     #def
 
@@ -89,18 +87,10 @@ class Query:
     def run_recursive(self, con, mapmem, mapref, cmd, output, query, level, row):
         param = query.parameters[level]
         if param.kind == 'child':
-            self.query_task(con, mapmem, mapref, query.parameters[level-1], param, row)
-            mem = mapmem[param.source]
-            self.run_mem(mem, con, mapmem, mapref, cmd, output, query, level, row)
-        elif param.kind == 'multiple':
-            pass
-        else:
-            mem = mapmem[param.source]
-            self.run_mem(mem, con, mapmem, mapref, cmd, output, query, level, row)
+            self.query_reference(con, mapmem, mapref, query.parameters[level-1], param, row)
         #if
-    #def
+        mem = mapmem[param.source]
 
-    def run_mem(self, mem, param, con, mapmem, mapref, cmd, output, query, level):
         first = True
         for r in range(len(mem.rows)):
             cmd2 = cmd
@@ -127,11 +117,7 @@ class Query:
             if level == len(query.parameters) - 1:
                 querytmp = copy.deepcopy(query)
                 querytmp.command = cmd2
-                if output2 != "":
-                    querytmp.filename = output2
-                else:
-                    querytmp.outputtype = 'memory'
-                #if
+                querytmp.file = output2
                 querytmp.parameters = []
                 self.run_internal(querytmp, mapmem, mapref, con, 0)
             else:
@@ -140,12 +126,12 @@ class Query:
         #for
     #def
     
-    def query_task(self, con, mapmem, mapref, p1, p2, row):
+    def query_reference(self, con, mapmem, mapref, p1, p2, row):
         query = mapref[p2.source]
         cmd = self.adjust_cmd_all(query.command, p1, row)
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
-        querytmp.outputtype = 'memory'
+        querytmp.output = 'memory'
         self.run_internal(querytmp, mapmem, mapref, con, 1)
     #def
 #class

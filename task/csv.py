@@ -8,15 +8,12 @@ class Csv:
         self.name =  get_dict_value(data,'Name').lower()
         self.kind =  get_dict_value(data,'Kind').lower()
         self.description =  get_dict_value(data,'Description')
-        self.filename =  get_dict_value(data, 'FileName')
-        self.outputtype =  get_dict_value(data, 'OutputType').lower()
-        if self.outputtype == "excel" or self.outputtype == "csv":
-            self.outfilename = get_dict_value(data,'OutFileName')
-        #if
+        self.file =  get_dict_value(data, 'File')
+        self.output =  get_dict_value(data, 'Output').lower()
     #def
 
     def run(self, mapmem, mapref, con, position):
-        if self.outputtype == 'reference':
+        if self.output == 'reference':
             mapref[self.name] = self
         else:
             _ = con    # not used for now
@@ -24,7 +21,7 @@ class Csv:
             _ = mapref   # not used for now
             rows = []
             columns = []
-            with open(self.filename, mode ='r') as file:
+            with open(self.file, mode ='r') as file:
                 # reading the CSV file
                 csvFile = csv.reader(file)
     
@@ -44,11 +41,7 @@ class Csv:
                 #
             #with
             m = Memory(columns, rows)
-            if self.outputtype == "excel":
-                Excel().save(m, self.outfilename)
-            else :
-                mapmem[self.name] = m
-            #if
+            mapmem[self.name] = m
         #if
     #def
 #class

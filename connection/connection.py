@@ -3,7 +3,7 @@ import sys
 class Connection:
     def __init__(self,data):
         self.name = data['Name']
-        self.connectionString = data['ConnectionString']
+        self.connection = data['Connection']
     #def
 #class
 

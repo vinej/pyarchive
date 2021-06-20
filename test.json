@@ -3,12 +3,12 @@
         { 
             "Name" : "corpo",
             "Driver" : "sqlserver",
-            "ConnectionString" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
+            "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
         },
         {
             "Name" : "project",
             "Driver" : "sqlserver",
-            "ConnectionString" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
+            "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
         }
     ],
     "Tasks" : [
@@ -16,15 +16,15 @@
             "Name" : "csv1",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
-            "FileName" : "users.csv",
-            "OutputType" : "memory"
+            "File" : "users.csv",
+            "Output" : "memory"
         },
         { 
             "Name" : "database",
             "Kind" : "array",  
             "Description" : "read list of country into memory",
             "Command":"archive|db2",
-            "OutputType" : "memory"
+            "Output" : "memory"
         },
         { 
             "Name" : "listnames",
@@ -32,22 +32,15 @@
             "Description" : "read the list of table into memory",
             "Connection" : "project",
             "Command":"select table_name from archive.dbo.tablename",
-            "OutputType" : "memory"
+            "Output" : "memory"
         },
         { 
             "Name" : "projects",
             "Kind" : "query",  
             "Description" : "read list of projects inot memory",
             "Connection" : "corpo",
-            "Command":"select [id], [name], [description], [database] from archive.dbo.projects where [database] = '{database}'",
-            "OutputType" : "reference",
-            "Parameters" : [
-                {
-                    "Names" : ["{database}"],
-                    "Kind": "parent",
-                    "Fields" : ["database"],
-                    "Source": "database"
-            }]
+            "Command":"select [id], [name], [description], [database] from archive.dbo.projects",
+            "Output" : "memory"
         },
         { 
             "Name" : "periodes",
@@ -55,7 +48,7 @@
             "Description" : "lazy read list of periodes for each project",
             "Connection" : "project",
             "Command":"select id,code from archive.dbo.Periodes where project = {project}",
-            "OutputType" : "reference"
+            "Output" : "reference"
         },
         { 
             "Name" : "names",
@@ -63,20 +56,20 @@
             "Description" : "extract to excel for each tables, the list of names by project for each periode",
             "Connection" : "project",
             "Command":"select * from archive.dbo.{names} where project = {project} and (periode = {per_prec} or periode = {per_curr})",
-            "ExcludedColumns":  ["fxml", "ftext"],
-            "AnonymizedColumns": ["name"],
-            "OutputType" : "excel",
-            "FileName" : "goarchive.xlsx",
+            "Excluded":  ["fxml", "ftext"],
+            "Anonymized": ["name"],
+            "Output" : "excel",
+            "File" : "goarchive.xlsx",
             "Parameters" : [
                 {
                     "Names" : ["{names}"],
-                    "Kind": "parent",
+                    "Kind": "single",
                     "Fields" : ["table_name"],
                     "Source": "listnames"
                 },
                 {
                     "Names" : ["{project}"],
-                    "Kind": "parent",
+                    "Kind": "single",
                     "Fields" : ["id"],
                     "Source": "projects"
                 },

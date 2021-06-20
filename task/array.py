@@ -8,14 +8,11 @@ class Array:
         self.kind = get_dict_value(data,'Kind').lower()
         self.description = get_dict_value(data,'Description')
         self.command = get_dict_value(data,'Command')
-        self.outputtype = get_dict_value(data,"OutputType").lower()
-        if self.outputtype == "excel" or self.outputtype == "csv":
-            self.fileName = get_dict_value(data,'FileName')
-        #if
+        self.output = get_dict_value(data,"Output").lower()
     #def
 
     def run(self, mapmem, mapref, con, position):
-        if self.outputtype == 'reference':
+        if self.output == 'reference':
             mapref[self.name] = self
         else:
             _ = con    # not used for now
@@ -30,11 +27,7 @@ class Array:
                 rows.append(onerow)
             #
             m = Memory(columns, rows)
-            if self.outputtype == "excel":
-                Excel().save(m, self.fileName)
-            else :
-                mapmem[self.name] = m
-            #if
+            mapmem[self.name] = m
         #if
     #def
 #class
