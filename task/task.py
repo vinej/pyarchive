@@ -1,11 +1,15 @@
 from task.array import Array
 from task.csv import Csv
 from task.query import Query
+from task.util import get_dict_value
+import logging
+from message.message import gmsg
 
 class Task:
     def __init__(self, data):
         self.mapmem = {}
         self.mapref = {}
+        self.vtasks = []
         self.maptask = []
         mapjsontask = data['Tasks']
         for t in mapjsontask:
@@ -15,14 +19,27 @@ class Task:
 
     def run(self, mapcon):
         i = 1
+        for vt in self.vtasks:
+            vt.run(self.mapmem, self.mapref, mapcon, i)
+            i = i + 1
+        #for
+    #def
+
+    def validate(self, mapcon):
+        i = 1
         for t in self.maptask:
             ct = self.get_task(t)
-            ct.run(self.mapmem, self.mapref, mapcon, i)
+            ct.validate(mapcon, i)
+            self.maptask.append(ct)
             i = i + 1
         #for
     #def
 
     def get_task(self, onetask):
+        kind = get_dict_value(onetask, 'Kind')
+        if kind == None:
+            logging.fatal(gmsg.get(58))
+        #if
         if onetask['Kind'] == 'array':
             return Array(onetask)
         elif onetask['Kind'] == 'csv':

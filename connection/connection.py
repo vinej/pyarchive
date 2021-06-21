@@ -27,5 +27,9 @@ class ConnectionMng:
             #if
         #for
     #def
+
+    def validate(self):
+        pass
+    #def
 #class
 

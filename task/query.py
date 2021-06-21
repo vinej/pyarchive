@@ -91,7 +91,7 @@ class Query:
     def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row, skip, isSkip):
         param = query.parameters[level]
         if param.kind == 'child':
-            self.query_reference_parent(con, mapmem, mapref, query.parameters[level-1], param, row, skip, isSkip)
+            self.adjust_cmd_from_parent(con, mapmem, mapref, query.parameters[level-1], param, row, skip, isSkip)
             return self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip)
         elif param.kind == "multiple":
             squery = mapref[param.source]
@@ -161,7 +161,7 @@ class Query:
         return True
     #def
     
-    def query_reference_parent(self, con, mapmem, mapref, p1, p2, row, skip, isSkip):
+    def adjust_cmd_from_parent(self, con, mapmem, mapref, p1, p2, row, skip, isSkip):
         query = mapref[p2.source]
         cmd = self.adjust_cmd_all(query.command, p1, row)
         querytmp = copy.deepcopy(query)
