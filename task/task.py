@@ -30,6 +30,7 @@ class Task:
         for t in self.maptask:
             ct = self.get_task(t)
             ct.validate(mapcon, i)
+            self.vtasks.append(ct)
             i = i + 1
         #for
     #def
