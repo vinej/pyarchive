@@ -4,6 +4,8 @@ from excel.excel import Excel
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
+import logging
+from message.message import gmsg
 
 class Csv:
     def __init__(self, data):
@@ -45,6 +47,7 @@ class Csv:
             m = Memory(columns, rows)
             mapmem[self.name] = m
         #if
+        logging.info(gmsg.get(4), self.name)
     #def
 
     def validate(self, mapcon, position):  

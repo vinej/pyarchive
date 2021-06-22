@@ -101,6 +101,7 @@ class Query:
         else:
             self.run_internal(self, mapmem, mapref, con, position, 0, False)
         #if
+        logging.info(gmsg.get(5), self.name)
     #def
 
     def run_internal(self, query, mapmem, mapref, con, position, skip, isSkip):

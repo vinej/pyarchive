@@ -1,0 +1,45 @@
+[2021-06-21 07:42:34,009] INFO     root         INFO: Pyarchive started
+[2021-06-21 07:42:34,009] INFO     root         INFO: Pyarchive comptleted with success
+[2021-06-21 08:03:59,036] INFO     root         Pyarchive started
+[2021-06-21 08:05:11,588] INFO     root         Pyarchive started
+[2021-06-21 08:09:16,684] INFO     root         Pyarchive started
+[2021-06-21 08:09:23,817] CRITICAL root         The field 'Kind' is missging and it's mandatory
+[2021-06-21 08:12:40,207] INFO     root         Pyarchive started
+[2021-06-21 08:12:55,667] CRITICAL root         The field 'Kind' is missging and it's mandatory
+[2021-06-21 08:16:14,417] INFO     root         Pyarchive started
+[2021-06-21 20:31:14,855] INFO     root         Pyarchive started
+[2021-06-21 20:37:27,953] INFO     root         Pyarchive started
+[2021-06-21 20:39:52,553] INFO     root         Pyarchive started
+[2021-06-21 20:39:52,554] CRITICAL root         JSON Connection Error: the connection at the position '1' does not contains the field 'Name'
+[2021-06-21 20:40:37,259] INFO     root         Pyarchive started
+[2021-06-21 20:42:22,952] INFO     root         Pyarchive started
+[2021-06-21 20:42:22,953] CRITICAL root         JSON Connection Error: the connection at the position '2' does not contains the field 'Connection'
+[2021-06-21 20:43:12,868] INFO     root         Pyarchive started
+[2021-06-21 20:43:12,869] CRITICAL root         JSON Connection Error: the connection at the position '2' does not contains the field 'Connection'
+[2021-06-21 20:43:44,715] INFO     root         Pyarchive started
+[2021-06-21 20:44:25,132] INFO     root         Pyarchive started
+[2021-06-21 20:44:25,133] CRITICAL root         JSON Connection Error: the connection' name 'corpo' at the position '1' already exists
+[2021-06-21 20:51:37,148] INFO     root         Pyarchive started
+[2021-06-21 20:51:37,150] CRITICAL root         JSON Connection Error: the connection' name 'corpo' at the position '1' already exists
+[2021-06-21 20:55:29,228] INFO     root         Pyarchive started
+[2021-06-21 20:56:11,273] INFO     root         Pyarchive started
+[2021-06-21 20:56:34,524] INFO     root         Pyarchive started
+[2021-06-21 20:57:26,560] INFO     root         Pyarchive started
+[2021-06-21 20:58:45,449] INFO     root         Pyarchive started
+[2021-06-21 20:59:31,263] INFO     root         Pyarchive started
+[2021-06-21 21:00:49,276] INFO     root         Pyarchive started
+[2021-06-21 21:02:22,272] INFO     root         Pyarchive started
+[2021-06-21 21:04:18,016] INFO     root         Pyarchive started
+[2021-06-21 21:05:24,299] INFO     root         Pyarchive started
+[2021-06-21 21:06:25,404] INFO     root         Pyarchive started
+[2021-06-21 21:06:25,404] INFO     root         Pyarchive comptleted with success
+[2021-06-21 21:06:27,195] INFO     root         Pyarchive started
+[2021-06-21 21:06:42,105] INFO     root         Pyarchive started
+[2021-06-21 21:06:53,761] INFO     root         Pyarchive comptleted with success
+[2021-06-21 21:07:48,378] INFO     root         Pyarchive started
+[2021-06-21 21:07:56,649] INFO     root         Pyarchive comptleted with success
+[2021-06-21 21:08:00,910] INFO     root         Pyarchive started
+[2021-06-21 21:08:50,389] INFO     root         Pyarchive started
+[2021-06-21 21:08:53,511] INFO     root         Array 'database' completed
+[2021-06-21 21:09:18,822] INFO     root         Pyarchive started
+[2021-06-21 21:09:18,823] INFO     root         Array 'database' completed

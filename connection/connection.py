@@ -52,8 +52,6 @@ class ConnectionMng:
 
         if con.connection == None:
             logging.fatal(gmsg.get(12), position, 'Connection')
-        else:
-            con.connection = con.connection.lower()
         #if
 
         # validate duplicate names

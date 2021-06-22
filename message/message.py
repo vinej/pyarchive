@@ -4,6 +4,8 @@ class Message:
 
         self.mapmsg[2] = "Message ID not found into the list"
         self.mapmsg[3] = "Array '%s' completed"
+        self.mapmsg[4] = "CSV '%s' completed"
+        self.mapmsg[5] = "QUERY '%s' completed"
         self.mapmsg[7] = "RUN Error: Error opening log file"
         self.mapmsg[8] = "START processing"
         self.mapmsg[9] = "END processing"
