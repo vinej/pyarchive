@@ -7,7 +7,9 @@ class Excel:
         if len(memory.rows) > 0:
             if excluded != None:
                 for exclude in excluded:
-                    del df[exclude]
+                    if exclude in df.columns:
+                        del df[exclude]
+                    #if
                 #for
             #if
         #if
