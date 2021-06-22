@@ -2,12 +2,10 @@
     "Connections" : [
         { 
             "Name" : "corpo",
-            "Driver" : "sqlserver",
             "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
         },
         {
             "Name" : "project",
-            "Driver" : "sqlserver",
             "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
         }
     ],

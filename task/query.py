@@ -3,6 +3,8 @@ from odbc.odbc import Odbc
 from excel.excel import Excel
 import copy
 from task.util import get_dict_value
+import logging
+from message.message import gmsg
 
 class Parameter:
     def __init__(self,data):
@@ -33,6 +35,64 @@ class Query:
                 self.parameters.append(Parameter(p))
             #for
         #if
+    #def
+
+    def validate(self, mapcon, position): 
+        _ = mapcon # not use here
+        if self.name == None:
+            logging.fatal(gmsg.get(26), position, 'Name')
+        #if
+        self.name = self.name.lower()
+
+        if self.kind == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Kind')
+        #
+        self.kind = self.kind.lower()
+
+        if self.command == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Command')
+        #if
+
+        if self.connection == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Connection')
+        #if
+        self.connection = self.connection.lower()
+
+        if self.output == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Output')
+        #if
+        self.output = self.output.lower()
+
+        if (self.output == 'excel' or self.output == 'csv') and self.file == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'File')
+        #if
+
+        if len(self.parameters) > 0:
+            for p in self.parameters:
+                self.validate_parameter(p, mapcon, position)
+            #for
+        #if
+    #def
+
+    def validate_parameter(self, param, mapcon, position):
+        _ = mapcon # not use here
+        if param.kind == None:
+            logging.fatal(gmsg.get(32), position, 'Kind')
+        #if
+        param.kind = param.kind.lower()
+
+        if param.fields == None:
+            logging.fatal(gmsg.get(32), position, 'Fields')
+        #
+
+        if param.names == None:
+            logging.fatal(gmsg.get(32), position,  'Names')
+        #if
+
+        if param.source == None:
+            logging.fatal(gmsg.get(32), position,  'Source')
+        #if
+        param.source = param.source.lower()
     #def
 
     def run(self, mapmem, mapref, con, position):

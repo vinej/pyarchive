@@ -30,7 +30,6 @@ class Task:
         for t in self.maptask:
             ct = self.get_task(t)
             ct.validate(mapcon, i)
-            self.maptask.append(ct)
             i = i + 1
         #for
     #def
@@ -40,11 +39,12 @@ class Task:
         if kind == None:
             logging.fatal(gmsg.get(58))
         #if
-        if onetask['Kind'] == 'array':
+        kind = kind.lower()
+        if kind == 'array':
             return Array(onetask)
-        elif onetask['Kind'] == 'csv':
+        elif kind == 'csv':
             return Csv(onetask)
-        elif onetask['Kind'] == 'query':
+        elif kind == 'query':
             return Query(onetask)
         return onetask
     #def

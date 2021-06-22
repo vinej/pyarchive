@@ -2,14 +2,16 @@ from task.memory import Memory
 import csv
 from excel.excel import Excel
 from task.util import get_dict_value
+import logging
+from message.message import gmsg
 
 class Csv:
     def __init__(self, data):
-        self.name =  get_dict_value(data,'Name').lower()
-        self.kind =  get_dict_value(data,'Kind').lower()
+        self.name =  get_dict_value(data,'Name')
+        self.kind =  get_dict_value(data,'Kind')
         self.description =  get_dict_value(data,'Description')
         self.file =  get_dict_value(data, 'File')
-        self.output =  get_dict_value(data, 'Output').lower()
+        self.output =  get_dict_value(data, 'Output')
     #def
 
     def run(self, mapmem, mapref, con, position):
@@ -44,4 +46,32 @@ class Csv:
             mapmem[self.name] = m
         #if
     #def
+
+    def validate(self, mapcon, position):  
+        _ = mapcon # not use here
+        if self.name == None:
+            logging.fatal(gmsg.get(26), position, 'Name')
+        #if
+        self.name = self.name.lower()
+
+        if self.kind == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Kind')
+        #
+        self.kind = self.kind.lower()
+
+        if self.file == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'File')
+        #if
+
+        if self.output == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Output')
+        #if
+        self.output = self.output.lower()
+
+        if self.output != 'memory':
+            logging.errro(gmsg.get(28), position, self.name, 'Output')
+            logging.fatal(gmsg.get(29))
+        #if
+	#def
+    
 #class
