@@ -1,14 +1,15 @@
+from message.message import gmsg
+import sys
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
 from connection.connection import ConnectionMng
 from ajson.archivejson import ArchiveJson
 from connection.connection import ConnectionMng
 from task.task import Task
-import sys
-import logging
-from logging.handlers import TimedRotatingFileHandler
-from message.message import gmsg
 
 def set_logging(file):
-    print('Starting configuring the logging on file : ' + file)
+    print(gmsg.get(2) % file)
     try:
         log_format = (
                 '[%(asctime)s] %(levelname)-8s %(name)-12s %(message)s')
@@ -24,27 +25,30 @@ def set_logging(file):
                 rhandler
             ]
         )
-        print('Completed setting the logging with success')
-    except Exception as inst:
-        print('Error configuring the logging, check the security for file : ' + file)
-        print('The file needs read/write access')
-        print('Error message : ' + str(inst))
-        sys.exit(1)
+        logging.info(gmsg.get(5), file)
+    except Exception as e:
+        print(gmsg.get(6), file)
+        print(gmsg.get(7), file)
+        print(gmsg.get(1), e)
     #try
 #def
 
 
 def main() :
     set_logging('pyarchive.log')
-    logging.info(gmsg.get(56)) #started
-    args = sys.argv[1:]
-    data = ArchiveJson().load(args[0])
-    con = ConnectionMng(data)
-    con.validate()
-    task = Task(data)
-    task.validate(con)
-    task.run(con)
-    logging.info(gmsg.get(57)) #completed
+    try:
+        logging.info(gmsg.get(56)) #started
+        args = sys.argv[1:]
+        data = ArchiveJson().load(args[0])
+        con = ConnectionMng(data)
+        con.validate()
+        task = Task(data)
+        task.validate(con)
+        task.run(con)
+        logging.info(gmsg.get(57)) #completed
+    except Exception as e:
+        logging.fatal(gmsg.get(1), e)
+    #try
 #def
 
 main()

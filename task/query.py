@@ -28,6 +28,9 @@ class Query:
         else:
             self.file = None
         #if
+        self.excluded =  get_dict_value(data,'Excluded')
+        self.anonymized =  get_dict_value(data,'Anonymized')
+
         self.parameters = []
         params = get_dict_value(data,'Parameters')
         if params != None:
@@ -96,12 +99,13 @@ class Query:
     #def
 
     def run(self, mapmem, mapref, con, position):
+        logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
             self.run_internal(self, mapmem, mapref, con, position, 0, False)
         #if
-        logging.info(gmsg.get(5), self.name)
+        logging.info(gmsg.get(3), self.kind, self.name)
     #def
 
     def run_internal(self, query, mapmem, mapref, con, position, skip, isSkip):

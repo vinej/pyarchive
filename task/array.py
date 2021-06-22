@@ -41,6 +41,7 @@ class Array:
 	#def
 
     def run(self, mapmem, mapref, con, position):
+        logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
@@ -58,7 +59,7 @@ class Array:
             m = Memory(columns, rows)
             mapmem[self.name] = m
         #if
-        logging.info(gmsg.get(3), self.name)
+        logging.info(gmsg.get(3), self.kind, self.name)
     #def
 #class
 

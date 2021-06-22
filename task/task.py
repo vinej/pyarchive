@@ -28,17 +28,17 @@ class Task:
     def validate(self, mapcon):
         i = 1
         for t in self.maptask:
-            ct = self.get_task(t)
+            ct = self.get_task(t, i)
             ct.validate(mapcon, i)
             self.vtasks.append(ct)
             i = i + 1
         #for
     #def
 
-    def get_task(self, onetask):
+    def get_task(self, onetask, position):
         kind = get_dict_value(onetask, 'Kind')
         if kind == None:
-            logging.fatal(gmsg.get(58))
+            logging.fatal(gmsg.get(27), position, onetask.name, 'Kind')
         #if
         kind = kind.lower()
         if kind == 'array':
