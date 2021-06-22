@@ -116,7 +116,7 @@ class Query:
             if query.output == 'memory' :
                 mapmem[query.name] = m
             else:
-                Excel().save(m, query.file)
+                Excel().save(m, query.file, query.excluded, query.anonymized)
             #if
             return True
         else:
