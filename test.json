@@ -62,9 +62,9 @@
             "Connection" : "project",
             "Command":"select * from archive.dbo.{names} where project = {project} and (periode = {per_prec} or periode = {per_curr})",
             "Excluded":  ["fxml", "ftext"],
-            "Anonymized": ["name"],
-            "Output" : "excel",
-            "File" : "goarchive.xlsx",
+            "Anonymized": ["name", "fntext"],
+            "Output" : "csv",
+            "File" : "goarchive.csv",
             "Parameters" : [
                 {
                     "Names" : ["{names}"],

@@ -1,6 +1,7 @@
 
+from output.output import Output
 from odbc.odbc import Odbc
-from excel.excel import Excel
+from output.output import Output
 import copy
 from task.util import get_dict_value
 import logging
@@ -23,7 +24,7 @@ class Query:
         self.connection = get_dict_value(data,'Connection')
         self.command = get_dict_value(data,'Command')
         self.output = get_dict_value(data,'Output')
-        if self.output == "excel" or self.output == "csv":
+        if self.output != "memory":
             self.file = get_dict_value(data,'File')
         else:
             self.file = None
@@ -66,7 +67,7 @@ class Query:
         #if
         self.output = self.output.lower()
 
-        if (self.output == 'excel' or self.output == 'csv') and self.file == None:
+        if self.output != 'memory' and self.file == None:
             logging.fatal(gmsg.get(27), position, self.name, 'File')
         #if
 
@@ -112,11 +113,13 @@ class Query:
         _ = position # not use for now
         connection = con.get_con(query.connection).connection
         if len(query.parameters) == 0:
-            m = Odbc().run(connection, query.command)
+            m = Odbc().run(connection, query.command, query.file, query.name, query.excluded, query.anonymized, query.output)
             if query.output == 'memory' :
                 mapmem[query.name] = m
             else:
-                Excel().save(m, query.file, query.excluded, query.anonymized)
+                if m != None:
+                    Output().save(m, query.file, query.name, query.excluded, query.anonymized, query.output)
+                #if
             #if
             return True
         else:

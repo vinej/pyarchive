@@ -1,5 +1,4 @@
 from task.memory import Memory
-from excel.excel import Excel
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
