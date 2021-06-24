@@ -1,16 +1,16 @@
 class Message:
     def __init__(self):
         self.mapmsg = {}
-        self.mapmsg[1] = "RUN: Runtime unexpected exception: '%s'"
+        self.mapmsg[1] = "Runtime unexpected exception: '%s'"
         self.mapmsg[2] = "Configuration of the logging into file '%s' is starting"
-        self.mapmsg[3] = "RUN: Task of kind '%s' with name '%s' is completed"
-        self.mapmsg[4] = "RUN: Task of kind '%s' with name '%s' is starting"
+        self.mapmsg[3] = "Task of kind '%s' with name '%s' is completed"
+        self.mapmsg[4] = "Task of kind '%s' with name '%s' is starting"
         self.mapmsg[5] = "Configuration of the logging into file '%s' is completed"
         self.mapmsg[6] = "Error configuring the logging, check the security for file '%s'"
         self.mapmsg[7] = "The file '%s' needs read/write access"
 
-        self.mapmsg[8] = "RUN: Query '%s' is starting"
-        self.mapmsg[9] = "RUN: Query '%s' is completed"
+        self.mapmsg[8] = "Query '%s' is starting"
+        self.mapmsg[9] = "Query '%s' is completed"
 
 
         self.mapmsg[11] = "JSON: The connection' name '%s' at the position '%s' already exists"
