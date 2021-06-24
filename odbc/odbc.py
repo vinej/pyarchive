@@ -12,13 +12,13 @@ class Odbc:
 
     def run(self, connection, query, file, name, excluded, anonymized, output):
         if output == 'csv' :
-            return self.run_with_direct_output(connection, query, file, name, excluded, anonymized)
+            return self.run_with_csv_output(connection, query, file, name, excluded, anonymized)
         else:
-            return self.run_on_memory(connection, query)
+            return self.run_return_memory(connection, query)
         #if
     #def
 
-    def run_on_memory(self, connection, query):
+    def run_return_memory(self, connection, query):
         logging.info(gmsg.get(8), query)
         con = pyodbc.connect(connection)
         cursor = con.cursor()
@@ -69,7 +69,7 @@ class Odbc:
         return columns
     #def
 
-    def run_with_direct_output(self, connection, query, file, name, excluded, anonymized):
+    def run_with_csv_output(self, connection, query, file, name, excluded, anonymized):
         logging.info(gmsg.get(8), query)
         with open(file, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"',quoting=csv.QUOTE_MINIMAL)

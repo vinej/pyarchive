@@ -1,6 +1,7 @@
 from task.array import Array
 from task.csv import Csv
 from task.query import Query
+from task.save import Save
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
@@ -47,6 +48,9 @@ class Task:
             return Csv(onetask)
         elif kind == 'query':
             return Query(onetask)
+        elif kind == "save":
+            return Save(onetask)
+        #if
         return onetask
     #def
 #class

@@ -6,6 +6,7 @@ import copy
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
+import sys
 
 class Parameter:
     def __init__(self,data):
@@ -24,7 +25,7 @@ class Query:
         self.connection = get_dict_value(data,'Connection')
         self.command = get_dict_value(data,'Command')
         self.output = get_dict_value(data,'Output')
-        if self.output != "memory":
+        if self.output == "excel" or self.output == "csv":
             self.file = get_dict_value(data,'File')
         else:
             self.file = None
@@ -45,30 +46,36 @@ class Query:
         _ = mapcon # not use here
         if self.name == None:
             logging.fatal(gmsg.get(26), position, 'Name')
+            sys.exit(26)
         #if
         self.name = self.name.lower()
 
         if self.kind == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Kind')
+            sys.exit(27)
         #
         self.kind = self.kind.lower()
 
         if self.command == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Command')
+            sys.exit(27)
         #if
 
         if self.connection == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Connection')
+            sys.exit(27)
         #if
         self.connection = self.connection.lower()
 
         if self.output == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Output')
+            sys.exit(27)
         #if
         self.output = self.output.lower()
 
-        if self.output != 'memory' and self.file == None:
+        if (self.output == 'excel' or self.output == 'csv') and self.file == None:
             logging.fatal(gmsg.get(27), position, self.name, 'File')
+            sys.exit(27)
         #if
 
         if len(self.parameters) > 0:
@@ -87,14 +94,17 @@ class Query:
 
         if param.fields == None:
             logging.fatal(gmsg.get(32), position, 'Fields')
-        #
+            sys.exit(32)
+        #if
 
         if param.names == None:
             logging.fatal(gmsg.get(32), position,  'Names')
+            sys.exit(32)
         #if
 
         if param.source == None:
             logging.fatal(gmsg.get(32), position,  'Source')
+            sys.exit(32)
         #if
         param.source = param.source.lower()
     #def

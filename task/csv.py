@@ -5,6 +5,7 @@ import logging
 from message.message import gmsg
 import logging
 from message.message import gmsg
+import sys
 
 class Csv:
     def __init__(self, data):
@@ -54,26 +55,31 @@ class Csv:
         _ = mapcon # not use here
         if self.name == None:
             logging.fatal(gmsg.get(26), position, 'Name')
+            sys.exit(26)
         #if
         self.name = self.name.lower()
 
         if self.kind == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Kind')
+            sys.exit(27)
         #
         self.kind = self.kind.lower()
 
         if self.file == None:
             logging.fatal(gmsg.get(27), position, self.name, 'File')
+            sys.exit(27)
         #if
 
         if self.output == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Output')
+            sys.exit(27)
         #if
         self.output = self.output.lower()
 
         if self.output != 'memory':
             logging.errro(gmsg.get(28), position, self.name, 'Output')
             logging.fatal(gmsg.get(29))
+            sys.exit(28)
         #if
 	#def
     

@@ -25,6 +25,14 @@
             "Output" : "memory"
         },
         { 
+            "Name" : "save1",
+            "Kind" : "save",  
+            "Description" : "save data from memory",
+            "File" : "users.xlsx",
+            "Output" : "excel",
+            "Source" : "csv1"
+        },
+        { 
             "Name" : "listnames",
             "Kind" : "query",  
             "Description" : "read the list of table into memory",
