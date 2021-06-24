@@ -12,7 +12,7 @@ def set_logging(file):
     print(gmsg.get(2) % file)
     try:
         log_format = (
-                '[%(asctime)s] %(levelname)-8s %(name)-12s %(message)s')
+                '[%(asctime)s] %(levelname)-8s %(name)-12s %(module)s:%(lineno)s %(funcName)s %(message)s')
         rhandler = TimedRotatingFileHandler(    file,
                                                 when="w0",
                                                 interval=1,

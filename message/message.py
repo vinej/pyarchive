@@ -27,7 +27,7 @@ class Message:
     #def
 
     def get(self,id):
-        return  self.mapmsg[id]
+        return  "Msg#:{id}:{msg}".format(id = id, msg = self.mapmsg[id])
     #def
 #class
 

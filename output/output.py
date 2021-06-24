@@ -31,6 +31,10 @@ class Output:
             #for
         #if
 
-        df.to_excel(file)
+        if output == "excel":
+            df.to_excel(file)
+        else:
+            df.to_csv(file)
+        #if
     #def
 #class
