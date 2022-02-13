@@ -246,18 +246,13 @@ class Query:
                 skip = skip - 1
                 continue
             #if
-            if isSkip2 :
-                isSkip2 = False
-                continue
-            #if
             tmpcmd = cmd
             tmpfile = file
             for i in range(len(param.fields)):
                 if i+1 < len(param.fields) and param.fields[i] == param.fields[i+1] :
-                    if first :
-                        r = r + 1
-                        first = False
-                        isSkip2 = True
+                    r = r + 1
+                    if r == len(mem.rows):
+                        return True  # complete, no more data
                     #if
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i+1)
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r-1], i)
