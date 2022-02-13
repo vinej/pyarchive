@@ -149,11 +149,11 @@ class Query:
     #def
 
     def adjust_cmd_all(self, cmd, param, row):
-	    for i in range(len(param.fields)):
-		    paramvalue = self.adjust_quote(str(row[param.fields[i]]))
-		    cmd = cmd.replace(param.names[i], paramvalue)
+        for i in range(len(param.fields)):
+            paramvalue = self.adjust_quote(str(row[param.fields[i]]))
+            cmd = cmd.replace(param.names[i], paramvalue)
         #for
-	    return cmd
+        return cmd
     #def
 
     def adjust_cmd_out_index(self,cmd, file, param, row, index):
@@ -165,6 +165,50 @@ class Query:
         #if
         return (cmd, file)
     #def
+
+    # this function will run for all parameters
+    # select * from archive.dbo.{names} where project = {project} and (periode = {per_prec} or periode = {per_curr})
+    # 
+    # Here we want to generate a sqlquery for
+    #   each table from archive.dbo.{names}
+    #   for those tables, we want to generate a requie
+    #   
+    # Muiltiple means that the query will run for each value of the parent parameter and for each value of the current parameter
+    #
+    # Child means that the query will run 
+
+    '''
+    select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = 'archive''
+    select id,code from archive.dbo.Periodes where project = 123'
+    select * from archive.dbo.names where project = 123 and (periode = 1 or periode = 2)       
+    select * from archive.dbo.names where project = 123 and (periode = 2 or periode = 3)  
+    select * from archive.dbo.names where project = 123 and (periode = 3 or periode = 4)      
+    select * from archive.dbo.names where project = 123 and (periode = 4 or periode = 5)     
+    select id,code from archive.dbo.Periodes where project = 124
+    select * from archive.dbo.names where project = 124 and (periode = 7 or periode = 8)         
+    select * from archive.dbo.names where project = 124 and (periode = 8 or periode = 9)    
+    select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = 'db2''
+    select id,code from archive.dbo.Periodes where project = 125
+    select * from archive.dbo.names where project = 125 and (periode = 10 or periode = 12)    
+    select * from archive.dbo.names where project = 125 and (periode = 10 or periode = 12)   
+    select id,code from archive.dbo.Periodes where project = 126
+    select * from archive.dbo.names where project = 126 and (periode = 11 or periode = 13)   
+    select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = 'archive''
+    select id,code from archive.dbo.Periodes where project = 123
+    select * from archive.dbo.names2 where project = 123 and (periode = 1 or periode = 2)    
+    select * from archive.dbo.names2 where project = 123 and (periode = 2 or periode = 3)     
+    select * from archive.dbo.names2 where project = 123 and (periode = 3 or periode = 4) 
+    select * from archive.dbo.names2 where project = 123 and (periode = 4 or periode = 5)   
+    select id,code from archive.dbo.Periodes where project = 124
+    select * from archive.dbo.names2 where project = 124 and (periode = 7 or periode = 8)          
+    select * from archive.dbo.names2 where project = 124 and (periode = 8 or periode = 9) 
+    select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = 'db2''
+    select id,code from archive.dbo.Periodes where project = 125
+    select id,code from archive.dbo.Periodes where project = 125
+    select * from archive.dbo.names2 where project = 125 and (periode = 10 or periode = 12)  
+    select id,code from archive.dbo.Periodes where project = 126
+    select * from archive.dbo.names2 where project = 126 and (periode = 11 or periode = 13)
+    '''
 
     def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row, skip, isSkip):
         param = query.parameters[level]
@@ -190,33 +234,33 @@ class Query:
 
     def run_mem(self, param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip):
         mem = mapmem[param.source]
-
         if isSkip and skip >= len(mem.rows):
             #no more multiple to do
             return False
         #if
+        isSkip2 = False
         first = True
         for r in range(len(mem.rows)):
+            # skip the number of rows currently done
             if isSkip and skip > 0:
                 skip = skip - 1
                 continue
             #if
+            if isSkip2 :
+                isSkip2 = False
+                continue
+            #if
             tmpcmd = cmd
             tmpfile = file
-            iskip = False
             for i in range(len(param.fields)):
-                if iskip:
-                    iskip = False
-                    continue
-                #if
                 if i+1 < len(param.fields) and param.fields[i] == param.fields[i+1] :
                     if first :
                         r = r + 1
                         first = False
+                        isSkip2 = True
                     #if
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i+1)
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r-1], i)
-                    iskip = True
                 else :
                     (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i)
                 #if

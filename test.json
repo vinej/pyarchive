@@ -35,7 +35,7 @@
         { 
             "Name" : "listnames",
             "Kind" : "query",  
-            "Description" : "read the list of table into memory",
+            "Description" : "read the list of tables into memory",
             "Connection" : "project",
             "Command":"select table_name from archive.dbo.tablename",
             "Output" : "memory"
@@ -43,7 +43,7 @@
         { 
             "Name" : "projects",
             "Kind" : "query",  
-            "Description" : "read list of projects inot memory",
+            "Description" : "read list of projects into memory",
             "Connection" : "corpo",
             "Command":"select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = '{database}'",
             "Output" : "reference",
@@ -72,7 +72,7 @@
             "Excluded":  ["fxml", "ftext"],
             "Anonymized": ["name", "fntext"],
             "Output" : "csv",
-            "File" : "goarchive.csv",
+            "File" : "pyarchive.csv",
             "Parameters" : [
                 {
                     "Names" : ["{names}"],
