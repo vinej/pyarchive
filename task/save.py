@@ -3,17 +3,26 @@ import logging
 from message.message import gmsg
 from output.output import Output
 import sys
+'''
+The class Save is used to save the data in memory to files with differents options
 
+Output      :   csv or excel
+Source      :   the name of the source data to save
+File        :   contains the file name ouput
+Excluded    :   a list of excluded columns
+Anonymized  :   a list of columns to anonymized
+'''
 class Save:
-    def __init__(self, data):
-        self.name = get_dict_value(data,'Name')
-        self.kind = get_dict_value(data,'Kind')
-        self.description = get_dict_value(data,'Description')
-        self.output = get_dict_value(data,"Output")
-        self.file = get_dict_value(data,"File")
-        self.source = get_dict_value(data,"Source")
-        self.excluded = get_dict_value(data,"Excluded")
-        self.anonymized = get_dict_value(data,"Anonymized")
+    def __init__(self, jsondata):
+        self.name = get_dict_value(jsondata,'Name')
+        self.kind = get_dict_value(jsondata,'Kind')
+        self.description = get_dict_value(jsondata,'Description')
+        self.command = get_dict_value(jsondata,'Command')
+        self.output = get_dict_value(jsondata,"Output")
+        self.file = get_dict_value(jsondata,"File")
+        self.source = get_dict_value(jsondata,"Source")
+        self.excluded = get_dict_value(jsondata,"Excluded")
+        self.anonymized = get_dict_value(jsondata,"Anonymized")
     #def
 
     def validate(self, mapcon, position):  
@@ -47,7 +56,7 @@ class Save:
         #if
         self.source = self.source.lower()
 
-        if self.output != 'excel':
+        if self.output != 'excel' and self.output != "csv":
             logging.errro(gmsg.get(28), position, self.name, 'Output')
             logging.fatal(gmsg.get(29))
             sys.exit(28)
@@ -59,11 +68,14 @@ class Save:
         _ = con    # not used for now
         _ = position  # not used for now
         _ = mapref # not used for now
+        # started
         logging.info(gmsg.get(4), self.kind, self.name)
+        # get the object to save into a file
         m = mapmem[self.source]
         if m != None:
             Output().save(m, self.file, self.name, self.excluded, self.anonymized, self.output)
         #if
+        # completed
         logging.info(gmsg.get(3), self.kind, self.name)
     #def
 #class

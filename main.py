@@ -2,7 +2,6 @@ from message.message import gmsg
 import sys
 import logging
 from logging.handlers import TimedRotatingFileHandler
-
 from connection.connection import ConnectionMng
 from ajson.archivejson import ArchiveJson
 from connection.connection import ConnectionMng
@@ -37,14 +36,22 @@ def set_logging(file):
 def main() :
     set_logging('pyarchive.log')
     try:
+        # get started
         logging.info(gmsg.get(56)) #started
         args = sys.argv[1:]
-        data = ArchiveJson().load(args[0])
-        con = ConnectionMng(data)
-        con.validate()
-        task = Task(data)
-        task.validate(con)
-        task.run(con)
+        # read the json file to execute
+        jsondata = ArchiveJson().load(args[0])
+        # get all connections
+        mapcon = ConnectionMng(jsondata)
+        # validate the connections
+        mapcon.validate()
+        # get all tasks to execute
+        tasks = Task(jsondata)
+        # validate the tasks
+        tasks.validate(mapcon)
+        # run the tasks
+        tasks.run(mapcon)
+        # completed
         logging.info(gmsg.get(57)) #completed
     except Exception as e:
         logging.fatal(gmsg.get(1), e)

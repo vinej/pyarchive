@@ -1,22 +1,33 @@
-import sys
 import logging
 from message.message import gmsg
 from task.util import get_dict_value
 
+'''
+Connection class
+
+Parameter: json object of type connection
+'''
 class Connection:
-    def __init__(self,data):
-        self.name = get_dict_value(data,'Name')
-        self.connection = get_dict_value(data,'Connection')
+    def __init__(self,jsondata):
+        self.name = get_dict_value(jsondata,'Name')
+        self.connection = get_dict_value(jsondata,'Connection')
     #def
 #class
 
+'''
+Class to manage all connections for the tasks
+
+Parameter: a json data object
+
+'''
 class ConnectionMng:
-    def __init__(self, data):
-        mapjsoncon = data['Connections']
+    def __init__(self, jsondata):
+        # get the connections section of the json object
+        mapjsoncon = jsondata['Connections']
         self.mapcon = []
         position = 1
+        # create a map of all connections
         for c in mapjsoncon:
-            newcon = Connection(c)
             self.mapcon.append(Connection(c))
             position = position + 1
         #for
@@ -26,6 +37,7 @@ class ConnectionMng:
         return self.mapcon
     #def
 
+    # get a connection by name
     def get_con(self, name):
         for c in self.mapcon:
             if name == c.name:
@@ -35,6 +47,7 @@ class ConnectionMng:
         return None
     #def
 
+    # validate all connections
     def validate(self): 
         position = 1
         for con in self.mapcon:
@@ -43,6 +56,7 @@ class ConnectionMng:
         #for
     #def 
 
+    # validate a connection at position x
     def validate_con(self, con, position):  
         if con.name == None:
             logging.fatal(gmsg.get(12), position, 'Name')

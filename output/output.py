@@ -3,6 +3,10 @@ from output.anonymize import Anonymized
 from task.memory import Memory
 from output.anonymize import ano
 
+'''
+simple class to encapsulate the output algo
+
+'''
 class Output:
     def save(self, memory, file, name, excluded, anonymized, output):
         df = DataFrame(memory.rows)

@@ -1,13 +1,28 @@
 
 from output.output import Output
-from odbc.odbc import Odbc
-from output.output import Output
+from myodbc.myodbc import Odbc
 import copy
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
 import sys
 
+'''
+The Parameter class is used by the query to create dynamic parameters to the SQL queries
+
+Kind    :   memory    :  means that parameters come from a static list in memory
+
+            reference :  means that parameters come from a source of type 'reference' that contains also parameters
+
+            child     :  means that parameters come from the previous parameter definition, so this one is a child.
+
+Names   :   the list of parameters names taht will be used into the queries separated by comma
+Fields  :   the list of fields from a source that will replaced the parameters into the queries
+Source  :   the name of the memory object that contains the rows
+
+Example : you want to a run a query with one parameter : always single
+
+'''
 class Parameter:
     def __init__(self,data):
         self.kind = get_dict_value(data,'Kind')
@@ -17,6 +32,22 @@ class Parameter:
     #def
 #class
 
+'''
+The class Query is a powerfull task to execute SQL queries with dynamilsc variables with one to many levels
+
+The properties of the Query json object
+
+Name            :   name of the task
+Kind            :   query
+Description     :   the description of the task
+Connection      :   the connection name to use for the query
+Command         :   the SQL command to execute
+Output          :   the output type of the query (memory,csv or excel)
+File            :   the destination file name if the output is csv or excel
+Excluded        :   the list of columns to exclude from the ouput
+Anonymized      :   the list of columns to anonymized
+Parameters      :   a list of parameter object used to execute the query
+'''
 class Query:
     def __init__(self, data):
         self.name = get_dict_value(data,'Name')
@@ -42,6 +73,7 @@ class Query:
         #if
     #def
 
+    # validate the query properties
     def validate(self, mapcon, position): 
         _ = mapcon # not use here
         if self.name == None:
@@ -85,6 +117,7 @@ class Query:
         #if
     #def
 
+    # validate parameters' properties
     def validate_parameter(self, param, mapcon, position):
         _ = mapcon # not use here
         if param.kind == None:
@@ -109,21 +142,31 @@ class Query:
         param.source = param.source.lower()
     #def
 
+    # run the query
     def run(self, mapmem, mapref, con, position):
+        # started
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
             self.run_internal(self, mapmem, mapref, con, position, 0, False)
         #if
+        # completed
         logging.info(gmsg.get(3), self.kind, self.name)
     #def
 
+    # run internal is called by a recursive algorith to run the current queries
+    # and save the result unto memory of into a file (csv,excel)
     def run_internal(self, query, mapmem, mapref, con, position, skip, isSkip):
         _ = position # not use for now
+        # get the connection to run the query
         connection = con.get_con(query.connection).connection
+
+        # if no parameters, so run the queqry and save the result in memory of into a file
         if len(query.parameters) == 0:
+            # run the query
             m = Odbc().run(connection, query.command, query.file, query.name, query.excluded, query.anonymized, query.output)
+            # put the result in memory of save it into a file
             if query.output == 'memory' :
                 mapmem[query.name] = m
             else:
@@ -133,10 +176,12 @@ class Query:
             #if
             return True
         else:
+            # there are parameters, so run recursively, to execute one to many queries depending of the parameters' list
             return self.run_recursive(con, mapmem, mapref, query.command, query.file, query, 0, None, skip, isSkip)
         #if
     #def
 
+    # name quote for Cvs
     def adjust_quote(self,value):
         if value[0] == '\'' and value[1] != '\'':
             value = value[1:]
@@ -148,6 +193,7 @@ class Query:
         return value
     #def
 
+    # adjust quote for parameters
     def adjust_cmd_all(self, cmd, param, row):
         for i in range(len(param.fields)):
             paramvalue = self.adjust_quote(str(row[param.fields[i]]))
@@ -156,6 +202,7 @@ class Query:
         return cmd
     #def
 
+    # generate a dynamic file output depending of the current parameters
     def adjust_cmd_out_index(self,cmd, file, param, row, index):
         paramvalue = self.adjust_quote(str(row[param.fields[index]]))
         cmd = cmd.replace(param.names[index], paramvalue.strip())
@@ -166,52 +213,79 @@ class Query:
         return (cmd, file)
     #def
 
-    def run_recursive(self, con, mapmem, mapref, cmd, file, query, level, row, skip, isSkip):
-        param = query.parameters[level]
+    # run the query for all parameters that could be memory,reference or child
+    # con       :   the connection to use
+    # mapmem    :   the map of all data in memory, could be used of param.Kind = 'memory'
+    # mapref    :   all the task of type 'reference' because they are executed with parameters. use for param.Kind = 'reference'
+    # cmd       :   the SQL command to execute
+    # file      :   the outpuyt file
+    # querytask :   the query task defenition
+    # level     :   the recursive level
+    # row       :   the current row for child parameters
+    # Note: the skip and isSkip is almost a patch to make it work with 3 levels (memory,reference,child)
+    #       maybe a bette way to do that.
+    # skip      :   the number of record to skip
+    # isSkip    :   is the skip is needed
+    def run_recursive(self, con, mapmem, mapref, cmd, file, querytask, level, row, skip, isSkip):
+        param = querytask.parameters[level]
+        # if type of child, parameters must be adjust with the current parent row
         if param.kind == 'child':
-            self.adjust_cmd_from_parent(con, mapmem, mapref, query.parameters[level-1], param, row, skip, isSkip)
-            return self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip)
-        elif param.kind == "multiple":
+            #addust parameters
+            self.adjust_cmd_from_parent(con, mapmem, mapref, querytask.parameters[level-1], param, row, skip, isSkip)
+            # run men
+            return self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
+        # if type reference, we need a deep copy of the current state and we will run for all rows. 
+        # as we don't know the number of rows in advance, we loop max 10M times
+        elif param.kind == "reference":
             squery = mapref[param.source]
             tmpquery = copy.deepcopy(squery)
             tmpquery.output = 'memory'
-            for i in range(10000000):
+            for i in range(100000000):
                 done = self.run_internal(tmpquery, mapmem, mapref, con, 1, i, True)
                 if done == False:
                     break
                 #if
-                self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip)
+                self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
             #for
             return True
+        elif param.kind == "memory":
+            return self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
         else:
-            return self.run_mem(param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip)
-        #if    
+            # not supposed to come here because of the pre-validation
+            raise Exception("parameter's kind not implemented") 
     #def
 
+    # run_mem, 
     def run_mem(self, param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip):
         mem = mapmem[param.source]
+
+        # it's here we check the max rows to execute
+        # the skip is fast because everything is in memory
         if isSkip and skip >= len(mem.rows):
-            #no more multiple to do
+            #no more reference to do
             return False
         #if
-        for r in range(len(mem.rows)):
-            # skip the number of rows currently done
-            if isSkip and skip > 0:
-                skip = skip - 1
-                continue
-            #if
+
+        # skip the record already done, get aslice of the rows
+        if isSkip and skip > 0:
+            rows = mem.rows[skip:]
+        else:
+            rows = mem.rows
+        #if 
+
+        for r in range(len(rows)):
             tmpcmd = cmd
             tmpfile = file
             for i in range(len(param.fields)):
                 if i+1 < len(param.fields) and param.fields[i] == param.fields[i+1] :
                     r = r + 1
-                    if r == len(mem.rows):
+                    if r == len(rows):
                         return True  # completed, no more data
                     #if
-                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i+1)
-                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r-1], i)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, rows[r], i+1)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, rows[r-1], i)
                 else :
-                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, mem.rows[r], i)
+                    (tmpcmd, tmpfile) = self.adjust_cmd_out_index(tmpcmd, tmpfile, param, rows[r], i)
                 #if
             #for
 
@@ -222,7 +296,7 @@ class Query:
                     self.save_output(query, tmpcmd, tmpfile, con, mapmem, mapref)
                 #if
             else:
-                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, mem.rows[r], skip, isSkip)
+                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, rows[r], skip, isSkip)
             #if
 
             if isSkip:
@@ -232,6 +306,7 @@ class Query:
         return True
     #def
     
+    # adjust the sql command with the paramen value (use for the child case)
     def adjust_cmd_from_parent(self, con, mapmem, mapref, p1, p2, row, skip, isSkip):
         query = mapref[p2.source]
         cmd = self.adjust_cmd_all(query.command, p1, row)
@@ -241,6 +316,7 @@ class Query:
         self.run_internal(querytmp, mapmem, mapref, con, 1, skip, isSkip)
     #def
 
+    # save the result into a file
     def save_output(self, query, cmd, file, con, mapmem, mapref):
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
@@ -249,6 +325,7 @@ class Query:
         self.run_internal(querytmp, mapmem, mapref, con, 0, 0, False)
     #def
 
+    # save the result in memory
     def save_memory(self, query, cmd, con, mapmem, mapref):
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd

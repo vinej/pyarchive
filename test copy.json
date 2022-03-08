@@ -1,87 +1,51 @@
 {
     "Connections" : [
-        { 
-            "Name" : "corpo",
-            "Driver" : "sqlserver",
-            "ConnectionString" : "saa:Hydne3/44@DESKTOP-L1MM0UJ?database=archive"
-        },
         {
             "Name" : "project",
-            "Driver" : "sqlserver",
-            "ConnectionString" : "saa:Hydne3/44@DESKTOP-L1MM0UJ?database=archive"
+            "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
         }
     ],
     "Tasks" : [
         { 
-            "Name" : "csv1",
-            "Kind" : "csv",  
-            "Description" : "read list of users into memory",
-            "FileName" : "users.csv",
-            "OutputType" : "memory"
-        },
-        { 
-            "Name" : "tests",
+            "Name" : "activity",
             "Kind" : "array",  
-            "Description" : "read list of country into memory",
-            "Command":"Canada|France|Germany",
-            "OutputType" : "memory"
-        },
-
+            "Command":"MGMT|SUPPORT",
+            "Description":"activity",
+            "Output" : "memory"
+        }
+        ,
         { 
-            "Name" : "projects",
+            "Name" : "tempo",
             "Kind" : "query",  
-            "Description" : "read list of projects inot memory",
-            "Connection" : "corpo",
-            "Command":"select [id], [name], [description], [database] from archive.dbo.projects",
-            "OutputType" : "memory"
-        },
-        { 
-            "Name" : "periodes",
-            "Kind" : "query",  
-            "Description" : "lazy read list of periodes for each project",
+            "Description" : "tempo",
             "Connection" : "project",
-            "Command":"select id,code from archive.dbo.Periodes where project = {project}",
-            "OutputType" : "reference"
-        },
-        { 
-            "Name" : "listnames",
-            "Kind" : "query",  
-            "Description" : "read the list of table into memory",
-            "Connection" : "project",
-            "Command":"select table_name from archive.dbo.tablename",
-            "OutputType" : "memory"
-        },
-        { 
-            "Name" : "names",
-            "Kind" : "query",  
-            "Description" : "extract to excel for each tables, the list of names by project for each periode",
-            "Connection" : "project",
-            "Command":"select * from archive.dbo.{names} where project = {project} and (periode = {per_prec} or periode = {per_curr})",
-            "ExcludedColumns":  ["fxml", "ftext"],
-            "AnonymizedColumns": ["name"],
-            "OutputType" : "excel",
-            "FileName" : "goarchive.xlsx",
+            "Command":"select * from dbo.tempo where activity='{act}'",
+            "Output" : "excel",
+            "File" : "tempo.xlsx",
             "Parameters" : [
                 {
-                    "Names" : ["{names}"],
-                    "Kind": "parent",
-                    "Fields" : ["table_name"],
-                    "Source": "listnames"
-                },
+                    "Names" : ["{act}"],
+                    "Kind": "memory",
+                    "Fields" : ["activity"],
+                    "Source": "activity"
+            }]
+        }
+        ,
+        { 
+            "Name" : "tempo2",
+            "Kind" : "query",  
+            "Description" : "tempo",
+            "Connection" : "project",
+            "Command":"exec dbo.test '{act}'",
+            "Output" : "excel",
+            "File" : "tempo2.xlsx",
+            "Parameters" : [
                 {
-                    "Names" : ["{project}"],
-                    "Kind": "parent",
-                    "Fields" : ["id"],
-                    "Source": "projects",
-                    "UseDatabase": "database"
-                },
-                {
-                    "Names" : ["{per_prec}", "{per_curr}"],
-                    "Kind" : "child",
-                    "Fields" : ["id", "id"],
-                    "Source": "periodes"
-                }
-            ]
+                    "Names" : ["{act}"],
+                    "Kind": "memory",
+                    "Fields" : ["activity"],
+                    "Source": "activity"
+            }]
         }
     ]
     }

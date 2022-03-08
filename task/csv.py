@@ -7,6 +7,17 @@ import logging
 from message.message import gmsg
 import sys
 
+'''
+The Csv class is used to read csv file
+
+The json object propertiesw
+
+Name        :   the name of the task
+Kind        :   csv
+Description :   the description of the task
+File        :   the input csv file
+Output      :   memory or reference
+'''
 class Csv:
     def __init__(self, data):
         self.name =  get_dict_value(data,'Name')
@@ -16,6 +27,7 @@ class Csv:
         self.output =  get_dict_value(data, 'Output')
     #def
 
+    # run the Csv task
     def run(self, mapmem, mapref, con, position):
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
@@ -51,6 +63,7 @@ class Csv:
         logging.info(gmsg.get(3), self.kind,  self.name)
     #def
 
+    # validate the Csv task
     def validate(self, mapcon, position):  
         _ = mapcon # not use here
         if self.name == None:
@@ -76,7 +89,7 @@ class Csv:
         #if
         self.output = self.output.lower()
 
-        if self.output != 'memory':
+        if self.output != 'memory' and self.output != 'reference':
             logging.errro(gmsg.get(28), position, self.name, 'Output')
             logging.fatal(gmsg.get(29))
             sys.exit(28)

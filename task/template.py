@@ -5,23 +5,22 @@ from message.message import gmsg
 import sys
 
 '''
-The Array class is used to creat a simple array of scalar value in memory
+The Template class is used to output memory info into an Excel template
 
 The json object propertiesw
 
 Name        :   the name of the task
-Kind        :   array
+Kind        :   template
 Description :   the description of the task
 Command     :   contains the list of values separated by a pipe |
 Output      :   memory
 '''
-class Array:
+class Template:
     def __init__(self, data):
         self.name = get_dict_value(data,'Name')
         self.kind = get_dict_value(data,'Kind')
         self.description = get_dict_value(data,'Description')
-        self.command = get_dict_value(data,'Command')
-        self.output = 'memory'
+        self.file = get_dict_value(data,'File')
     #def
 
 
