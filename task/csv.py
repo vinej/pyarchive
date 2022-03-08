@@ -19,21 +19,21 @@ File        :   the input csv file
 Output      :   memory or reference
 '''
 class Csv:
-    def __init__(self, data):
-        self.name =  get_dict_value(data,'Name')
-        self.kind =  get_dict_value(data,'Kind')
-        self.description =  get_dict_value(data,'Description')
-        self.file =  get_dict_value(data, 'File')
-        self.output =  get_dict_value(data, 'Output')
+    def __init__(self, jsondata):
+        self.name =  get_dict_value(jsondata,'Name')
+        self.kind =  get_dict_value(jsondata,'Kind')
+        self.description =  get_dict_value(jsondata,'Description')
+        self.file =  get_dict_value(jsondata, 'File')
+        self.output =  get_dict_value(jsondata, 'Output')
     #def
 
     # run the Csv task
-    def run(self, mapmem, mapref, con, position):
+    def run(self, mapmem, mapref, mapcon, position):
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
-            _ = con    # not used for now
+            _ = mapcon    # not used for now
             _ = position  # not used for now
             _ = mapref   # not used for now
             rows = []

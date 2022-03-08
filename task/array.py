@@ -13,14 +13,14 @@ Name        :   the name of the task
 Kind        :   array
 Description :   the description of the task
 Command     :   contains the list of values separated by a pipe |
-Output      :   memory
+Output      :   memory or reference
 '''
 class Array:
-    def __init__(self, data):
-        self.name = get_dict_value(data,'Name')
-        self.kind = get_dict_value(data,'Kind')
-        self.description = get_dict_value(data,'Description')
-        self.command = get_dict_value(data,'Command')
+    def __init__(self, jsondata):
+        self.name = get_dict_value(jsondata,'Name')
+        self.kind = get_dict_value(jsondata,'Kind')
+        self.description = get_dict_value(jsondata,'Description')
+        self.command = get_dict_value(jsondata,'Command')
         self.output = 'memory'
     #def
 
@@ -57,12 +57,12 @@ class Array:
         #if
 	#def
 
-    def run(self, mapmem, mapref, con, position):
+    def run(self, mapmem, mapref, mapcon, position):
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
-            _ = con    # not used for now
+            _ = mapcon    # not used for now
             _ = position  # not used for now
             _ = mapref # not used for now
             columns = [self.name]

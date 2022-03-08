@@ -50,7 +50,7 @@
             "Parameters" : [
                 {
                     "Names" : ["{database}"],
-                    "Kind": "single",
+                    "Kind": "memory",
                     "Fields" : ["database"],
                     "Source": "database"
             }]

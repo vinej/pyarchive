@@ -6,6 +6,7 @@ from connection.connection import ConnectionMng
 from ajson.archivejson import ArchiveJson
 from connection.connection import ConnectionMng
 from task.task import Task
+import traceback
 
 def set_logging(file):
     print(gmsg.get(2) % file)
@@ -54,6 +55,7 @@ def main() :
         # completed
         logging.info(gmsg.get(57)) #completed
     except Exception as e:
+        traceback.print_exception(*sys.exc_info())
         logging.fatal(gmsg.get(1), e)
     #try
 #def

@@ -143,13 +143,13 @@ class Query:
     #def
 
     # run the query
-    def run(self, mapmem, mapref, con, position):
+    def run(self, mapmem, mapref, mapcon, position):
         # started
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':
             mapref[self.name] = self
         else:
-            self.run_internal(self, mapmem, mapref, con, position, 0, False)
+            self.run_internal(self, mapmem, mapref, mapcon, position, 0, False)
         #if
         # completed
         logging.info(gmsg.get(3), self.kind, self.name)
@@ -157,10 +157,10 @@ class Query:
 
     # run internal is called by a recursive algorith to run the current queries
     # and save the result unto memory of into a file (csv,excel)
-    def run_internal(self, query, mapmem, mapref, con, position, skip, isSkip):
+    def run_internal(self, query, mapmem, mapref, mapcon, position, skip, isSkip):
         _ = position # not use for now
         # get the connection to run the query
-        connection = con.get_con(query.connection).connection
+        connection = mapcon.get_con(query.connection).connection
 
         # if no parameters, so run the queqry and save the result in memory of into a file
         if len(query.parameters) == 0:
@@ -177,7 +177,7 @@ class Query:
             return True
         else:
             # there are parameters, so run recursively, to execute one to many queries depending of the parameters' list
-            return self.run_recursive(con, mapmem, mapref, query.command, query.file, query, 0, None, skip, isSkip)
+            return self.run_recursive(mapcon, mapmem, mapref, query.command, query.file, query, 0, None, skip, isSkip)
         #if
     #def
 
@@ -226,14 +226,14 @@ class Query:
     #       maybe a bette way to do that.
     # skip      :   the number of record to skip
     # isSkip    :   is the skip is needed
-    def run_recursive(self, con, mapmem, mapref, cmd, file, querytask, level, row, skip, isSkip):
+    def run_recursive(self, mapcon, mapmem, mapref, cmd, file, querytask, level, row, skip, isSkip):
         param = querytask.parameters[level]
         # if type of child, parameters must be adjust with the current parent row
         if param.kind == 'child':
             #addust parameters
-            self.adjust_cmd_from_parent(con, mapmem, mapref, querytask.parameters[level-1], param, row, skip, isSkip)
+            self.adjust_cmd_from_parent(mapcon, mapmem, mapref, querytask.parameters[level-1], param, row, skip, isSkip)
             # run men
-            return self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
+            return self.run_mem(param, mapcon, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
         # if type reference, we need a deep copy of the current state and we will run for all rows. 
         # as we don't know the number of rows in advance, we loop max 10M times
         elif param.kind == "reference":
@@ -241,22 +241,22 @@ class Query:
             tmpquery = copy.deepcopy(squery)
             tmpquery.output = 'memory'
             for i in range(100000000):
-                done = self.run_internal(tmpquery, mapmem, mapref, con, 1, i, True)
+                done = self.run_internal(tmpquery, mapmem, mapref, mapcon, 1, i, True)
                 if done == False:
                     break
                 #if
-                self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
+                self.run_mem(param, mapcon, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
             #for
             return True
         elif param.kind == "memory":
-            return self.run_mem(param, con, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
+            return self.run_mem(param, mapcon, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
         else:
             # not supposed to come here because of the pre-validation
             raise Exception("parameter's kind not implemented") 
     #def
 
     # run_mem, 
-    def run_mem(self, param, con, mapmem, mapref, cmd, file, query, level, skip, isSkip):
+    def run_mem(self, param, mapcon, mapmem, mapref, cmd, file, query, level, skip, isSkip):
         mem = mapmem[param.source]
 
         # it's here we check the max rows to execute
@@ -291,12 +291,12 @@ class Query:
 
             if level == len(query.parameters) - 1:
                 if isSkip:
-                    self.save_memory(query, tmpcmd, con, mapmem, mapref)
+                    self.save_memory(query, tmpcmd, mapcon, mapmem, mapref)
                 else:
-                    self.save_output(query, tmpcmd, tmpfile, con, mapmem, mapref)
+                    self.save_output(query, tmpcmd, tmpfile, mapcon, mapmem, mapref)
                 #if
             else:
-                self.run_recursive(con, mapmem, mapref, tmpcmd, tmpfile, query, level+1, rows[r], skip, isSkip)
+                self.run_recursive(mapcon, mapmem, mapref, tmpcmd, tmpfile, query, level+1, rows[r], skip, isSkip)
             #if
 
             if isSkip:
@@ -307,30 +307,30 @@ class Query:
     #def
     
     # adjust the sql command with the paramen value (use for the child case)
-    def adjust_cmd_from_parent(self, con, mapmem, mapref, p1, p2, row, skip, isSkip):
+    def adjust_cmd_from_parent(self, mapcon, mapmem, mapref, p1, p2, row, skip, isSkip):
         query = mapref[p2.source]
         cmd = self.adjust_cmd_all(query.command, p1, row)
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
         querytmp.output = 'memory'
-        self.run_internal(querytmp, mapmem, mapref, con, 1, skip, isSkip)
+        self.run_internal(querytmp, mapmem, mapref, mapcon, 1, skip, isSkip)
     #def
 
     # save the result into a file
-    def save_output(self, query, cmd, file, con, mapmem, mapref):
+    def save_output(self, query, cmd, file, mapcon, mapmem, mapref):
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
         querytmp.file = file
         querytmp.parameters = []
-        self.run_internal(querytmp, mapmem, mapref, con, 0, 0, False)
+        self.run_internal(querytmp, mapmem, mapref, mapcon, 0, 0, False)
     #def
 
     # save the result in memory
-    def save_memory(self, query, cmd, con, mapmem, mapref):
+    def save_memory(self, query, cmd, mapcon, mapmem, mapref):
         querytmp = copy.deepcopy(query)
         querytmp.command = cmd
         querytmp.output = 'memory'
         querytmp.parameters = []
-        self.run_internal(querytmp, mapmem, mapref, con, 0, 0, False)
+        self.run_internal(querytmp, mapmem, mapref, mapcon, 0, 0, False)
     #def
 #class
