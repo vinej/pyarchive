@@ -20,7 +20,7 @@
         {
             "Name" : "template1",
             "Kind" : "template",  
-            "Description" : "test emplate",
+            "Description" : "test template",
             "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_template.xlsx",
             "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template.xlsx"
         }
@@ -31,6 +31,13 @@
             "Description" : "read list of users into memory",
             "File" : "users.csv",
             "Output" : "memory"
+        },
+        {
+            "Name" : "template2",
+            "Kind" : "template",  
+            "Description" : "test template2",
+            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_template2.xlsx",
+            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         },
         { 
             "Name" : "save1",

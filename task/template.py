@@ -5,6 +5,8 @@ from message.message import gmsg
 import sys
 import openpyxl
 from copy import copy
+from openpyxl.formula.translate import Translator
+from openpyxl.utils import get_column_letter
 
 '''
 The Template class is used to output memory info into an Excel template
@@ -59,13 +61,21 @@ class Template:
         return rangeSelected, rangeSelectedStyle
     #def
 
+
+
     #Paste data from copyRange into template sheet
-    def pasteRange(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData):
+    def pasteRange(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData, col_ori, row_ori):
         countRow = 0
         for i in range(startRow,endRow+1,1):
             countCol = 0
             for j in range(startCol,endCol+1,1):
-                sheetReceiving.cell(row = i, column = j).value = copiedData[countRow][countCol]
+                value = copiedData[countRow][countCol]
+                if value[0] == '=':
+                    ori = get_column_letter(j) + str(row_ori+2)
+                    dst = get_column_letter(j) + str(i)
+                    sheetReceiving.cell(row = i, column = j).value = Translator(value, origin=ori).translate_formula(dst)
+                else:
+                    sheetReceiving.cell(row = i, column = j).value = copiedData[countRow][countCol]
                 countCol += 1
             countRow += 1
     #def
@@ -114,9 +124,10 @@ class Template:
         #Loops through selected Rows
         for i in range(startRow,endRow + 1,1):
             for j in range(startCol,endCol+1,1):
-                listnames = self.get_field_name(sheet.cell(i,j).value)
-                for name in listnames:
-                    sheet.cell(i,j).value = self.replace_field_name(row, name, sheet.cell(i,j).value)
+                if sheet.cell(i,j).value.startswith('=') == False:
+                    listnames = self.get_field_name(sheet.cell(i,j).value)
+                    for name in listnames:
+                        sheet.cell(i,j).value = self.replace_field_name(row, name, sheet.cell(i,j).value)
             #Adds the RowSelected List and nests inside the rangeSelected
     #def
 
@@ -135,11 +146,11 @@ class Template:
             sheet.insert_rows(r2,len(mapmem[source].rows)-1)
             rng,sty = self.copyRange(c1,r1+1,sheet.max_column,r2-1,sheet)
             for i in range(len(mapmem[source].rows)):
-                self.pasteRange(c1,r1+i+1,sheet.max_column,r1+i+1,sheet,rng)
+                self.pasteRange(c1,r1+i+1,sheet.max_column,r1+i+1,sheet,rng,c1,r1)
                 self.pasteRangeStyle(c1,r1+i+1,sheet.max_column,r1+i+1,sheet,sty)
 
             for i in range(len(mapmem[source].rows)):
-                self.replace_fields(mapmem[source].rows[i], c1, r1+i+1, c2, r1+i+1, sheet)
+                self.replace_fields(mapmem[source].rows[i], c1, r1+i+1, sheet.max_column, r1+i+1, sheet)
 
             sheet.delete_rows(r1,1)
             sheet.delete_rows(r2+len(mapmem[source].rows)-2)
