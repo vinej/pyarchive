@@ -6,7 +6,7 @@ The utility takes a json file in parameter.
 
 Here a example of a json file 
 
-`
+```
 {
     "Connections" : [
         {
@@ -58,7 +58,7 @@ Here a example of a json file
         }
     ]
     }
-`
+```
 
 
 
