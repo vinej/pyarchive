@@ -252,7 +252,7 @@ class Query:
             return self.run_mem(param, mapcon, mapmem, mapref, cmd, file, querytask, level, skip, isSkip)
         else:
             # not supposed to come here because of the pre-validation
-            raise Exception("parameter's kind not implemented") 
+            raise Exception("parameter's kind not implemented: " + param.kind) 
     #def
 
     # run_mem, 

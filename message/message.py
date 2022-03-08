@@ -23,7 +23,7 @@ class Message:
         self.mapmsg[32] = "JSON: the parameter at position '%s' of the task at position '%s' does not contains the field <%>"
 
         self.mapmsg[56] = "Pyarchive started"
-        self.mapmsg[57] = "Pyarchive comptleted with success"
+        self.mapmsg[57] = "Pyarchive completed with success"
     #def
 
     def get(self,id):

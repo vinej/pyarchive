@@ -17,6 +17,14 @@
             "Command":"archive|db2",
             "Output" : "memory"
         },
+        {
+            "Name" : "template1",
+            "Kind" : "template",  
+            "Description" : "test emplate",
+            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_template.xlsx",
+            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template.xlsx"
+        }
+        ,
         { 
             "Name" : "csv1",
             "Kind" : "csv",  
