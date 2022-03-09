@@ -5,7 +5,9 @@ from output.output import Output
 import sys
 '''
 The class Save is used to save the data in memory to files with differents options
-
+Name        :   the name of the task
+Kind        :   save
+Description :   the description of the task
 Output      :   csv or excel
 Source      :   the name of the source data to save
 File        :   contains the file name ouput
