@@ -88,7 +88,7 @@ Template definition
     Excel template rules
         - the excel template can have many tabs
         --> the title of each tab is the memory source name to use for dynamic rows
-        - the dynamic region of each tab is define between {{begin}} and {{end}}
+        - the dynamic region of each tab is define between [[begin]] and [[end]]
         - the dynamic section could have one to many lines
         - into the dynamic section, the fields with {{...}} will be replaced with the information from the source rows
         - the template support styles and formulas
@@ -96,9 +96,9 @@ Template definition
         Excel template
                A               B               C                    D
         1  first_name       last_name       full_name           occupation
-        2  {{begin}}			
+        2  [[begin]]			
         3  {{first_name}}   {{last_name}}   =A3&","&B3          {{occupation}}	                                                     	
-        4  {{end}}
+        4  [[end]]
 		
         result
              A                  B               C                  D

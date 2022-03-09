@@ -137,8 +137,8 @@ class Template:
 
         for sheet in book.worksheets:
             source = sheet.title
-            cstart,rstart = self.find_cr(sheet, '{{begin}}')
-            cend,rend = self.find_cr(sheet, '{{end}}')
+            cstart,rstart = self.find_cr(sheet, '[[begin]]')
+            cend,rend = self.find_cr(sheet, '[[end]]')
             # the dynamic sedction could be on many rows. We need the height of the section
             height = rend - rstart - 1
             # 1,4
