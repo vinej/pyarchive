@@ -13,7 +13,7 @@ The json file has 2 sections
         Name        : the name of the connection that will be used by tasks
         Connection  : the connection string to connect to the database
 
-2: Tasks: is an array of json objects with one of definitions below
+2: Tasks: is an array of json objects with definitions below
 
     This section define the task that will run sequentially
     a task can use information created by previous tasks as parameters
