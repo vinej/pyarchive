@@ -23,29 +23,31 @@ Task's Kinds
 
 Array definition
     Name        :   the name of the task
-    Kind        :   **array**
+    Kind        :   array
     Description :   the description of the task
     Command     :   contains the list of values separated by a pipe |
     Output      :   memory
 
 Csv definition
     Name        :   the name of the task
-    Kind        :   **csv**
+    Kind        :   csv
     Description :   the description of the task
     File        :   the input csv file
     Output      :   memory 
 
 Query definition
     Name            :   name of the task
-    Kind            :   **query**
+    Kind            :   query
     Description     :   the description of the task
-    Connection      :   the connection name to use for the query
-    Command         :   the SQL or stored proc to execute
-    Output          :   the output type of the query (memory,csv or excel)
+    Connection      :   the connection's name to use for the query
+    Command         :   the SQL or stored procecure to execute
+    Output          :   the output type of the query (memory,reference, csv or excel)
+                        reference means that the query is not executed right away, but will be executed
+                                    when a parameter will use it.
     File            :   the destination file name if the output is csv or excel
-    Excluded        :   the list of columns to exclude from the ouput
-    Anonymized      :   the list of columns to anonymized
-    Parameters      :   a list of parameters object used to execute the query
+    Excluded        :   the list of columns to exclude from the output
+    Anonymized      :   the list of columns to anonymize
+    Parameters      :   a list of parameter's objects used to execute the query
 
 Parameter definition
     Kind    :   memory    :  means that the parameter comes from a static list in memory
@@ -57,17 +59,17 @@ Parameter definition
 
 Save definition
     Name        :   the name of the task
-    Kind        :   **save**
+    Kind        :   save
     Description :   the description of the task
     Output      :   csv or excel
     Source      :   the name of the source data to save
-    File        :   contains the file name ouput
+    File        :   the output file name
     Excluded    :   a list of excluded columns
-    Anonymized  :   a list of columns to anonymized
+    Anonymized  :   a list of columns to anonymize
 
 Template definition
     Name        :   the name of the task
-    Kind        :   **template**
+    Kind        :   template
     Description :   the description of the task
     File        :   the excel output file
     Template    :   the excel template file to use
