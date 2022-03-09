@@ -150,12 +150,14 @@ class Template:
 
             # paste the section into the added rows
             for i in range(len(mapmem[source].rows)):
-                self.pasteRange(cstart,rstart + (i*height) + 1,sheet.max_column,(rstart + (i*height) + 1) + height - 1,sheet,rng,rstart+1)
-                self.pasteRangeStyle(cstart,rstart + (i*height) + 1,sheet.max_column,(rstart + (i*height) + 1) + height - 1,sheet,sty)
+                hstart = rstart + (i*height) + 1
+                self.pasteRange(cstart,hstart,sheet.max_column,hstart + height - 1,sheet,rng,rstart+1)
+                self.pasteRangeStyle(cstart,hstart,sheet.max_column,hstart + height - 1,sheet,sty)
 
             # update the data of each section
             for i in range(len(mapmem[source].rows)):
-                self.replace_fields(mapmem[source].rows[i], cstart, rstart + (i*height) + 1, sheet.max_column, (rstart + (i*height) + 1) + height - 1, sheet)
+                hstart = rstart + (i*height) + 1
+                self.replace_fields(mapmem[source].rows[i], cstart, hstart, sheet.max_column, hstart + height - 1, sheet)
 
             # remove the {{begin}} marker
             sheet.delete_rows(rstart,1)
