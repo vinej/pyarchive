@@ -48,13 +48,13 @@ class Template:
         rangeSelected = []
         rangeSelectedStyle = []
         #Loops through selected Rows
-        for i in range(startRow,endRow + 1,1):
+        for irow in range(startRow,endRow + 1,1):
             #Appends the row to a RowSelected list
             rowSelected = []
             rowSelectedStyle = []
-            for j in range(startCol,endCol+1,1):
-                rowSelected.append(sheet.cell(row = i, column = j).value)
-                rowSelectedStyle.append(copy(sheet.cell(row = i, column = j)._style))
+            for jcol in range(startCol,endCol+1,1):
+                rowSelected.append(sheet.cell(row = irow, column = jcol).value)
+                rowSelectedStyle.append(copy(sheet.cell(row = irow, column = jcol)._style))
             #Adds the RowSelected List and nests inside the rangeSelected
             rangeSelected.append(rowSelected)
             rangeSelectedStyle.append(rowSelectedStyle)
@@ -64,18 +64,18 @@ class Template:
 
 
     #Paste data from copyRange into template sheet
-    def pasteRange(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData, col_ori, row_ori):
+    def pasteRange(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData, row_ori):
         countRow = 0
-        for i in range(startRow,endRow+1,1):
+        for irow in range(startRow,endRow+1,1):
             countCol = 0
-            for j in range(startCol,endCol+1,1):
+            for jcol in range(startCol,endCol+1,1):
                 value = copiedData[countRow][countCol]
-                if value[0] == '=':
-                    ori = get_column_letter(j) + str(row_ori+2)
-                    dst = get_column_letter(j) + str(i)
-                    sheetReceiving.cell(row = i, column = j).value = Translator(value, origin=ori).translate_formula(dst)
+                if str(value)[0] == '=':
+                    ori = get_column_letter(jcol) + str( (row_ori+1) )
+                    dst = get_column_letter(jcol) + str(irow)
+                    sheetReceiving.cell(row = irow, column = jcol).value = Translator(value, origin=ori).translate_formula(dst)
                 else:
-                    sheetReceiving.cell(row = i, column = j).value = copiedData[countRow][countCol]
+                    sheetReceiving.cell(row = irow, column = jcol).value = copiedData[countRow][countCol]
                 countCol += 1
             countRow += 1
     #def
@@ -83,20 +83,20 @@ class Template:
     #Paste data from copyRange into template sheet
     def pasteRangeStyle(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData):
         countRow = 0
-        for i in range(startRow,endRow+1,1):
+        for irow in range(startRow,endRow+1,1):
             countCol = 0
-            for j in range(startCol,endCol+1,1):
-                sheetReceiving.cell(row = i, column = j)._style = copiedData[countRow][countCol]
+            for jcol in range(startCol,endCol+1,1):
+                sheetReceiving.cell(row = irow, column = jcol)._style = copiedData[countRow][countCol]
                 countCol += 1
             countRow += 1
     #def
 
     def find_cr(self, sheet, value):
-        for r in range(sheet.max_row):
-            for c in range(sheet.max_column):
-                if sheet.cell(r+1,c+1).value == value:
-                    print(c+1, r+1)
-                    return (c+1,r+1)
+        for row in range(sheet.max_row):
+            for col in range(sheet.max_column):
+                if sheet.cell(row+1,col+1).value == value:
+                    print(col+1, row+1)
+                    return (col+1,row+1)
         raise Exception('not found')
     #def
 
@@ -106,7 +106,7 @@ class Template:
     def get_field_name(self, value):
         outnames = []
         # return a list of name {{xxx}}
-        list = value.split('{{')
+        list = str(value).split('{{')
         for part in list:
             idx = part.find('}}')
             if idx != -1:
@@ -122,13 +122,12 @@ class Template:
 
     def replace_fields(self, row, startCol, startRow, endCol, endRow, sheet):
         #Loops through selected Rows
-        for i in range(startRow,endRow + 1,1):
-            for j in range(startCol,endCol+1,1):
-                if sheet.cell(i,j).value.startswith('=') == False:
-                    listnames = self.get_field_name(sheet.cell(i,j).value)
+        for irow in range(startRow,endRow + 1,1):
+            for jcol in range(startCol,endCol+1,1):
+                if str(sheet.cell(irow,jcol).value).startswith('=') == False:
+                    listnames = self.get_field_name(sheet.cell(irow,jcol).value)
                     for name in listnames:
-                        sheet.cell(i,j).value = self.replace_field_name(row, name, sheet.cell(i,j).value)
-            #Adds the RowSelected List and nests inside the rangeSelected
+                        sheet.cell(irow,jcol).value = self.replace_field_name(row, name, sheet.cell(irow,jcol).value)
     #def
 
     def run(self, mapmem, mapref, mapcon, position):
@@ -138,22 +137,31 @@ class Template:
 
         for sheet in book.worksheets:
             source = sheet.title
-            c1,r1 = self.find_cr(sheet, '{{begin}}')
-            # 1,2
-            c2,r2 = self.find_cr(sheet, '{{end}}')
+            cstart,rstart = self.find_cr(sheet, '{{begin}}')
+            cend,rend = self.find_cr(sheet, '{{end}}')
+            # the dynamic sedction could be on many rows. We need the height of the section
+            height = rend - rstart - 1
             # 1,4
-            # insert rows before the end
-            sheet.insert_rows(r2,len(mapmem[source].rows)-1)
-            rng,sty = self.copyRange(c1,r1+1,sheet.max_column,r2-1,sheet)
-            for i in range(len(mapmem[source].rows)):
-                self.pasteRange(c1,r1+i+1,sheet.max_column,r1+i+1,sheet,rng,c1,r1)
-                self.pasteRangeStyle(c1,r1+i+1,sheet.max_column,r1+i+1,sheet,sty)
+            # insert rows before the end. number of row into the data * the heiht of the section
+            sheet.insert_rows(rend,(len(mapmem[source].rows) * height - 1))
 
-            for i in range(len(mapmem[source].rows)):
-                self.replace_fields(mapmem[source].rows[i], c1, r1+i+1, sheet.max_column, r1+i+1, sheet)
+            # copy the section into memory                                                 
+            rng,sty = self.copyRange(cstart,rstart+1,sheet.max_column,rend-1+height-1,sheet)
 
-            sheet.delete_rows(r1,1)
-            sheet.delete_rows(r2+len(mapmem[source].rows)-2)
+            # paste the section into the added rows
+            for i in range(len(mapmem[source].rows)):
+                self.pasteRange(cstart,rstart + (i*height) + 1,sheet.max_column,(rstart + (i*height) + 1) + height - 1,sheet,rng,rstart+1)
+                self.pasteRangeStyle(cstart,rstart + (i*height) + 1,sheet.max_column,(rstart + (i*height) + 1) + height - 1,sheet,sty)
+
+            # update the data of each section
+            for i in range(len(mapmem[source].rows)):
+                self.replace_fields(mapmem[source].rows[i], cstart, rstart + (i*height) + 1, sheet.max_column, (rstart + (i*height) + 1) + height - 1, sheet)
+
+            # remove the {{begin}} marker
+            sheet.delete_rows(rstart,1)
+
+            # remove the {{end}} marker
+            sheet.delete_rows(rend+((len(mapmem[source].rows))*height)-2)
                 
         book.save(self.file)
 
