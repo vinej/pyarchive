@@ -8,15 +8,14 @@ from message.message import gmsg
 import sys
 
 '''
-The Csv class is used to read csv file
+The Csv class is used to read csv file into memory
 
-The json object propertiesw
+The json object properties
 
 Name        :   the name of the task
 Kind        :   csv
 Description :   the description of the task
 File        :   the input csv file
-Output      :   memory or reference
 '''
 class Csv:
     def __init__(self, jsondata):
@@ -24,42 +23,39 @@ class Csv:
         self.kind =  get_dict_value(jsondata,'Kind')
         self.description =  get_dict_value(jsondata,'Description')
         self.file =  get_dict_value(jsondata, 'File')
-        self.output =  get_dict_value(jsondata, 'Output')
+        self.output =  'memory'
     #def
 
     # run the Csv task
     def run(self, mapmem, mapref, mapcon, position):
         logging.info(gmsg.get(4), self.kind, self.name)
-        if self.output == 'reference':
-            mapref[self.name] = self
-        else:
-            _ = mapcon    # not used for now
-            _ = position  # not used for now
-            _ = mapref   # not used for now
-            rows = []
-            columns = []
-            with open(self.file, mode ='r') as file:
-                # reading the CSV file
-                csvFile = csv.reader(file)
-    
-                # displaying the contents of the CSV file
-                first = True
-                for row in csvFile:
-                    if first:
-                        columns = row
-                        first = False
-                    else :
-                        onerow = {}
-                        for i in range(len(columns)):
-                            onerow[columns[i]] = row[i]
-                        #for
-                        rows.append(onerow)
-                    #if
-                #
-            #with
-            m = Memory(columns, rows)
-            mapmem[self.name] = m
-        #if
+        _ = mapcon    # not used for now
+        _ = position  # not used for now
+        _ = mapref   # not used for now
+        rows = []
+        columns = []
+        with open(self.file, mode ='r') as file:
+            # reading the CSV file
+            csvFile = csv.reader(file)
+
+            # displaying the contents of the CSV file
+            first = True
+            for row in csvFile:
+                if first:
+                    columns = row
+                    first = False
+                else :
+                    onerow = {}
+                    for i in range(len(columns)):
+                        onerow[columns[i]] = row[i]
+                    #for
+                    rows.append(onerow)
+                #if
+            #
+        #with
+        m = Memory(columns, rows)
+        mapmem[self.name] = m
+
         logging.info(gmsg.get(3), self.kind,  self.name)
     #def
 
@@ -95,5 +91,4 @@ class Csv:
             sys.exit(28)
         #if
 	#def
-    
 #class

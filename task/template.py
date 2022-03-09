@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 '''
 The Template class is used to output memory info into an Excel template
 
-The json object propertiesw
+The json object properties
 
 Name        :   the name of the task
 Kind        :   template

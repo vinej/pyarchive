@@ -14,8 +14,7 @@
             "Name" : "database",
             "Kind" : "array",  
             "Description" : "read list of country into memory",
-            "Command":"archive|db2",
-            "Output" : "memory"
+            "Command":"archive|db2"
         },
         {
             "Name" : "template1",
@@ -29,8 +28,7 @@
             "Name" : "csv1",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
-            "File" : "users.csv",
-            "Output" : "memory"
+            "File" : "users.csv"
         },
         {
             "Name" : "template2",

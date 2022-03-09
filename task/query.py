@@ -8,20 +8,14 @@ from message.message import gmsg
 import sys
 
 '''
-The Parameter class is used by the query to create dynamic parameters to the SQL queries
+The Parameter class is used by the query to create dynamic parameters to the SQL queries and save then into different excel file
 
-Kind    :   memory    :  means that parameters come from a static list in memory
-
-            reference :  means that parameters come from a source of type 'reference' that contains also parameters
-
-            child     :  means that parameters come from the previous parameter definition, so this one is a child.
-
-Names   :   the list of parameters names taht will be used into the queries separated by comma
+Kind    :   memory    :  means that parameter's rows comes from a static list in memory
+            reference :  means that parameter's rows comes from a source of type 'reference' that contains also parameters
+            child     :  means that parameter's rows comes from the previous parameter's definition, so this one is a child.
+Names   :   the list of parameters' names that will be used into the queries separated by comma
 Fields  :   the list of fields from a source that will replaced the parameters into the queries
-Source  :   the name of the memory object that contains the rows
-
-Example : you want to a run a query with one parameter : always single
-
+Source  :   the name of the memory object that contains rows
 '''
 class Parameter:
     def __init__(self,data):
@@ -33,20 +27,20 @@ class Parameter:
 #class
 
 '''
-The class Query is a powerfull task to execute SQL queries with dynamilsc variables with one to many levels
+The class Query is a powerfull task to execute SQL queries or stored procedures with dynamic variables with one to many levels
 
-The properties of the Query json object
+The properties of the Query json object:
 
 Name            :   name of the task
 Kind            :   query
 Description     :   the description of the task
-Connection      :   the connection name to use for the query
-Command         :   the SQL command to execute
-Output          :   the output type of the query (memory,csv or excel)
+Connection      :   the connection's name to use for the query
+Command         :   the SQL or a stored procedure to execute
+Output          :   the output type of the query (memory,reference,csv or excel)
 File            :   the destination file name if the output is csv or excel
 Excluded        :   the list of columns to exclude from the ouput
-Anonymized      :   the list of columns to anonymized
-Parameters      :   a list of parameter object used to execute the query
+Anonymized      :   the list of columns to anonymize
+Parameters      :   a list of parameters' objects used to execute the query
 '''
 class Query:
     def __init__(self, data):
@@ -110,6 +104,18 @@ class Query:
             sys.exit(27)
         #if
 
+        if self.excluded is not None:
+            if type(self.excluded).__name__ != 'list':
+                logging.fatal(gmsg.get(40), position, 'Excluded')
+            #if
+        #if
+
+        if self.anonymized is not None:
+             if type(self.anonymized).__name__ != 'list':
+                logging.fatal(gmsg.get(40), position, 'Anonymized')
+            #if
+        #if
+
         if len(self.parameters) > 0:
             for p in self.parameters:
                 self.validate_parameter(p, mapcon, position)
@@ -130,10 +136,20 @@ class Query:
             sys.exit(32)
         #if
 
+        if type(param.fields).__name__ != 'list':
+            logging.fatal(gmsg.get(40), position, 'Fields')
+            sys.exit(32)
+        #if  
+
         if param.names == None:
             logging.fatal(gmsg.get(32), position,  'Names')
             sys.exit(32)
         #if
+
+        if type(param.names).__name__ != 'list':
+            logging.fatal(gmsg.get(40), position, 'Names')
+            sys.exit(32)
+        #if  
 
         if param.source == None:
             logging.fatal(gmsg.get(32), position,  'Source')
@@ -157,27 +173,27 @@ class Query:
 
     # run internal is called by a recursive algorith to run the current queries
     # and save the result unto memory of into a file (csv,excel)
-    def run_internal(self, query, mapmem, mapref, mapcon, position, skip, isSkip):
+    def run_internal(self, querytask, mapmem, mapref, mapcon, position, skip, isSkip):
         _ = position # not use for now
         # get the connection to run the query
-        connection = mapcon.get_con(query.connection).connection
+        connection = mapcon.get_con(querytask.connection).connection
 
         # if no parameters, so run the queqry and save the result in memory of into a file
-        if len(query.parameters) == 0:
+        if len(querytask.parameters) == 0:
             # run the query
-            m = Odbc().run(connection, query.command, query.file, query.name, query.excluded, query.anonymized, query.output)
+            m = Odbc().run(connection, querytask.command, querytask.file, querytask.name, querytask.excluded, querytask.anonymized, querytask.output)
             # put the result in memory of save it into a file
-            if query.output == 'memory' :
-                mapmem[query.name] = m
+            if querytask.output == 'memory' :
+                mapmem[querytask.name] = m
             else:
                 if m != None:
-                    Output().save(m, query.file, query.name, query.excluded, query.anonymized, query.output)
+                    Output().save(m, querytask.file, querytask.name, querytask.excluded, querytask.anonymized, querytask.output)
                 #if
             #if
             return True
         else:
             # there are parameters, so run recursively, to execute one to many queries depending of the parameters' list
-            return self.run_recursive(mapcon, mapmem, mapref, query.command, query.file, query, 0, None, skip, isSkip)
+            return self.run_recursive(mapcon, mapmem, mapref, querytask.command, querytask.file, querytask, 0, None, skip, isSkip)
         #if
     #def
 
@@ -214,7 +230,7 @@ class Query:
     #def
 
     # run the query for all parameters that could be memory,reference or child
-    # con       :   the connection to use
+    # mapcon       :   the connection to use
     # mapmem    :   the map of all data in memory, could be used of param.Kind = 'memory'
     # mapref    :   all the task of type 'reference' because they are executed with parameters. use for param.Kind = 'reference'
     # cmd       :   the SQL command to execute
@@ -256,7 +272,7 @@ class Query:
     #def
 
     # run_mem, 
-    def run_mem(self, param, mapcon, mapmem, mapref, cmd, file, query, level, skip, isSkip):
+    def run_mem(self, param, mapcon, mapmem, mapref, cmd, file, querytask, level, skip, isSkip):
         mem = mapmem[param.source]
 
         # it's here we check the max rows to execute
@@ -289,14 +305,14 @@ class Query:
                 #if
             #for
 
-            if level == len(query.parameters) - 1:
+            if level == len(querytask.parameters) - 1:
                 if isSkip:
-                    self.save_memory(query, tmpcmd, mapcon, mapmem, mapref)
+                    self.save_memory(querytask, tmpcmd, mapcon, mapmem, mapref)
                 else:
-                    self.save_output(query, tmpcmd, tmpfile, mapcon, mapmem, mapref)
+                    self.save_output(querytask, tmpcmd, tmpfile, mapcon, mapmem, mapref)
                 #if
             else:
-                self.run_recursive(mapcon, mapmem, mapref, tmpcmd, tmpfile, query, level+1, rows[r], skip, isSkip)
+                self.run_recursive(mapcon, mapmem, mapref, tmpcmd, tmpfile, querytask, level+1, rows[r], skip, isSkip)
             #if
 
             if isSkip:
@@ -317,8 +333,8 @@ class Query:
     #def
 
     # save the result into a file
-    def save_output(self, query, cmd, file, mapcon, mapmem, mapref):
-        querytmp = copy.deepcopy(query)
+    def save_output(self, querytask, cmd, file, mapcon, mapmem, mapref):
+        querytmp = copy.deepcopy(querytask)
         querytmp.command = cmd
         querytmp.file = file
         querytmp.parameters = []
@@ -326,8 +342,8 @@ class Query:
     #def
 
     # save the result in memory
-    def save_memory(self, query, cmd, mapcon, mapmem, mapref):
-        querytmp = copy.deepcopy(query)
+    def save_memory(self, querytask, cmd, mapcon, mapmem, mapref):
+        querytmp = copy.deepcopy(querytask)
         querytmp.command = cmd
         querytmp.output = 'memory'
         querytmp.parameters = []

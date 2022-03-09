@@ -22,6 +22,8 @@ class Message:
         self.mapmsg[29] = "JSON: The supported OutputType is <memory> only"
         self.mapmsg[32] = "JSON: the parameter at position '%s' of the task at position '%s' does not contains the field <%>"
 
+        self.mapmsg[40] = "The property value must be an array, not a single value"
+
         self.mapmsg[56] = "Pyarchive started"
         self.mapmsg[57] = "Pyarchive completed with success"
     #def

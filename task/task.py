@@ -8,8 +8,6 @@ import logging
 from message.message import gmsg
 '''
     Master object to run all task
-
-
     mapmen:     list of memory object
     mapref:     list of reference object not already instantiated
     vtasks:     list of task

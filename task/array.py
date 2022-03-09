@@ -5,15 +5,14 @@ from message.message import gmsg
 import sys
 
 '''
-The Array class is used to creat a simple array of scalar value in memory
+The Array class is used to create a simple array of scalar values in memory
 
-The json object propertiesw
+The json object properties
 
 Name        :   the name of the task
 Kind        :   array
 Description :   the description of the task
 Command     :   contains the list of values separated by a pipe |
-Output      :   memory or reference
 '''
 class Array:
     def __init__(self, jsondata):
@@ -59,23 +58,20 @@ class Array:
 
     def run(self, mapmem, mapref, mapcon, position):
         logging.info(gmsg.get(4), self.kind, self.name)
-        if self.output == 'reference':
-            mapref[self.name] = self
-        else:
-            _ = mapcon    # not used for now
-            _ = position  # not used for now
-            _ = mapref # not used for now
-            columns = [self.name]
-            arows = self.command.split('|')
-            rows = []
-            for value in arows:
-                onerow = {}
-                onerow[self.name] = value
-                rows.append(onerow)
-            #
-            m = Memory(columns, rows)
-            mapmem[self.name] = m
-        #if
+        _ = mapcon    # not used for now
+        _ = position  # not used for now
+        _ = mapref # not used for now
+        columns = [self.name]
+        arows = self.command.split('|')
+        rows = []
+        for value in arows:
+            onerow = {}
+            onerow[self.name] = value
+            rows.append(onerow)
+        #
+        m = Memory(columns, rows)
+        mapmem[self.name] = m
+
         logging.info(gmsg.get(3), self.kind, self.name)
     #def
 #class

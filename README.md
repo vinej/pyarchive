@@ -1,5 +1,11 @@
 # pyarchive
-Archive data tools in python (python 3.10.1)
+PYArchive is a tool in python to archive in csv/excel files data from databases. I created the tool because I was fed up to use copy/pase from Microsoft SQL studio to put the information into a Excel file. 
+```
+    local installation
+        1- install pip
+        2- pip install pyodbc
+        3- pip install openpyxl
+```
 
 This small utility could be used to archive data from differents sources (csv,excel,db).
 
@@ -20,7 +26,7 @@ The json paramater file has 2 sections
 
 
 Task's Kinds
-    array       :   create a simple list of scalar values in memory
+    array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
     csv         :   read a csv file in memory
     query       :   execute a SQL query or a stored procedure
     save        :   save into a csv/excel file information created by previous tasks
@@ -31,14 +37,12 @@ Array definition
     Kind        :   array
     Description :   the description of the task
     Command     :   contains the list of values separated by a pipe |
-    Output      :   memory   
 
 Csv definition
     Name        :   the name of the task
     Kind        :   csv
     Description :   the description of the task
     File        :   the input csv file
-    Output      :   memory 
 
 Query definition
     Name            :   name of the task
@@ -133,7 +137,7 @@ Example with a SQL and a Stored procedure with parameters to put into different 
             }]
         }
     ]
-    }
+}
 ```
 
 V 0.3 (March 2022)
