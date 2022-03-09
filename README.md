@@ -2,12 +2,13 @@
 Archive data tools in python (python 3.10.1)
 
 This small utility could be used to archive data from differents sources (csv,excel,db).
-The utility takes a json file in parameter.
 
-Note the file :  main.exe  is a executable created with pyinstaller with this file you don't need to install python on your machine
+The utility takes a json file as parameter.
+
+Note:  main.exe is a window executable created with pyinstaller
 
 ```
-The json file has 2 sections
+The json paramater file has 2 sections
 
 1: Connections: is an array of json objects with the below definition
 
@@ -17,22 +18,20 @@ The json file has 2 sections
 
 2: Tasks: is an array of json objects with definitions below
 
-    This section define the task that will run sequentially
-    a task can use information created by previous tasks as parameters
 
 Task's Kinds
-    array       :   create a simple list of scalar value in memory
+    array       :   create a simple list of scalar values in memory
     csv         :   read a csv file in memory
-    query       :   execute a SQL quary or a store procedure
+    query       :   execute a SQL query or a stored procedure
     save        :   save into a csv/excel file information created by previous tasks
-    template    :   save into a excel file information from memory with an excel template
+    template    :   save into a excel file information from memory created by previous task with an excel template
 
 Array definition
     Name        :   the name of the task
     Kind        :   array
     Description :   the description of the task
     Command     :   contains the list of values separated by a pipe |
-    Output      :   memory
+    Output      :   memory   
 
 Csv definition
     Name        :   the name of the task
@@ -45,23 +44,25 @@ Query definition
     Name            :   name of the task
     Kind            :   query
     Description     :   the description of the task
-    Connection      :   the connection's name to use for the query
+    Connection      :   the connection's name to use for the query from the connection section
     Command         :   the SQL or stored procecure to execute
     Output          :   the output type of the query (memory,reference, csv or excel)
-                        reference means that the query is not executed right away, but will be executed
-                                    when a parameter will use it.
+                        ex: select * from employees where name = '{{name}}' and email = '{{email}}'
+                        reference:  means that the query is not executed right away, but will be executed when a parameter will use it.
+                        memory:     means that the result will be put in memory
+                        csv,excel:  means that the result will be saved into a csv or excel file.
     File            :   the destination file name if the output is csv or excel
     Excluded        :   the list of columns to exclude from the output
     Anonymized      :   the list of columns to anonymize
     Parameters      :   a list of parameter's objects used to execute the query
 
 Parameter definition
-    Kind    :   memory    :  means that the parameter comes from a static list in memory
-                reference :  means that the parameter comes from a source of type 'reference' that contains also parameters
-                child     :  means that the parameter comes from the previous parameter definition, so this one is a child.
+    Kind    :   memory    :  means that the parameter rows comes from a list in memory
+                reference :  means that the parameter rows comes from a source of type 'reference' that contains also parameters
+                child     :  means that the parameter rows comes from the previous parameter definition, so this one is a child.
     Source  :   the name of the memory object that contains the rows
-    Names   :   the list of parameters' names separated by comma that will be used into the queries
-    Fields  :   the list of fields from the source that will replace parameters into the queries
+    Names   :   the list of parameters' names separated by comma that will be used into the queries ex: ['{{name}}','{{email}}']
+    Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
 
 Save definition
     Name        :   the name of the task
@@ -80,7 +81,7 @@ Template definition
     File        :   the excel output file
     Template    :   the excel template file to use
 
-Example with a SQL and a Stored procedure
+Example with a SQL and a Stored procedure with parameters to put into different excel files the MGMT and SUPPORT information from the database
 
 {
     "Connections" : [
@@ -134,7 +135,5 @@ Example with a SQL and a Stored procedure
     ]
     }
 ```
-
-
 
 V 0.3 (March 2022)
