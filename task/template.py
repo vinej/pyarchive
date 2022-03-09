@@ -16,8 +16,8 @@ The json object propertiesw
 Name        :   the name of the task
 Kind        :   template
 Description :   the description of the task
-Command     :   contains the list of values separated by a pipe |
-Output      :   memory
+File        :   the excel output file
+Template    :   the excel template file to use
 '''
 class Template:
     def __init__(self, jsondata):
