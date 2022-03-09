@@ -1,8 +1,10 @@
 # pyarchive
-Archive data tools in python (python 3.9.x)
+Archive data tools in python (python 3.10.1)
 
 This small utility could be used to archive data from differents sources (csv,excel,db).
 The utility takes a json file in parameter.
+
+Note the file :  main.exe  is a executable created with pyinstaller with this file you don't need to install python on your machine
 
 ```
 The json file has 2 sections
@@ -135,4 +137,4 @@ Example with a SQL and a Stored procedure
 
 
 
-V 0.2
+V 0.3 (March 2022)
