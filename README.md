@@ -23,21 +23,21 @@ Task's Kinds
 
 Array definition
     Name        :   the name of the task
-    Kind        :   array
+    Kind        :   **array**
     Description :   the description of the task
     Command     :   contains the list of values separated by a pipe |
     Output      :   memory
 
 Csv definition
     Name        :   the name of the task
-    Kind        :   csv
+    Kind        :   **csv**
     Description :   the description of the task
     File        :   the input csv file
     Output      :   memory 
 
 Query definition
     Name            :   name of the task
-    Kind            :   query
+    Kind            :   **query**
     Description     :   the description of the task
     Connection      :   the connection name to use for the query
     Command         :   the SQL or stored proc to execute
@@ -57,7 +57,7 @@ Parameter definition
 
 Save definition
     Name        :   the name of the task
-    Kind        :   save
+    Kind        :   **save**
     Description :   the description of the task
     Output      :   csv or excel
     Source      :   the name of the source data to save
@@ -67,7 +67,7 @@ Save definition
 
 Template definition
     Name        :   the name of the task
-    Kind        :   template
+    Kind        :   **template**
     Description :   the description of the task
     File        :   the excel output file
     Template    :   the excel template file to use
