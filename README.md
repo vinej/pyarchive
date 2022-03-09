@@ -5,21 +5,25 @@ This small utility could be used to archive data from differents sources (csv,ex
 The utility takes a json file in parameter.
 
 ```
-The json file has 2 section
+The json file has 2 sections
 
-1: connections
-    This section define connections used by the tasks
+1: Connections: is an array of json objects with the below definition
 
-2: tasks
-    This section define the task that will run sequentialy
-    a task can use the information created by previous tasks as parameters
+    Connection object definition
+        Name        : the name of the connection that will be used by tasks
+        Connection  : the connection string to connect to the database
+
+2: Tasks: is an array of json objects with one of definitions below
+
+    This section define the task that will run sequentially
+    a task can use information created by previous tasks as parameters
 
 Task's Kinds
     array       :   create a simple list of scalar value in memory
     csv         :   read a csv file in memory
-    query       :   execute a SQL/SP query
+    query       :   execute a SQL quary or a store procedure
     save        :   save into a csv/excel file information created by previous tasks
-    template    :   save into a Excel file the information from memory with an excel template
+    template    :   save into a excel file information from memory with an excel template
 
 Array definition
     Name        :   the name of the task
