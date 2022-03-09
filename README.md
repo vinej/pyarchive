@@ -99,8 +99,7 @@ Example with a SQL and a Stored procedure with parameters to put into different 
             "Name" : "activity",
             "Kind" : "array",  
             "Command":"MGMT|SUPPORT",
-            "Description":"activity",
-            "Output" : "memory"
+            "Description":"activity"
         }
         ,
         { 
