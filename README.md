@@ -1,5 +1,5 @@
 # pyarchive
-PYArchive is a tool in python to archive in csv/excel files data from databases. I created the tool because I was fed up to use copy/pase from Microsoft SQL studio to put the information into a Excel file. 
+PYArchive is a tool in python to archive in csv/excel files data from databases. I created the tool because I was fed up to use copy/paste from Microsoft SQL studio to put the information into a Excel file. 
 ```
     local installation
         1- install pip
