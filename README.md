@@ -14,24 +14,42 @@ The utility takes a json file as parameter.
 Note:  main.exe is a window executable created with pyinstaller
 
 ```
-The json paramater file has 3 sections : Connections, GlobalParameter, Tasks
+The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
 
-1: Connections: is an array of json objects with the below definition to connect to databases
+1: Connections: is an array of connections to the database used by the GlobalParameter and Tasks sections.
+        The object definition:  
 
-    Connection object definition
         Name        : the name of the connection that will be used by tasks
         Connection  : the connection string to connect to the database
 
-2: GlobalParameter: Is an object that include a Task that will be used to run all tasks for all occurence in memory
-        only array,csv,query tasks are available in the section GlobalParameter
-        the parameter variables uses [[xxx]] in the tasks definition to access the current row and field of the current iteration (loop)
-        by example, this option can be used to run all tasks for all projects
+        Example
+        "Connections" : [
+            {
+                "Name" : "project",
+                "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
+            }
+        ],....
 
-3: Tasks: is an array of json objects with definitions below
+2: GlobalParameter: This option is used to run all tasks many time from a list of values
+        the list of values is created from a Task of type array, csv or query
+        the parameter variables uses [[xxx]] in the Tasks definition section to access the current row and field of the current iteration (loop)
+        by example, this option can be used to run all tasks for project 'prj1' and 'prj2'
 
-Task's Kinds available
+        Example:
+        "GlobalParameter":
+        [
+            { 
+                "Name" : "project",
+                "Kind" : "array",  
+                "Description" : "read list of projects into memory",
+                "Command" : "prj1|prj2"
+            }
+        ],...
+        see the task definition below
+
+3: Tasks: tasks are commands run sequentialy from task definition below. There is 5 kinds of task:
     array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
-    csv         :   read a csv file in memory. the first line of the CSv must contains the columns' names
+    csv         :   read a csv file in memory. the first line of the CSV must contains the columns' names
     query       :   execute a SQL query or a stored procedure and save the result
     save        :   save into a csv/excel file information created by previous tasks in memory
     template    :   save into a excel file information created by previous tasks in memory with the help of an excel template
@@ -64,13 +82,13 @@ Query definition
     Anonymized      :   the list of columns to anonymize on the output
     Parameters      :   a list of parameter's objects used to execute the query
 
-Parameter definition
-    Kind    :   memory    :  means that the parameter rows comes from a list in memory
-                reference :  means that the parameter rows comes from a source of type 'reference' that contains also parameters
-                child     :  means that the parameter rows comes from the previous parameter definition, so this one is a child.
-    Source  :   the name of the memory object that contains the rows
-    Names   :   the list of parameters' names separated by comma that will be used into the queries ex: ['{{name}}','{{email}}']
-    Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
+    Parameter definition
+        Kind    :   memory    :  means that the parameter rows comes from a list in memory
+                    reference :  means that the parameter rows comes from a source of type 'reference' that contains also parameters
+                    child     :  means that the parameter rows comes from the previous parameter definition, so this one is a child.
+        Source  :   the name of the memory object that contains the rows
+        Names   :   the list of parameters' names separated by comma that will be used into the queries ex: ['{{name}}','{{email}}']
+        Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
 
 Save definition
     Name        :   the name of the task
@@ -196,5 +214,4 @@ an example with GlobalParameter
     ]
     }
 ```
-
 V 0.3 (March 2022)
