@@ -29,12 +29,12 @@ The json paramater file has 3 sections : Connections, GlobalParameter, Tasks
 
 3: Tasks: is an array of json objects with definitions below
 
-Task's Kinds
+Task's Kinds available
     array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
-    csv         :   read a csv file in memory
-    query       :   execute a SQL query or a stored procedure
-    save        :   save into a csv/excel file information created by previous tasks
-    template    :   save into a excel file information from memory created by previous task with an excel template
+    csv         :   read a csv file in memory. the first line of the CSv must contains the columns' names
+    query       :   execute a SQL query or a stored procedure and save the result
+    save        :   save into a csv/excel file information created by previous tasks in memory
+    template    :   save into a excel file information created by previous tasks in memory with the help of an excel template
 
 Array definition
     Name        :   the name of the task
@@ -46,7 +46,7 @@ Csv definition
     Name        :   the name of the task
     Kind        :   csv
     Description :   the description of the task
-    File        :   the input csv file
+    File        :   the full path of the csv file
 
 Query definition
     Name            :   name of the task
@@ -54,14 +54,14 @@ Query definition
     Description     :   the description of the task
     Connection      :   the connection's name to use for the query from the connection section
     Command         :   the SQL or stored procecure to execute
-    Output          :   the output type of the query (memory,reference, csv or excel)
                         ex: select * from employees where name = '{{name}}' and email = '{{email}}'
+    Output          :   the output type of the query (memory,reference, csv or excel)
                         reference:  means that the query is not executed right away, but will be executed when a parameter will use it.
                         memory:     means that the result will be put in memory
                         csv,excel:  means that the result will be saved into a csv or excel file.
     File            :   the destination file name if the output is csv or excel
     Excluded        :   the list of columns to exclude from the output
-    Anonymized      :   the list of columns to anonymize
+    Anonymized      :   the list of columns to anonymize on the output
     Parameters      :   a list of parameter's objects used to execute the query
 
 Parameter definition
@@ -86,8 +86,8 @@ Template definition
     Name        :   the name of the task
     Kind        :   template
     Description :   the description of the task
-    File        :   the excel output file
-    Template    :   the excel template file to use
+    File        :   the full path of the excel output file
+    Template    :   the full path of excel template file to use
 
     Excel template rules
         - the excel template can have many tabs
@@ -112,7 +112,7 @@ Template definition
         4  Brian            Bethamy         Brian,Bethamy       programmer
 
 
-Example with a SQL and a Stored procedure with parameters to put into different excel files the MGMT and SUPPORT information from the database
+Example of a json file to use with pyarchive
 
 {
     "Connections" : [
