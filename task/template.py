@@ -1,5 +1,6 @@
 from task.memory import Memory
 from task.util import get_dict_value
+from task.util import replace_global_parameter
 import logging
 from message.message import gmsg
 import sys
@@ -130,8 +131,15 @@ class Template:
                         sheet.cell(irow,jcol).value = self.replace_field_name(row, name, sheet.cell(irow,jcol).value)
     #def
 
-    def run(self, mapmem, mapref, mapcon, position):
+    def run(self, mapmem, mapref, mapcon, position, g_row):
         logging.info(gmsg.get(4), self.kind, self.name)
+        _ = mapcon    # not used for now
+        _ = position  # not used for now
+        _ = mapref # not used for now
+
+        self.file = replace_global_parameter(self.file, g_row)
+        self.description = replace_global_parameter(self.description, g_row)
+        self.template = replace_global_parameter(self.template, g_row)
 
         book = openpyxl.load_workbook(self.template)
 

@@ -1,6 +1,8 @@
 from task.memory import Memory
 import csv
 from task.util import get_dict_value
+from task.util import replace_global_parameter
+
 import logging
 from message.message import gmsg
 import logging
@@ -27,7 +29,12 @@ class Csv:
     #def
 
     # run the Csv task
-    def run(self, mapmem, mapref, mapcon, position):
+    def run(self, mapmem, mapref, mapcon, position, g_row):
+
+        # replace the global parameter
+        self.file = replace_global_parameter(self.file, g_row)
+        self.description = replace_global_parameter(self.description, g_row)
+
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
         _ = position  # not used for now

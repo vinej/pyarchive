@@ -3,6 +3,7 @@ from output.output import Output
 from myodbc.myodbc import Odbc
 import copy
 from task.util import get_dict_value
+from task.util import replace_global_parameter
 import logging
 from message.message import gmsg
 import sys
@@ -159,7 +160,21 @@ class Query:
     #def
 
     # run the query
-    def run(self, mapmem, mapref, mapcon, position):
+    def run(self, mapmem, mapref, mapcon, position, g_row):
+
+        # adjust global parameters
+        self.file = replace_global_parameter(self.file, g_row)
+        self.description = replace_global_parameter(self.description, g_row)
+        self.command = replace_global_parameter(self.command, g_row)
+        self.connection = replace_global_parameter(self.connection, g_row)
+        self.output = replace_global_parameter(self.output, g_row)
+        self.excluded = replace_global_parameter(self.excluded, g_row)
+        self.anonymized = replace_global_parameter(self.anonymized, g_row)
+
+        for param in self.parameters:
+            param.fields = replace_global_parameter(param.fields, g_row)
+            param.names = replace_global_parameter(param.name, g_row)
+
         # started
         logging.info(gmsg.get(4), self.kind, self.name)
         if self.output == 'reference':

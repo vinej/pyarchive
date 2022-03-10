@@ -6,6 +6,7 @@ from connection.connection import ConnectionMng
 from ajson.archivejson import ArchiveJson
 from connection.connection import ConnectionMng
 from task.task import Task
+from task.globalparameter import GlobalParameter
 import traceback
 
 def set_logging(file):
@@ -33,25 +34,53 @@ def set_logging(file):
     #try
 #def
 
+def validate_args(args):
+    pass
+    if len(args) < 1 or len(args) > 2:
+        raise Exception("Invalidid parameters")
+    #if
+#def
+
+
 
 def main() :
     set_logging('pyarchive.log')
     try:
         # get started
         logging.info(gmsg.get(56)) #started
+        
         args = sys.argv[1:]
+
+        validate_args(args)
         # read the json file to execute
         jsondata = ArchiveJson().load(args[0])
+
         # get all connections
         mapcon = ConnectionMng(jsondata)
         # validate the connections
         mapcon.validate()
+        # get all loops to execute the tasks
+        gparam = GlobalParameter(jsondata)
+        gparam.validate(mapcon)
         # get all tasks to execute
         tasks = Task(jsondata)
         # validate the tasks
         tasks.validate(mapcon)
         # run the tasks
-        tasks.run(mapcon)
+        if len(gparam.maptask) > 0:
+            gparam.run(mapcon)
+            for mem in gparam.mapmem:
+                for g_row in gparam.mapmem[mem].rows:
+                    tasks.run(mapcon, g_row)
+                    # recreate the tasks for the next run
+                    # free memory
+                    tasks = None
+                    tasks = Task(jsondata)
+                    tasks.validate(mapcon)
+            #for
+        else:
+            tasks.run(mapcon, g_row)
+        #if
         # completed
         logging.info(gmsg.get(57)) #completed
     except Exception as e:

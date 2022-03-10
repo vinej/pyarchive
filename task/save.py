@@ -1,4 +1,5 @@
 from task.util import get_dict_value
+from task.util import replace_global_parameter
 import logging
 from message.message import gmsg
 from output.output import Output
@@ -19,7 +20,6 @@ class Save:
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')
         self.description = get_dict_value(jsondata,'Description')
-        self.command = get_dict_value(jsondata,'Command')
         self.output = get_dict_value(jsondata,"Output")
         self.file = get_dict_value(jsondata,"File")
         self.source = get_dict_value(jsondata,"Source")
@@ -66,10 +66,17 @@ class Save:
         #if
 	#def
 
-    def run(self, mapmem, mapref, con, position):
+    def run(self, mapmem, mapref, con, position, g_row):
         _ = con    # not used for now
         _ = position  # not used for now
         _ = mapref # not used for now
+        
+                # adjust global parameters
+        self.file = replace_global_parameter(self.file, g_row)
+        self.description = replace_global_parameter(self.description, g_row)
+        self.output = replace_global_parameter(self.output, g_row)
+        self.excluded = replace_global_parameter(self.excluded, g_row)
+        self.anonymized = replace_global_parameter(self.anonymized, g_row)
         # started
         logging.info(gmsg.get(4), self.kind, self.name)
         # get the object to save into a file

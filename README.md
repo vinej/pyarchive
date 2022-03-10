@@ -14,16 +14,20 @@ The utility takes a json file as parameter.
 Note:  main.exe is a window executable created with pyinstaller
 
 ```
-The json paramater file has 2 sections
+The json paramater file has 3 sections : Connections, GlobalParameter, Tasks
 
-1: Connections: is an array of json objects with the below definition
+1: Connections: is an array of json objects with the below definition to connect to databases
 
     Connection object definition
         Name        : the name of the connection that will be used by tasks
         Connection  : the connection string to connect to the database
 
-2: Tasks: is an array of json objects with definitions below
+2: GlobalParameter: Is an object that include a Task that will be used to run all tasks for all occurence in memory
+        only array,csv,query tasks are available in the section GlobalParameter
+        the parameter variables uses [[xxx]] in the tasks definition to access the current row and field of the current iteration (loop)
+        by example, this option can be used to run all tasks for all projects
 
+3: Tasks: is an array of json objects with definitions below
 
 Task's Kinds
     array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
@@ -117,6 +121,7 @@ Example with a SQL and a Stored procedure with parameters to put into different 
             "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
         }
     ],
+    "GlobalParameter": [],
     "Tasks" : [
         { 
             "Name" : "activity",
@@ -160,6 +165,36 @@ Example with a SQL and a Stored procedure with parameters to put into different 
         }
     ]
 }
+
+an example with GlobalParameter
+{
+    "Connections" : [],
+    "GlobalParameter":
+    [
+        { 
+            "Name" : "project",
+            "Kind" : "array",  
+            "Description" : "read list of projects into memory",
+            "Command" : "prj1|prj2"
+        }
+    ]
+    ,
+    "Tasks" : [
+        { 
+            "Name" : "csv1",
+            "Kind" : "csv",  
+            "Description" : "read list of users into memory",
+            "File" : "users_[[project]].csv"
+        },
+        {
+            "Name" : "template2",
+            "Kind" : "template",  
+            "Description" : "test template2",
+            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
+        }
+    ]
+    }
 ```
 
 V 0.3 (March 2022)

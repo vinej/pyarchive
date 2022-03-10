@@ -9,6 +9,14 @@
             "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
         }
     ],
+    "Loops": [
+        { 
+            "Name" : "projects",
+            "Kind" : "csv",  
+            "Description" : "read list of projects to run all tasks by project",
+            "File" : "projects.csv"
+        }
+    ],
     "Tasks" : [
         { 
             "Name" : "database",

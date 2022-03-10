@@ -1,98 +1,28 @@
 {
-    "Connections" : [
+    "Connections" : [],
+    "GlobalParameter":
+    [
         { 
-            "Name" : "corpo",
-            "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
-        },
-        {
             "Name" : "project",
-            "Connection" : "DRIVER={SQL Server Native Client 11.0};SERVER=localhost;DATABASE=archive;UID=saa;PWD=Hydne3/44"
-        }
-    ],
-    "Tasks" : [
-        { 
-            "Name" : "database",
             "Kind" : "array",  
-            "Description" : "read list of country into memory",
-            "Command":"archive|db2",
-            "Output" : "memory"
-        },
+            "Description" : "read list of projects into memory",
+            "Command" : "prj1|prj2"
+        }
+    ]
+    ,
+    "Tasks" : [
         { 
             "Name" : "csv1",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
-            "File" : "users.csv",
-            "Output" : "memory"
+            "File" : "users.csv"
         },
-        { 
-            "Name" : "save1",
-            "Kind" : "save",  
-            "Description" : "save data from memory",
-            "File" : "users.xlsx",
-            "Output" : "excel",
-            "Source" : "csv1"
-        },
-        { 
-            "Name" : "listnames",
-            "Kind" : "query",  
-            "Description" : "read the list of tables into memory",
-            "Connection" : "project",
-            "Command":"select table_name from archive.dbo.tablename",
-            "Output" : "memory"
-        },
-        { 
-            "Name" : "projects",
-            "Kind" : "query",  
-            "Description" : "read list of projects into memory",
-            "Connection" : "corpo",
-            "Command":"select [id], [name], [description], [database] from archive.dbo.projects WHERE [database] = '{database}'",
-            "Output" : "reference",
-            "Parameters" : [
-                {
-                    "Names" : ["{database}"],
-                    "Kind": "single",
-                    "Fields" : ["database"],
-                    "Source": "database"
-            }]
-        },
-        { 
-            "Name" : "periodes",
-            "Kind" : "query",  
-            "Description" : "lazy read list of periodes for each project",
-            "Connection" : "project",
-            "Command":"select id,code from archive.dbo.Periodes where project = {project}",
-            "Output" : "reference"
-        },
-        { 
-            "Name" : "names",
-            "Kind" : "query",  
-            "Description" : "extract to excel for each tables, the list of names by project for each periode",
-            "Connection" : "project",
-            "Command":"select * from archive.dbo.{names} where project = {project} and (periode = {per_prec} or periode = {per_curr})",
-            "Excluded":  ["fxml", "ftext"],
-            "Anonymized": ["name", "fntext"],
-            "Output" : "csv",
-            "File" : "pyarchive.csv",
-            "Parameters" : [
-                {
-                    "Names" : ["{names}"],
-                    "Kind": "memory",
-                    "Fields" : ["table_name"],
-                    "Source": "listnames"
-                },
-                {
-                    "Names" : ["{project}"],
-                    "Kind": "reference",
-                    "Fields" : ["id"],
-                    "Source": "projects"
-                },
-                {
-                    "Names" : ["{per_prec}", "{per_curr}"],
-                    "Kind" : "child",
-                    "Fields" : ["id", "id"],
-                    "Source": "periodes"
-                }
-            ]
+        {
+            "Name" : "template2",
+            "Kind" : "template",  
+            "Description" : "test template2",
+            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         }
     ]
     }
