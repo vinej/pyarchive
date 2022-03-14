@@ -53,6 +53,7 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
     query       :   execute a SQL query or a stored procedure and save the result
     save        :   save into a csv/excel file information created by previous tasks in memory
     template    :   save into a excel file information created by previous tasks in memory with the help of an excel template
+    curl        :   launch a curl command (not completed yet, on progress)
 
 Array definition
     Name        :   the name of the task
@@ -130,8 +131,34 @@ Template definition
         4  Brian            Bethamy         Brian,Bethamy       programmer
 
 
-Example of a json file to use with pyarchive
+Curl definition  (see curl documentatuion 7.82 on Internet)
+(on progress, not integrated with memory and parser yet)
+    Name:               name of the task
+    Kind:               curl
+    Description:        description of the task
+    Output:             memory or reference
+    Options:            an array of curl option' objects (see curl documentation version 7.82)
+                        see below example. You can have one to many options.
+                        the first one is often the URL of the call supported by curl
+    (not implemented yet) 
+    Parser:             the parser to use to decode the result (text,csv,json,html)
+    HierarchyProperty:  if parser = json and the contain of the json file is an hierarchy, then set the property  ex: "children"
+        { 
+            "Name" : "google",
+            "Kind" : "curl",  
+            "Description":"get the google html page",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": 'http://www.google.com' }
+            ]
+        }
 
+
+========
+Examples
+========
+
+Example of a json file to use with pyarchive
 {
     "Connections" : [
         {
