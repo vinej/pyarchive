@@ -12,7 +12,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["test copy 2.json"]
+            "args": ["test curl.json"]
         }
     ]
 }

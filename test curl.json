@@ -1,0 +1,15 @@
+{
+    "Connections" : [],
+    "GlobalParameter":[],
+    "Tasks" : [
+        { 
+            "Name" : "google",
+            "Kind" : "curl",  
+            "Description" : "read google home page, curl must be into the system PATH",
+            "Output": "memory",
+            "Options": [
+                {"Option": "www.google.comm"}
+            ]
+        }
+    ]
+    }

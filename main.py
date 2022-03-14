@@ -79,6 +79,7 @@ def main() :
                     tasks.validate(mapcon)
             #for
         else:
+            g_row = None
             tasks.run(mapcon, g_row)
         #if
         # completed

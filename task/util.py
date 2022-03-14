@@ -26,6 +26,9 @@ def get_global_names(value):
 
 def replace_global_parameter(value, g_row):
     # find all [[xxx]] and replace by g_row[xxx]
+    if g_row == None:
+        return value
+    #if
     gnames = get_global_names(value)
 
     for name in gnames:
@@ -33,5 +36,4 @@ def replace_global_parameter(value, g_row):
         value =  value.replace(name, g_row[column])
 
     return value
-    #if
 #def

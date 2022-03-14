@@ -3,6 +3,7 @@ from task.csv import Csv
 from task.query import Query
 from task.save import Save
 from task.template import Template
+from task.curl import Curl
 from task.util import get_dict_value
 import logging
 from message.message import gmsg
@@ -76,6 +77,8 @@ class Task:
             return Save(onetask)
         elif kind == "template":
             return Template(onetask)
+        elif kind == "curl":
+            return Curl(onetask)
         else:
             raise Exception("Invalid Kind for a loop :" + kind)
         #if 
