@@ -132,7 +132,6 @@ Template definition
 
 
 Curl definition  (see curl documentatuion 7.82 on Internet)
-(on progress, not integrated with memory and parser yet)
     Name:               name of the task
     Kind:               curl
     Description:        description of the task
@@ -140,9 +139,10 @@ Curl definition  (see curl documentatuion 7.82 on Internet)
     Options:            an array of curl option' objects (see curl documentation version 7.82)
                         see below example. You can have one to many options.
                         the first one is often the URL of the call supported by curl
-    (not implemented yet) 
-    Parser:             the parser to use to decode the result (text,csv,json,html)
-    HierarchyProperty:  if parser = json and the contain of the json file is an hierarchy, then set the property  ex: "children"
+    Parser:             the parser to use to decode the result (html,text,css,csv,json,xml)
+
+                        NOTE: into the curl options, " must be escape for \"
+
         { 
             "Name" : "google",
             "Kind" : "curl",  
@@ -150,9 +150,33 @@ Curl definition  (see curl documentatuion 7.82 on Internet)
             "Output" : "memory",
             "Options" : [
                 { "Option": 'http://www.google.com' }
-            ]
+            ],
+            "Parser": "html"
+        },
+        { 
+            "Name" : "json",
+            "Kind" : "curl",  
+            "Description":"get a json file",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": "file://c:/curl/test_json.json"},
+                { "Option": "-H \"X-Custom-Header: value\"" },
+                { "Option": "-H \"Content-Type: application/json\"" }             
+            ],
+            "Parser" : "json"
+        },
+        { 
+            "Name" : "xml",
+            "Kind" : "curl",  
+            "Description":"get a xml file",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": "file://c:/curl/test_xml.xml"},
+                { "Option": "-H \"X-Custom-Header: value\"" },
+                { "Option": "-H \"Content-Type: application/xml\"" }             
+            ],
+            "Parser" : "xml"
         }
-
 
 ========
 Examples

@@ -8,8 +8,41 @@
             "Description" : "read google home page, curl must be into the system PATH",
             "Output": "memory",
             "Options": [
-                {"Option": "www.google.comm"}
-            ]
+                {"Option": "www.google.com"}
+            ],
+            "Parser": "html"
+        },
+        { 
+            "Name" : "json",
+            "Kind" : "curl",  
+            "Description":"get a json file",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": "file://c:/curl/test_json.json"},
+                { "Option": "-H \"X-Custom-Header: value\"" },
+                { "Option": "-H \"Content-Type: application/json\"" }             
+            ],
+            "Parser" : "json"
+        },
+        { 
+            "Name" : "xml",
+            "Kind" : "curl",  
+            "Description":"get a xml file",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": "file://c:/curl/test_xml.xml"},
+                { "Option": "-H \"X-Custom-Header: value\"" },
+                { "Option": "-H \"Content-Type: application/xml\"" }             
+            ],
+            "Parser" : "xml"
+        },
+        { 
+            "Name" : "save",
+            "Kind" : "save",  
+            "Description":"save xml into excel",
+            "Output" : "excel",
+            "File": "test_xml.xlsx",
+            "Source": "xml"
         }
     ]
     }

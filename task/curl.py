@@ -3,6 +3,10 @@ import subprocess
 from task.memory import Memory
 from task.util import get_dict_value
 from task.util import replace_global_parameter
+from task.util import read_csv
+from task.util import read_json
+from task.util import read_xml
+
 from message.message import gmsg
 import logging
 '''
@@ -13,6 +17,7 @@ Output:             memory or reference
 Options:            an array of curl option object (see curl documentation version 7.82)
                     see below example. UYou can have one to ma many opttions.
                     the first one is often the URL of the call supported by curl
+Parser:             one of html,css,text,json,csv,xml
         { 
             "Name" : "google",
             "Kind" : "curl",  
@@ -20,7 +25,24 @@ Options:            an array of curl option object (see curl documentation versi
             "Output" : "memory",
             "Options" : [
                 { "Option": 'http://www.google.com' }
-            ]
+            ],
+            "Parser" : "html"
+        }
+
+        example of curl command : https://reqbin.com/req/c-1n4ljxb9/curl-get-request-example
+
+        get a json file
+        { 
+            "Name" : "json",
+            "Kind" : "curl",  
+            "Description":"get the google html page",
+            "Output" : "memory",
+            "Options" : [
+                { "Option": "https://reqbin.com/echo/get/json" },
+                { "Option": "-H \"X-Custom-Header: value\"" },
+                { "Option": "-H \"Content-Type: application/json\"" },               
+            ],
+            "Parser" : "json"
         }
 '''
 class Curl:
@@ -30,6 +52,8 @@ class Curl:
         self.description =  get_dict_value(jsondata,'Description')
         self.options =  get_dict_value(jsondata, 'Options')
         self.output =  get_dict_value(jsondata, 'Output')
+        self.parser = get_dict_value(jsondata, 'Parser')
+        self.hierarchy = get_dict_value(jsondata, 'HierarchyProperty')
     #def
 
     '''
@@ -71,6 +95,20 @@ class Curl:
         stdout, stderr = process.communicate()
         self.check_error(process.returncode, stderr, cmd)
 
-        mapmem[self.name] = stdout
+
+        if self.parser == None or self.parser == 'html' or self.parser == 'css' or self.parser == 'text':
+            mapmem[self.name] = stdout
+        elif self.parser == 'csv':
+            columns, rows = read_csv(stdout)
+            mapmem[self.name] = Memory(columns, rows)
+        elif self.parser == 'json':
+            columns, rows = read_json(stdout)
+            mapmem[self.name] = Memory(columns, rows)
+        elif self.parser == 'xml':
+            columns, rows = read_xml(stdout)
+            mapmem[self.name] = Memory(columns, rows)
+        else:
+            raise Exception("Curl error, parser not implemented: " + self.parser)
+        #if
 #class
 
