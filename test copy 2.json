@@ -18,11 +18,13 @@
             "File" : "users.csv"
         },
         {
-            "Name" : "template2",
-            "Kind" : "template",  
-            "Description" : "test template2",
-            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
-            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
+            "Name"          :   "template2",
+            "Kind"          :   "save",  
+            "Source"        :   "csv1",
+            "Description"   :   "test template2",
+            "Output"        :   "excel",
+            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "ExcelTemplate" :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         }
     ]
     }

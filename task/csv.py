@@ -1,10 +1,7 @@
-from task.memory import Memory
+from output.memory import Memory
 import csv
-from task.util import get_dict_value
-from task.util import replace_global_parameter
-
-import logging
-from message.message import gmsg
+from output.util import get_dict_value
+from output.util import replace_global_parameter
 import logging
 from message.message import gmsg
 import sys

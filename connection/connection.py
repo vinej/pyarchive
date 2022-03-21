@@ -1,6 +1,6 @@
 import logging
 from message.message import gmsg
-from task.util import get_dict_value
+from output.util import get_dict_value
 
 '''
 Connection class

@@ -2,8 +2,8 @@ from task.array import Array
 from task.csv import Csv
 from task.query import Query
 from task.save import Save
-from task.template import Template
-from task.util import get_dict_value
+from output.exceltemplate import ExcelTemplate
+from output.util import get_dict_value
 import logging
 from message.message import gmsg
 '''

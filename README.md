@@ -52,7 +52,6 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
     csv         :   read a csv file in memory. the first line of the CSV must contains the columns' names
     query       :   execute a SQL query or a stored procedure and save the result
     save        :   save into a csv/excel file information created by previous tasks in memory
-    template    :   save into a excel file information created by previous tasks in memory with the help of an excel template
     curl        :   launch a curl command (not completed yet, on progress)
 
 Array definition
@@ -79,6 +78,7 @@ Query definition
                         memory:     means that the result will be put in memory
                         csv,excel:  means that the result will be saved into a csv or excel file.
     File            :   the destination file name if the output is csv or excel
+    Exceltemplate   :   a excel template to use for the output of type Excel (see into Save task for template rules for ExcelTemplate)
     Excluded        :   the list of columns to exclude from the output
     Anonymized      :   the list of columns to anonymize on the output
     Parameters      :   a list of parameter's objects used to execute the query
@@ -92,43 +92,37 @@ Query definition
         Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
 
 Save definition
-    Name        :   the name of the task
-    Kind        :   save
-    Description :   the description of the task
-    Output      :   csv or excel
-    Source      :   the name of the source data to save
-    File        :   the output file name
-    Excluded    :   a list of excluded columns
-    Anonymized  :   a list of columns to anonymize
+    Name            :   the name of the task
+    Kind            :   save
+    Description     :   the description of the task
+    Output          :   csv or excel
+    Source          :   the name of the source data to save
+    File            :   the output file name
+    Excluded        :   a list of excluded columns
+    Anonymized      :   a list of columns to anonymize
+    Exceltemplate   :   a excel template to use for the output of type Excel
 
-Template definition
-    Name        :   the name of the task
-    Kind        :   template
-    Description :   the description of the task
-    File        :   the full path of the excel output file
-    Template    :   the full path of excel template file to use
+        Excel template rules
+            - the excel template can have many tabs
+            --> the title of each tab is the memory source name to use for dynamic rows
+            - the dynamic region of each tab is define between [[begin]] and [[end]]
+            - the dynamic section could have one to many lines
+            - into the dynamic section, the fields with {{...}} will be replaced with the information from the source rows
+            - the template support styles and formulas
 
-    Excel template rules
-        - the excel template can have many tabs
-        --> the title of each tab is the memory source name to use for dynamic rows
-        - the dynamic region of each tab is define between [[begin]] and [[end]]
-        - the dynamic section could have one to many lines
-        - into the dynamic section, the fields with {{...}} will be replaced with the information from the source rows
-        - the template support styles and formulas
-
-        Excel template
-               A               B               C                    D
-        1  first_name       last_name       full_name           occupation
-        2  [[begin]]			
-        3  {{first_name}}   {{last_name}}   =A3&","&B3          {{occupation}}	                                                     	
-        4  [[end]]
-		
-        result
-             A                  B               C                  D
-        1  first_namw       last_name       full_name           occupation
-        2  John             Doe             John,Doe            gardener
-        3  Lucy	            Smith           Lucy,Smith          teacher
-        4  Brian            Bethamy         Brian,Bethamy       programmer
+            Excel template
+                A               B               C                    D
+            1  first_name       last_name       full_name           occupation
+            2  [[begin]]			
+            3  {{first_name}}   {{last_name}}   =A3&","&B3          {{occupation}}	                                                     	
+            4  [[end]]
+            
+            result
+                A                  B               C                  D
+            1  first_namw       last_name       full_name           occupation
+            2  John             Doe             John,Doe            gardener
+            3  Lucy	            Smith           Lucy,Smith          teacher
+            4  Brian            Bethamy         Brian,Bethamy       programmer
 
 
 Curl definition  (see curl documentatuion 7.82 on Internet)
@@ -265,4 +259,4 @@ an example with GlobalParameter
     ]
     }
 ```
-V 0.3 (March 2022)
+V 0.4 (March 2022)

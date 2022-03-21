@@ -1,5 +1,5 @@
-from task.memory import Memory
-from task.util import get_dict_value
+from output.memory import Memory
+from output.util import get_dict_value
 import logging
 from message.message import gmsg
 import sys

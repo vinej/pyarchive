@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from output.anonymize import Anonymized
-from task.memory import Memory
+from output.memory import Memory
 from output.anonymize import ano
 
 '''

@@ -1,9 +1,3 @@
-from task.memory import Memory
-from task.util import get_dict_value
-from task.util import replace_global_parameter
-import logging
-from message.message import gmsg
-import sys
 import openpyxl
 from copy import copy
 from openpyxl.formula.translate import Translator
@@ -20,30 +14,12 @@ Description :   the description of the task
 File        :   the excel output file
 Template    :   the excel template file to use
 '''
-class Template:
-    def __init__(self, jsondata):
-        self.name = get_dict_value(jsondata,'Name')
-        self.kind = get_dict_value(jsondata,'Kind')
-        self.description = get_dict_value(jsondata,'Description')
-        self.file = get_dict_value(jsondata,'File')
-        self.template = get_dict_value(jsondata,'Template')
+class ExcelTemplate:
+    def __init__(self, file, source, exceltemplate):
+        self.file = file
+        self.source = source
+        self.exceltemplate = exceltemplate
     #def
-
-
-    def validate(self, mapcon, position):  
-        _ = mapcon # not use here
-        if self.name == None:
-            logging.fatal(gmsg.get(26), position, 'Name')
-            sys.exit(26)
-        #if
-        self.name = self.name.lower()
-
-        if self.kind == None:
-            logging.fatal(gmsg.get(27), position, self.name, 'Kind')
-            sys.exit(27)
-        #
-        self.kind = self.kind.lower()
-	#def
 
     def copyRange(self, startCol, startRow, endCol, endRow, sheet):
         rangeSelected = []
@@ -61,8 +37,6 @@ class Template:
             rangeSelectedStyle.append(rowSelectedStyle)
         return rangeSelected, rangeSelectedStyle
     #def
-
-
 
     #Paste data from copyRange into template sheet
     def pasteRange(self, startCol, startRow, endCol, endRow, sheetReceiving, copiedData, row_ori):
@@ -131,17 +105,8 @@ class Template:
                         sheet.cell(irow,jcol).value = self.replace_field_name(row, name, sheet.cell(irow,jcol).value)
     #def
 
-    def run(self, mapmem, mapref, mapcon, position, g_row):
-        logging.info(gmsg.get(4), self.kind, self.name)
-        _ = mapcon    # not used for now
-        _ = position  # not used for now
-        _ = mapref # not used for now
-
-        self.file = replace_global_parameter(self.file, g_row)
-        self.description = replace_global_parameter(self.description, g_row)
-        self.template = replace_global_parameter(self.template, g_row)
-
-        book = openpyxl.load_workbook(self.template)
+    def exe(self, mapmem):
+        book = openpyxl.load_workbook(self.exceltemplate)
 
         for sheet in book.worksheets:
             source = sheet.title
@@ -174,11 +139,6 @@ class Template:
             sheet.delete_rows(rend+((len(mapmem[source].rows))*height)-2)
                 
         book.save(self.file)
-
-        logging.info(gmsg.get(3), self.kind, self.name)
     #def
-
-
-
 #class
 

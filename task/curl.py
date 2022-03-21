@@ -1,11 +1,11 @@
 import shlex
 import subprocess
-from task.memory import Memory
-from task.util import get_dict_value
-from task.util import replace_global_parameter
-from task.util import read_csv
-from task.util import read_json
-from task.util import read_xml
+from output.memory import Memory
+from output.util import get_dict_value
+from output.util import replace_global_parameter
+from output.util import read_csv
+from output.util import read_json
+from output.util import read_xml
 
 from message.message import gmsg
 import logging

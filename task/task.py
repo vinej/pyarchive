@@ -2,9 +2,8 @@ from task.array import Array
 from task.csv import Csv
 from task.query import Query
 from task.save import Save
-from task.template import Template
 from task.curl import Curl
-from task.util import get_dict_value
+from output.util import get_dict_value
 import logging
 from message.message import gmsg
 '''
@@ -75,8 +74,6 @@ class Task:
             return Query(onetask)
         elif kind == "save":
             return Save(onetask)
-        elif kind == "template":
-            return Template(onetask)
         elif kind == "curl":
             return Curl(onetask)
         else:

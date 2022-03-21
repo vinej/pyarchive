@@ -1,4 +1,4 @@
-from task.memory import Memory
+from output.memory import Memory
 import logging
 import pyodbc
 import csv

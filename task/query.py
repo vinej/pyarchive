@@ -1,12 +1,12 @@
-
 from output.output import Output
 from myodbc.myodbc import Odbc
 import copy
-from task.util import get_dict_value
-from task.util import replace_global_parameter
+from output.util import get_dict_value
+from output.util import replace_global_parameter
 import logging
 from message.message import gmsg
 import sys
+from output.exceltemplate import ExcelTemplate
 
 '''
 The Parameter class is used by the query to create dynamic parameters to the SQL queries and save then into different excel file
@@ -38,29 +38,31 @@ Description     :   the description of the task
 Connection      :   the connection's name to use for the query
 Command         :   the SQL or a stored procedure to execute
 Output          :   the output type of the query (memory,reference,csv or excel)
+ExcelTemplate   :   for a excel ouput, use a excel template
 File            :   the destination file name if the output is csv or excel
 Excluded        :   the list of columns to exclude from the ouput
 Anonymized      :   the list of columns to anonymize
 Parameters      :   a list of parameters' objects used to execute the query
 '''
 class Query:
-    def __init__(self, data):
-        self.name = get_dict_value(data,'Name')
-        self.kind = get_dict_value(data,'Kind')
-        self.description = get_dict_value(data,'Description')
-        self.connection = get_dict_value(data,'Connection')
-        self.command = get_dict_value(data,'Command')
-        self.output = get_dict_value(data,'Output')
+    def __init__(self, jsondata):
+        self.name = get_dict_value(jsondata,'Name')
+        self.kind = get_dict_value(jsondata,'Kind')
+        self.description = get_dict_value(jsondata,'Description')
+        self.connection = get_dict_value(jsondata,'Connection')
+        self.command = get_dict_value(jsondata,'Command')
+        self.output = get_dict_value(jsondata,'Output')
         if self.output == "excel" or self.output == "csv":
-            self.file = get_dict_value(data,'File')
+            self.file = get_dict_value(jsondata,'File')
         else:
             self.file = None
         #if
-        self.excluded =  get_dict_value(data,'Excluded')
-        self.anonymized =  get_dict_value(data,'Anonymized')
+        self.exceltemplate = get_dict_value(jsondata,"ExcelTemplate")
+        self.excluded =  get_dict_value(jsondata,'Excluded')
+        self.anonymized =  get_dict_value(jsondata,'Anonymized')
 
         self.parameters = []
-        params = get_dict_value(data,'Parameters')
+        params = get_dict_value(jsondata,'Parameters')
         if params != None:
             for p in params:
                 self.parameters.append(Parameter(p))
@@ -170,6 +172,7 @@ class Query:
         self.output = replace_global_parameter(self.output, g_row)
         self.excluded = replace_global_parameter(self.excluded, g_row)
         self.anonymized = replace_global_parameter(self.anonymized, g_row)
+        self.exceltemplate = replace_global_parameter(self.exceltemplate, g_row)
 
         for param in self.parameters:
             param.fields = replace_global_parameter(param.fields, g_row)
@@ -202,7 +205,11 @@ class Query:
                 mapmem[querytask.name] = m
             else:
                 if m != None:
-                    Output().save(m, querytask.file, querytask.name, querytask.excluded, querytask.anonymized, querytask.output)
+                    if self.exceltemplate != None:
+                        tpt = ExcelTemplate(querytask.file, querytask.source, querytask.exceltemplate)
+                        tpt.exe(mapmem)
+                    else:
+                        Output().save(m, querytask.file, querytask.name, querytask.excluded, querytask.anonymized, querytask.output)
                 #if
             #if
             return True

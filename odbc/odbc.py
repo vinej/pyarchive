@@ -1,5 +1,5 @@
 import pyodbc
-from task.memory import Memory
+from output.memory import Memory
 import logging
 import csv
 from message.message import gmsg
