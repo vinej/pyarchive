@@ -121,7 +121,7 @@ Save definition
                 A                  B               C                  D
             1  first_namw       last_name       full_name           occupation
             2  John             Doe             John,Doe            gardener
-            3  Lucy	            Smith           Lucy,Smith          teacher
+            3  Lucy             Smith           Lucy,Smith          teacher
             4  Brian            Bethamy         Brian,Bethamy       programmer
 
 
