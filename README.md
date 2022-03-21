@@ -229,7 +229,7 @@ Example of a json file to use with pyarchive
     ]
 }
 
-an example with GlobalParameter
+an example with GlobalParameter and ExcelTemplate
 {
     "Connections" : [],
     "GlobalParameter":
@@ -244,17 +244,18 @@ an example with GlobalParameter
     ,
     "Tasks" : [
         { 
-            "Name" : "csv1",
+            "Name" : "users",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
             "File" : "users_[[project]].csv"
         },
         {
-            "Name" : "template2",
-            "Kind" : "template",  
-            "Description" : "test template2",
-            "File":"C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
-            "Template" : "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
+            "Name"          :   "template",
+            "Kind"          :   "save",  
+            "Source"        :   "users",
+            "Description"   :   "test template2",
+            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "ExcelTemplate" :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         }
     ]
     }
