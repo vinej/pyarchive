@@ -1,6 +1,6 @@
 {
     "Connections" : [],
-    "GlobalParameter":
+    "GlobalParameters":
     [
         { 
             "Name" : "project",
@@ -23,7 +23,7 @@
             "Source"        :   "csv1",
             "Description"   :   "test template2",
             "Output"        :   "excel",
-            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project.project]]_template2.xlsx",
             "ExcelTemplate" :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         }
     ]

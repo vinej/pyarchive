@@ -30,13 +30,30 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
             }
         ],....
 
-2: GlobalParameter: This option is used to run all tasks many time from a list of values
+2: GlobalParameters: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
+
+        The internal loops are like that
+
+            for row1 in rows level1 
+                for row2 in rows level2
+                    for row3 in rows level3
+                        for row4 in rows level4
+                            for row5 in rows level5
+
+                                execute all tasks with global parameters row1,row2,rows3,row4,row5
+
+        Example, you maybe want to run tasks for all databases. For each database, run for all projects into the database. For each project run for each periode of the project. This kind of user case with have 3 levels.
+
+        - the level2, level3,level4,level5 tasks can used also parameters from the previous level. In that case the output type must be 'reference' instead of 'memory'
+        - an output type 'reference' means that the task is not executed right away the first time. The task is put in memory to be re-run with parameters updated with
+        - values from previous tasks
+
         the list of values is created from a Task of type array, csv or query
-        the parameter variables uses [[xxx]] in the Tasks definition section to access the current row and field of the current iteration (loop)
+        the parameter variables uses [[name.column]] in the Tasks definition section to access the current row and field of the current iteration (loop)
         by example, this option can be used to run all tasks for project 'prj1' and 'prj2'
 
-        Example:
-        "GlobalParameter":
+        Example to loop on a fixed list of projects
+        "GlobalParameters":
         [
             { 
                 "Name" : "project",
@@ -78,7 +95,7 @@ Query definition
                         memory:     means that the result will be put in memory
                         csv,excel:  means that the result will be saved into a csv or excel file.
     File            :   the destination file name if the output is csv or excel
-    Exceltemplate   :   a excel template to use for the output of type Excel (see into Save task for template rules for ExcelTemplate)
+    ExcelTemplate   :   a excel template to use for the output of type Excel (see into Save task for template rules for ExcelTemplate)
     Excluded        :   the list of columns to exclude from the output
     Anonymized      :   the list of columns to anonymize on the output
     Parameters      :   a list of parameter's objects used to execute the query
@@ -100,7 +117,7 @@ Save definition
     File            :   the output file name
     Excluded        :   a list of excluded columns
     Anonymized      :   a list of columns to anonymize
-    Exceltemplate   :   a excel template to use for the output of type Excel
+    ExcelTemplate   :   a excel template to use for the output of type Excel
 
         Excel template rules
             - the excel template can have many tabs
@@ -112,14 +129,14 @@ Save definition
 
             Excel template
                 A               B               C                    D
-            1  first_name       last_name       full_name           occupation
+            1  First Name       Last Name       Full Name           Occupation
             2  [[begin]]			
             3  {{first_name}}   {{last_name}}   =A3&","&B3          {{occupation}}	                                                     	
             4  [[end]]
             
             result
                 A                  B               C                  D
-            1  first_namw       last_name       full_name           occupation
+            1  First Name       Last Name       Full Name           Occupation
             2  John             Doe             John,Doe            gardener
             3  Lucy             Smith           Lucy,Smith          teacher
             4  Brian            Bethamy         Brian,Bethamy       programmer
@@ -136,6 +153,7 @@ Curl definition  (see curl documentatuion 7.82 on Internet)
     Parser:             the parser to use to decode the result (html,text,css,csv,json,xml)
 
                         NOTE: into the curl options, " must be escape for \"
+                        NOTE: for html,text,css, only one colum, is created with the name of the task's name
 
         { 
             "Name" : "google",
@@ -184,7 +202,7 @@ Example of a json file to use with pyarchive
             "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
         }
     ],
-    "GlobalParameter": [],
+    "GlobalParameters": [],
     "Tasks" : [
         { 
             "Name" : "activity",
@@ -232,7 +250,7 @@ Example of a json file to use with pyarchive
 an example with GlobalParameter and ExcelTemplate
 {
     "Connections" : [],
-    "GlobalParameter":
+    "GlobalParameters":
     [
         { 
             "Name" : "project",
@@ -247,14 +265,14 @@ an example with GlobalParameter and ExcelTemplate
             "Name" : "users",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
-            "File" : "users_[[project]].csv"
+            "File" : "users_[[project.project]].csv"
         },
         {
             "Name"          :   "template",
             "Kind"          :   "save",  
             "Source"        :   "users",
             "Description"   :   "test template2",
-            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project]]_template2.xlsx",
+            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project.project]]_template2.xlsx",
             "ExcelTemplate" :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
         }
     ]

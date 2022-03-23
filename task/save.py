@@ -69,18 +69,18 @@ class Save:
         #if
 	#def
 
-    def run(self, mapmem, mapref, mapcon, position, g_row):
+    def run(self, mapmem, mapref, mapcon, position, g_rows):
         _ = mapcon    # not used for now
         _ = position  # not used for now
         _ = mapref # not used for now
         
-                # adjust global parameters
-        self.file = replace_global_parameter(self.file, g_row)
-        self.description = replace_global_parameter(self.description, g_row)
-        self.output = replace_global_parameter(self.output, g_row)
-        self.exceltemplate = replace_global_parameter(self.exceltemplate, g_row)
-        self.excluded = replace_global_parameter(self.excluded, g_row)
-        self.anonymized = replace_global_parameter(self.anonymized, g_row)
+        # adjust global parameters
+        self.file = replace_global_parameter(self.file, g_rows)
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
+        self.exceltemplate = replace_global_parameter(self.exceltemplate, g_rows)
+        self.excluded = replace_global_parameter(self.excluded, g_rows)
+        self.anonymized = replace_global_parameter(self.anonymized, g_rows)
         # started
         logging.info(gmsg.get(4), self.kind, self.name)
         # get the object to save into a file

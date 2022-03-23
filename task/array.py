@@ -56,11 +56,12 @@ class Array:
         #if
 	#def
 
-    def run(self, mapmem, mapref, mapcon, position):
+    def run(self, mapmem, mapref, mapcon, position, g_rows):
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
         _ = position  # not used for now
         _ = mapref # not used for now
+        _ = g_rows
         columns = [self.name]
         arows = self.command.split('|')
         rows = []

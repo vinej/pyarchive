@@ -162,21 +162,20 @@ class Query:
     #def
 
     # run the query
-    def run(self, mapmem, mapref, mapcon, position, g_row):
-
+    def run(self, mapmem, mapref, mapcon, position, g_rows):
         # adjust global parameters
-        self.file = replace_global_parameter(self.file, g_row)
-        self.description = replace_global_parameter(self.description, g_row)
-        self.command = replace_global_parameter(self.command, g_row)
-        self.connection = replace_global_parameter(self.connection, g_row)
-        self.output = replace_global_parameter(self.output, g_row)
-        self.excluded = replace_global_parameter(self.excluded, g_row)
-        self.anonymized = replace_global_parameter(self.anonymized, g_row)
-        self.exceltemplate = replace_global_parameter(self.exceltemplate, g_row)
+        self.file = replace_global_parameter(self.file, g_rows)
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.command = replace_global_parameter(self.command, g_rows)
+        self.connection = replace_global_parameter(self.connection, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
+        self.excluded = replace_global_parameter(self.excluded, g_rows)
+        self.anonymized = replace_global_parameter(self.anonymized, g_rows)
+        self.exceltemplate = replace_global_parameter(self.exceltemplate, g_rows)
 
         for param in self.parameters:
-            param.fields = replace_global_parameter(param.fields, g_row)
-            param.names = replace_global_parameter(param.name, g_row)
+            param.fields = replace_global_parameter(param.fields, g_rows)
+            param.names = replace_global_parameter(param.name, g_rows)
 
         # started
         logging.info(gmsg.get(4), self.kind, self.name)

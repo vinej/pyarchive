@@ -26,11 +26,10 @@ class Csv:
     #def
 
     # run the Csv task
-    def run(self, mapmem, mapref, mapcon, position, g_row):
-
+    def run(self, mapmem, mapref, mapcon, position, g_rows):
         # replace the global parameter
-        self.file = replace_global_parameter(self.file, g_row)
-        self.description = replace_global_parameter(self.description, g_row)
+        self.file = replace_global_parameter(self.file, g_rows)
+        self.description = replace_global_parameter(self.description, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now

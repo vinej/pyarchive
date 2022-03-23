@@ -33,12 +33,12 @@ class Task:
 
         parameter: mapcon a map of all current connections
     '''
-    def run(self, mapcon, g_row):
+    def run(self, mapcon, g_rows):
         i = 1
         # run all task in a sequential order
         for vt in self.vtasks:
             # the run method is called of the task object
-            vt.run(self.mapmem, self.mapref, mapcon, i, g_row)
+            vt.run(self.mapmem, self.mapref, mapcon, i, g_rows)
             i = i + 1
         #for
     #def

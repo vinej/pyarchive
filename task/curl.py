@@ -77,14 +77,17 @@ class Curl:
     #def
 
     # run the Csv task
-    def run(self, mapmem, mapref, mapcon, position, g_row):
+    def run(self, mapmem, mapref, mapcon, position, g_rows):
         #for o in self.options:
         #    o.option = replace_global_parameter(o.option, g_row) + "b"
         #print(self.options)
+        _ = mapref
+        _ = mapcon
+        _ = position
         out = []
         for opt in self.options:
             value = get_dict_value(opt, "Option")
-            value = replace_global_parameter(value, g_row)
+            value = replace_global_parameter(value, g_rows)
             out.append(value)
         #for
 

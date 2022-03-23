@@ -24,16 +24,23 @@ def get_global_names(value):
 #def
 
 
-def replace_global_parameter(value, g_row):
-    # find all [[xxx]] and replace by g_row[xxx]
-    if g_row == None:
+'''
+    g_rows is a map of 3 grows
+        { name:rows, name:rows, name:rows }
+    Global parameters have the format [[name.column]]
+
+'''
+def replace_global_parameter(value, g_rows):
+    # find all [[name.column]] and replace by g_rows[name][column]
+    if g_rows == None:
         return value
     #if
     gnames = get_global_names(value)
 
     for name in gnames:
-        column = name.replace('[[','').replace(']]','')
-        value =  value.replace(name, g_row[column])
+        gparam = name.replace('[[','').replace(']]','')
+        onename,column = gparam.split('.')
+        value =  value.replace('[['+gparam+']]',g_rows[onename][column])
 
     return value
 #def
