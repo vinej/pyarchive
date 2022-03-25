@@ -14,9 +14,46 @@ The utility takes a json file as parameter.
 Note:  main.exe is a window executable created with pyinstaller
 
 ```
-The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
+The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
 
-1: Connections: is an array of connections to the database used by the GlobalParameter and Tasks sections.
+
+1: Globals: (not impkemented yet)
+
+            is list of parameters that can be used into all other section as [[globalname.paramname]]
+            The parameters must be defined by environement, because often we test scripts in developement first
+            after in pre-production and at the end in production. the goal is to be able to change only the
+            property "env" when we want to run the script for another environement
+
+        "Globals" :
+            "env": "DV",
+            "DV":
+                [
+                    {
+                        "Name" : "cpdb",
+                        "Value" : "db[env]cp01"
+                        "Descriprion" : "the corporate database in DV"
+                    }
+                ],
+            "PP":
+                [
+                    {
+                        "Name" : "",
+                        "Value" : "db[env]cp01"
+                        "Descriprion" : "the corporate database in DV"
+                    }
+                ],
+            "PR":
+                [
+                    {
+                        "Name" : "databaSE",
+                        "Value" : "db[env]cp"
+                        "Descriprion" : "the corporate database in DV"
+                    }
+                ]
+            ,...
+            
+
+2: Connections: is an array of connections to the database used by the GlobalParameter and Tasks sections.
         The object definition:  
 
         Name        : the name of the connection that will be used by tasks
@@ -30,7 +67,8 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
             }
         ],....
 
-2: GlobalParameters: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
+
+2: Loops: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
 
         The internal loops are like that
 
@@ -48,12 +86,12 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
         - an output type 'reference' means that the task is not executed right away the first time. The task is put in memory to be re-run with parameters updated with
         - values from previous tasks
 
-        the list of values is created from a Task of type array, csv or query
-        the parameter variables uses [[name.column]] in the Tasks definition section to access the current row and field of the current iteration (loop)
+        the list of values is created from a Task of type array, csv,query or curl
+        the parameter variables uses [[loopname.columnname]] in the Tasks definition section to access the current row and field of the current iteration (loop)
         by example, this option can be used to run all tasks for project 'prj1' and 'prj2'
 
         Example to loop on a fixed list of projects
-        "GlobalParameters":
+        "Loops":
         [
             { 
                 "Name" : "project",
@@ -65,59 +103,61 @@ The json parameter file has 3 sections : Connections, GlobalParameter, Tasks
         see the task definition below
 
 3: Tasks: tasks are commands run sequentialy from task definition below. There is 5 kinds of task:
-    array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
-    csv         :   read a csv file in memory. the first line of the CSV must contains the columns' names
-    query       :   execute a SQL query or a stored procedure and save the result
-    save        :   save into a csv/excel file information created by previous tasks in memory
-    curl        :   launch a curl command (not completed yet, on progress)
 
-Array definition
-    Name        :   the name of the task
-    Kind        :   array
-    Description :   the description of the task
-    Command     :   contains the list of values separated by a pipe |
+    The available tasks are:
+        array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
+        csv         :   read a csv file in memory. the first line of the CSV must contains the columns' names
+        query       :   execute a SQL query or a stored procedure and save the result
+        save        :   save into a csv/excel file information created by previous tasks in memory
+        curl        :   launch a curl command (not completed yet, on progress)
 
-Csv definition
-    Name        :   the name of the task
-    Kind        :   csv
-    Description :   the description of the task
-    File        :   the full path of the csv file
+    Array definition
+        Name        :   the name of the task
+        Kind        :   array
+        Description :   the description of the task
+        Command     :   contains the list of values separated by a pipe |
 
-Query definition
-    Name            :   name of the task
-    Kind            :   query
-    Description     :   the description of the task
-    Connection      :   the connection's name to use for the query from the connection section
-    Command         :   the SQL or stored procecure to execute
-                        ex: select * from employees where name = '{{name}}' and email = '{{email}}'
-    Output          :   the output type of the query (memory,reference, csv or excel)
-                        reference:  means that the query is not executed right away, but will be executed when a parameter will use it.
-                        memory:     means that the result will be put in memory
-                        csv,excel:  means that the result will be saved into a csv or excel file.
-    File            :   the destination file name if the output is csv or excel
-    ExcelTemplate   :   a excel template to use for the output of type Excel (see into Save task for template rules for ExcelTemplate)
-    Excluded        :   the list of columns to exclude from the output
-    Anonymized      :   the list of columns to anonymize on the output
-    Parameters      :   a list of parameter's objects used to execute the query
+    Csv definition
+        Name        :   the name of the task
+        Kind        :   csv
+        Description :   the description of the task
+        File        :   the full path of the csv file
 
-    Parameter definition
-        Kind    :   memory    :  means that the parameter rows comes from a list in memory
-                    reference :  means that the parameter rows comes from a source of type 'reference' that contains also parameters
-                    child     :  means that the parameter rows comes from the previous parameter definition, so this one is a child.
-        Source  :   the name of the memory object that contains the rows
-        Names   :   the list of parameters' names separated by comma that will be used into the queries ex: ['{{name}}','{{email}}']
-        Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
+    Query definition
+        Name            :   name of the task
+        Kind            :   query
+        Description     :   the description of the task
+        Connection      :   the connection's name to use for the query from the connection section
+        Command         :   the SQL or stored procecure to execute
+                            ex: select * from employees where name = '{{name}}' and email = '{{email}}'
+        Output          :   the output type of the query (memory,reference, csv or excel)
+                            reference:  means that the query is not executed right away, but will be executed when a parameter will use it.
+                            memory:     means that the result will be put in memory
+                            csv,excel:  means that the result will be saved into a csv or excel file.
+        File            :   the destination file name if the output is csv or excel
+        ExcelTemplate   :   a excel template to use for the output of type Excel (see into Save task for template rules for ExcelTemplate)
+        Excluded        :   the list of columns to exclude from the output
+        Anonymized      :   the list of columns to anonymize on the output
+        Parameters      :   a list of parameter's objects used to execute the query
 
-Save definition
-    Name            :   the name of the task
-    Kind            :   save
-    Description     :   the description of the task
-    Output          :   csv or excel
-    Source          :   the name of the source data to save
-    File            :   the output file name
-    Excluded        :   a list of excluded columns
-    Anonymized      :   a list of columns to anonymize
-    ExcelTemplate   :   a excel template to use for the output of type Excel
+        Parameter definition
+            Kind    :   memory    :  means that the parameter rows comes from a list in memory
+                        reference :  means that the parameter rows comes from a source of type 'reference' that contains also parameters
+                        child     :  means that the parameter rows comes from the previous parameter definition, so this one is a child.
+            Source  :   the name of the memory object that contains the rows
+            Names   :   the list of parameters' names separated by comma that will be used into the queries ex: ['{{name}}','{{email}}']
+            Fields  :   the list of fields from the source that will replace parameters into the queries: ex: ['name','email']
+
+    Save definition
+        Name            :   the name of the task
+        Kind            :   save
+        Description     :   the description of the task
+        Output          :   csv or excel
+        Source          :   the name of the source data to save
+        File            :   the output file name
+        Excluded        :   a list of excluded columns
+        Anonymized      :   a list of columns to anonymize
+        ExcelTemplate   :   a excel template to use for the output of type Excel
 
         Excel template rules
             - the excel template can have many tabs
@@ -142,18 +182,18 @@ Save definition
             4  Brian            Bethamy         Brian,Bethamy       programmer
 
 
-Curl definition  (see curl documentatuion 7.82 on Internet)
-    Name:               name of the task
-    Kind:               curl
-    Description:        description of the task
-    Output:             memory or reference
-    Options:            an array of curl option' objects (see curl documentation version 7.82)
-                        see below example. You can have one to many options.
-                        the first one is often the URL of the call supported by curl
-    Parser:             the parser to use to decode the result (html,text,css,csv,json,xml)
+    Curl definition  (see curl documentatuion 7.82 on Internet)
+        Name:               name of the task
+        Kind:               curl
+        Description:        description of the task
+        Output:             memory or reference
+        Options:            an array of curl option' objects (see curl documentation version 7.82)
+                            see below example. You can have one to many options.
+                            the first one is often the URL of the call supported by curl
+        Parser:             the parser to use to decode the result (html,text,css,csv,json,xml)
 
-                        NOTE: into the curl options, " must be escape for \"
-                        NOTE: for html,text,css, only one colum, is created with the name of the task's name
+                            NOTE: into the curl options, " must be escape for \"
+                            NOTE: for html,text,css, only one colum, is created with the name of the task's name
 
         { 
             "Name" : "google",
@@ -202,7 +242,7 @@ Example of a json file to use with pyarchive
             "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
         }
     ],
-    "GlobalParameters": [],
+    "Loops": [],
     "Tasks" : [
         { 
             "Name" : "activity",
@@ -250,7 +290,7 @@ Example of a json file to use with pyarchive
 an example with GlobalParameter and ExcelTemplate
 {
     "Connections" : [],
-    "GlobalParameters":
+    "Loops":
     [
         { 
             "Name" : "project",
