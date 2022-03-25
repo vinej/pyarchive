@@ -5,6 +5,7 @@
             "Connection" : "Trusted_Connection=yes;DRIVER={SQL Server Native Client 11.0};SERVER=CA-LC6G5KC2\\SQLEXPRESS;DATABASE=psa_tempo_invoice;UID=saa;PWD=aaa"
         }
     ],
+    "Loops" : [],
     "Tasks" : [
         { 
             "Name" : "activity",

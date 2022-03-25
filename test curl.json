@@ -1,6 +1,6 @@
 {
     "Connections" : [],
-    "GlobalParameter":[],
+    "Loops":[],
     "Tasks" : [
         { 
             "Name" : "google",

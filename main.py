@@ -6,7 +6,8 @@ from connection.connection import ConnectionMng
 from ajson.archivejson import ArchiveJson
 from connection.connection import ConnectionMng
 from task.task import Task
-from task.globalparameter import GlobalParameter
+from task.loop import Loop
+
 import traceback
 
 def set_logging(file):
@@ -41,8 +42,6 @@ def validate_args(args):
     #if
 #def
 
-
-
 def main() :
     set_logging('pyarchive.log')
     try:
@@ -60,50 +59,50 @@ def main() :
         # validate the connections
         mapcon.validate()
         # get all loops to execute the tasks
-        gparam = GlobalParameter(jsondata)
-        gparam.validate(mapcon)
+        loops = Loop(jsondata)
+        loops.validate(mapcon)
         # get all tasks to execute
         tasks = Task(jsondata)
         # validate the tasks
         tasks.validate(mapcon)
         # run the tasks
-        if len(gparam.maptask) > 0:
-            gparam.run(mapcon)
-            gparam.set_layer_mapmem(5)
+        if len(loops.maptask) > 0:
+            loops.run(mapcon)
+            loops.set_layer_mapmem(5)
 
             # maximum of 5 layers of GlobalParameters, for each layers, maye it's needed
             # to rerun the the current task before looping on the task records
-            for g_row0 in gparam.mapmem[gparam.vtasks[0].name].rows:
+            for g_row0 in loops.mapmem[loops.vtasks[0].name].rows:
                 # if the gparam.vtask[0] is of type reference, we must re-run the task as 'memory' because
                 # the task could use GlobalParameters that need to be fixed before doing the real call
-                if gparam.vtasks[1].output == 'reference' :
-                    g_rows =  { gparam.vtasks[0].name: g_row0 }
-                    gparam.run_task(mapcon, gparam.vtasks[1], 1, g_rows)
+                if loops.vtasks[1].output == 'reference' :
+                    g_rows =  { loops.vtasks[0].name: g_row0 }
+                    loops.run_task(mapcon, loops.vtasks[1], 1, g_rows)
                 #if
-                for g_row1 in gparam.mapmem[gparam.vtasks[1].name].rows:
-                    if gparam.vtasks[2].output == 'reference' :
-                        g_rows =  { gparam.vtasks[0].name: g_row0, gparam.vtasks[1].name: g_row1}
-                        gparam.run_task(mapcon, gparam.vtasks[2], 2, g_rows)
+                for g_row1 in loops.mapmem[loops.vtasks[1].name].rows:
+                    if loops.vtasks[2].output == 'reference' :
+                        g_rows =  { loops.vtasks[0].name: g_row0, loops.vtasks[1].name: g_row1}
+                        loops.run_task(mapcon, loops.vtasks[2], 2, g_rows)
                     #if
-                    for g_row2 in gparam.mapmem[gparam.vtasks[2].name].rows: 
+                    for g_row2 in loops.mapmem[loops.vtasks[2].name].rows: 
                         # if the gparam.vtask[0] is of type reference, we must re-run the task as 'memory' because
                         # the task could use GlobalParameters that need to be fixed before doing the real call
-                        if gparam.vtasks[3].output == 'reference' :
-                            g_rows =   { gparam.vtasks[0].name: g_row0, gparam.vtasks[1].name: g_row1, gparam.vtasks[2].name: g_row2}
-                            gparam.run_task(mapcon, gparam.vtasks[3], 3, g_rows)
+                        if loops.vtasks[3].output == 'reference' :
+                            g_rows =   { loops.vtasks[0].name: g_row0, loops.vtasks[1].name: g_row1, loops.vtasks[2].name: g_row2}
+                            loops.run_task(mapcon, loops.vtasks[3], 3, g_rows)
                         #if
-                        for g_row3 in gparam.mapmem[gparam.vtasks[3].name].rows: 
+                        for g_row3 in loops.mapmem[loops.vtasks[3].name].rows: 
                             # if the gparam.vtask[0] is of type reference, we must re-run the task as 'memory' because
                             # the task could use GlobalParameters that need to be fixed before doing the real call
-                            if gparam.vtasks[4].output == 'reference' :
-                                g_rows =  { gparam.vtasks[0].name: g_row0, gparam.vtasks[1].name: g_row1,
-                                            gparam.vtasks[2].name: g_row2, gparam.vtasks[3].name: g_row3 }
-                                gparam.run_task(mapcon, gparam.vtasks[4], 4, g_rows)
+                            if loops.vtasks[4].output == 'reference' :
+                                g_rows =  { loops.vtasks[0].name: g_row0, loops.vtasks[1].name: g_row1,
+                                            loops.vtasks[2].name: g_row2, loops.vtasks[3].name: g_row3 }
+                                loops.run_task(mapcon, loops.vtasks[4], 4, g_rows)
                             #if
-                            for g_row4 in gparam.mapmem[gparam.vtasks[4].name].rows: 
-                                g_rows =  { gparam.vtasks[0].name: g_row0, gparam.vtasks[1].name: g_row1,
-                                            gparam.vtasks[2].name: g_row2, gparam.vtasks[3].name: g_row3,
-                                            gparam.vtasks[4].name: g_row4} 
+                            for g_row4 in loops.mapmem[loops.vtasks[4].name].rows: 
+                                g_rows =  { loops.vtasks[0].name: g_row0, loops.vtasks[1].name: g_row1,
+                                            loops.vtasks[2].name: g_row2, loops.vtasks[3].name: g_row3,
+                                            loops.vtasks[4].name: g_row4} 
 
                                 tasks.run(mapcon, g_rows)
                                 # recreate the tasks for the next run

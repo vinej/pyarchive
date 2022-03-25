@@ -19,13 +19,13 @@ import json
 parameter
     data    :    a json object with Tasks object
 '''
-class GlobalParameter:
+class Loop:
     def __init__(self, jsondata):
         self.mapmem = {}
         self.mapref = {}
         self.vtasks = []
         self.maptask = []
-        mapjsontask = jsondata['GlobalParameters']
+        mapjsontask = jsondata['Loops']
         if mapjsontask is not None:
             for t in mapjsontask:
                 self.maptask.append(t)
@@ -103,12 +103,10 @@ class GlobalParameter:
             return Csv(onetask)
         elif kind == 'query':
             return Query(onetask)
-        elif kind == 'save':
-            return Save(onetask)
         elif kind == 'curl':
             return Curl(onetask)
         else:
-            raise Exception("Invalid Kind for a loop :" + kind)
+            raise Exception("Invalid Kind for a GlobalParameter :" + kind)
         #if 
     #def
 #class
