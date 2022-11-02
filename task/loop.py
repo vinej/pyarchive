@@ -71,7 +71,7 @@ class Loop:
     #def
 
     '''
-    Create a fixed 3 layers vtask. 
+    Create a fixed 5 layers vtask. 
     '''
     def set_layer_mapmem(self, qte):
         count = 1
