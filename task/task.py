@@ -3,6 +3,8 @@ from task.csv import Csv
 from task.query import Query
 from task.save import Save
 from task.curl import Curl
+from task.create import Create
+from task.sync import Sync
 from output.util import get_dict_value
 import logging
 from message.message import gmsg
@@ -72,6 +74,10 @@ class Task:
             return Csv(onetask)
         elif kind == 'query':
             return Query(onetask)
+        elif kind == 'sync':
+            return Sync(onetask)
+        elif kind == 'create':
+            return Create(onetask)
         elif kind == "save":
             return Save(onetask)
         elif kind == "curl":

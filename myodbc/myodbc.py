@@ -11,11 +11,21 @@ class Odbc:
     #def
 
     def run(self, connection, query, file, name, excluded, anonymized, output):
-        if output == 'csv' :
+        if output == 'ddl' :
+            self.run_ddl(connection, query)
+            return []
+        elif output == 'csv' :
             return self.run_with_csv_output(connection, query, file, name, excluded, anonymized)
         else:
             return self.run_return_memory(connection, query)
         #if
+    #def
+
+    def run_ddl(self, connection, query):
+        logging.info(gmsg.get(8), query)
+        con = pyodbc.connect(connection)
+        cur = con.cursor()
+        cur.execute(query).commit()
     #def
 
     def run_return_memory(self, connection, query):
