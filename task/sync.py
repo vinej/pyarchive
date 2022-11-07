@@ -153,8 +153,6 @@ class Sync:
                         primaryKeyValue = str(row[col])
                         isFirst = False
 
-              
-
                     if row[col] == None:
                         sql = sql.replace("'{{zzz"+col+"}}'", 'null')   # for number
                         sql = sql.replace("{{zzz"+col+"}}", 'null')   # for number
