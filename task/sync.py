@@ -110,6 +110,8 @@ class Sync:
         # get new records
         syncdate = str(open(self.filesync).readline())
 
+
+
         sqlDeleteForInsert = f"delete from {self.synctable} where {self.createdate} > '{syncdate}' "
         sqlSelectForInsert = f"insert into {self.synctable} select * from [[synonyms.synonym_name]] where {self.createdate} > '{syncdate}'"
         sqlSelectForInsert = replace_global_parameter(sqlSelectForInsert, g_rows)
@@ -126,7 +128,9 @@ class Sync:
                 sql = sql + ","
 
             sql = sql + row["COLUMN_NAME"] + " = "
-            if row["DATA_TYPE"] == "varchar" or row["DATA_TYPE"] == "char" or row["DATA_TYPE"] == "nvarchar" or row["DATA_TYPE"] == "datetime" or row["DATA_TYPE"] == "date":
+            dtype = row["DATA_TYPE"]
+
+            if dtype == "varchar" or dtype == "char" or dtype == "nvarchar" or dtype == "datetime" or dtype == "date":
                 sql = sql + "'{{zzz"+row["COLUMN_NAME"]+"}}'"
             else :
                 sql = sql + "{{zzz"+row["COLUMN_NAME"]+"}}"
@@ -137,17 +141,36 @@ class Sync:
         m = Odbc().run(connection, sqlSelect, None, None, None, None, "memory")
 
         if len(m.rows) > 0:
-            tmplateSql = sql
+            templateSql = sql
             for row in m.rows :
+                isFirst = True
                 sql = templateSql
                 primaryKey = ""
                 primaryKeyValue = ""
-                for col in m.columns :
-                    sql = sql.replace("{{zzz"+col.name+"}}"), m[row][col]
-                    if col.name == self.primarykey :
-                        primaryKey = col.name
-                        primaryKeyValue = m[row][col]
+                for col in m.col :
+                    if isFirst == True :
+                        primaryKey = col
+                        primaryKeyValue = str(row[col])
+                        isFirst = False
 
+              
+
+                    if row[col] == None:
+                        sql = sql.replace("'{{zzz"+col+"}}'", 'null')   # for number
+                        sql = sql.replace("{{zzz"+col+"}}", 'null')   # for number
+                    elif row[col] == False:
+                        sql = sql.replace("'{{zzz"+col+"}}'", '0')   #for other
+                        sql = sql.replace("{{zzz"+col+"}}", '0')   # for number
+                    elif row[col] == True:
+                        sql = sql.replace("'{{zzz"+col+"}}'", '1')   #for other 
+                        sql = sql.replace("{{zzz"+col+"}}", '1')   # for number                          
+                    else :
+                        value =  str(row[col])
+                        value = value.replace("'","''")  # double quot
+                        value = value.replace('"','""')  # double quot
+                        sql = sql.replace("{{zzz"+col+"}}", str(row[col]))
+                        
+                #for
                 sql = sql.replace("{{primarykey}}", primaryKey)
                 sql = sql.replace("{{primarykeyvalue}}", primaryKeyValue)
                 m = Odbc().run(connection, sql, None, None, None, None, "ddl")
