@@ -10,16 +10,6 @@ import sys
 The Sync class synchronize 2 table/view from a source table/view with a dest table/view
 The json object properties
 
-Name            :   the name of the task
-Kind            :   sync
-Description     :   the description of the task
-SourceTable     :   source table view to sync
-DestTable       :   dest table view to sync
-Connectionsource:   connection  of source
-ConnectionDest  :   connection dest
-FieldDateCreate :   field to use for new record
-FieldDateUpdate :   field to use for updated record
-Type            :   full==del/insert)  /   incremental==insert/update)
 '''
 class Sync:
     def __init__(self, jsondata):

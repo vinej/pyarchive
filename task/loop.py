@@ -2,8 +2,14 @@ from output.memory import Memory
 from task.array import Array
 from task.csv import Csv
 from task.query import Query
-from task.save import Save
 from task.curl import Curl
+from task.dir import Dir
+from task.log import Log
+from task.create import Create
+from task.sync import Sync
+from task.unzip import Unzip
+
+
 from output.exceltemplate import ExcelTemplate
 from output.util import get_dict_value
 import logging
@@ -105,6 +111,16 @@ class Loop:
             return Query(onetask)
         elif kind == 'curl':
             return Curl(onetask)
+        elif kind == 'dir':
+            return Dir(onetask)
+        elif kind == 'log':
+            return Log(onetask)
+        elif kind == 'create':
+            return Create(onetask)       
+        elif kind == 'unzip':
+            return Unzip(onetask) 
+        elif kind == 'sync':
+            return Sync(onetask) 
         else:
             raise Exception("Invalid Kind for a GlobalParameter :" + kind)
         #if 

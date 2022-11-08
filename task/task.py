@@ -5,6 +5,10 @@ from task.save import Save
 from task.curl import Curl
 from task.create import Create
 from task.sync import Sync
+from task.log import Log
+from task.dir import Dir
+from task.unzip import Unzip
+
 from output.util import get_dict_value
 import logging
 from message.message import gmsg
@@ -76,10 +80,16 @@ class Task:
             return Query(onetask)
         elif kind == 'sync':
             return Sync(onetask)
+        elif kind == 'dir':
+            return Dir(onetask)        
+        elif kind == 'log':
+            return Log(onetask)       
         elif kind == 'create':
             return Create(onetask)
         elif kind == "save":
             return Save(onetask)
+        elif kind == "unzip":
+            return Unzip(onetask) 
         elif kind == "curl":
             return Curl(onetask)
         else:
