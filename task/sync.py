@@ -9,7 +9,17 @@ import sys
 '''
 The Sync class synchronize 2 table/view from a source table/view with a dest table/view
 The json object properties
-
+Name            :   the name of the task
+kind            :   the kind of the task
+description     :   the description of the task 
+sourcetable     :   the source table used to sync with the synctable
+synctable       :   the table that will be syncked wit the source table
+connection      :   the connection use to access the source and sync tables (use synonyms and link servers if both are not from the same database)
+filesync        :   the file that contains the last sync date
+createdate      :   the field used as creation date to insert new records
+updatedate      :   the field used as last update date to update records
+primarykey      :   the primary key fo the sync table
+source          :   the mem source that contain the colum definition of the source table
 '''
 class Sync:
     def __init__(self, jsondata):
@@ -110,6 +120,7 @@ class Sync:
         m = Odbc().run(connection, sqlDeleteForInsert, None, None, None, None, "ddl")
         m = Odbc().run(connection, sqlSelectForInsert, None, None, None, None, "ddl")
 
+        # build the tempate that will be used to update rows
         sql = F"UPDATE {self.synctable} set "
         isFirst = True
         for row in mapmem[self.source].rows :
@@ -126,36 +137,44 @@ class Sync:
                 sql = sql + "{{zzz"+row["COLUMN_NAME"]+"}}"
             isFirst = False
         sql = sql + " WHERE {{primarykey}} = " + "{{primarykeyvalue}}"
+        templateSql = sql
+
         # with this sql, go throung all rows that must be updated
         sqlSelect = f"select * from {self.sourcetable} where {self.updatedate} > '{syncdate}'"
         m = Odbc().run(connection, sqlSelect, None, None, None, None, "memory")
 
         if len(m.rows) > 0:
-            templateSql = sql
             for row in m.rows :
                 isFirst = True
                 sql = templateSql
-                primaryKey = ""
+                primaryKey = self.primarykey
                 primaryKeyValue = ""
                 for col in m.col :
+
+                    # if the primarykey is not set, take the first col
                     if isFirst == True :
-                        primaryKey = col
-                        primaryKeyValue = str(row[col])
+                        if primaryKey == "":
+                            primaryKey = col
                         isFirst = False
+                    
+                    # set the primary key if we found the column
+                    if primaryKey == col:
+                        primaryKeyValue = str(row[col])
 
                     if row[col] == None:
-                        sql = sql.replace("'{{zzz"+col+"}}'", 'null')   # for number
-                        sql = sql.replace("{{zzz"+col+"}}", 'null')   # for number
+                        sql = sql.replace("'{{zzz"+col+"}}'", 'null')   # for string
+                        sql = sql.replace("{{zzz"+col+"}}", 'null')   # for number if it was not a string
                     elif row[col] == False:
-                        sql = sql.replace("'{{zzz"+col+"}}'", '0')   #for other
-                        sql = sql.replace("{{zzz"+col+"}}", '0')   # for number
+                        sql = sql.replace("'{{zzz"+col+"}}'", '0')  # for string
+                        sql = sql.replace("{{zzz"+col+"}}", '0')   # for number if it was not a string
                     elif row[col] == True:
-                        sql = sql.replace("'{{zzz"+col+"}}'", '1')   #for other 
-                        sql = sql.replace("{{zzz"+col+"}}", '1')   # for number                          
+                        sql = sql.replace("'{{zzz"+col+"}}'", '1')   #for string 
+                        sql = sql.replace("{{zzz"+col+"}}", '1')   # for number if it was not a string                         
                     else :
                         value =  str(row[col])
-                        value = value.replace("'","''")  # double quot
-                        value = value.replace('"','""')  # double quot
+                        value = value.replace("'","''")  # double single quot
+                        value = value.replace('"','""')  # double double quot
+                        # date,guid are managed like string
                         sql = sql.replace("{{zzz"+col+"}}", str(row[col]))
                         
                 #for

@@ -4,14 +4,16 @@ import logging
 from message.message import gmsg
 import sys
 from zipfile import ZipFile
-  
-
 
 '''
-The Create class is used to create a simple a table from a list of definition
+The Unzip class is used to unzip a zip into a diurectory
 
 The json object properties
-
+Name            :   name of the task
+Kind            :   query
+Description     :   the description of the task
+File            :   the input file to unzip
+Directory       :   destination directory to unzip files
 '''
 class Unzip:
     def __init__(self, jsondata):
@@ -60,6 +62,7 @@ class Unzip:
         _ = g_rows
         _ = position
         _ = mapref
+        _ = mapmem
 
         self.description = replace_global_parameter(self.description, g_rows)
         self.file = replace_global_parameter(self.file, g_rows)

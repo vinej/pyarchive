@@ -6,7 +6,8 @@
             "Name" : "directory",
             "Kind" : "dir",  
             "Description" : "get list of file into dir",
-            "Path":"c:/logs/*.log"
+            "Path":"c:/logs/*.log",
+            "Recursive": "False"
         }
     ]
     ,

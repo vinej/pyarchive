@@ -7,10 +7,18 @@ from message.message import gmsg
 import sys
 
 '''
-The Create class is used to create a simple a table from a list of definition
+The Log class is used to create a simple a table from a list of definition
 
 The json object properties
+Name            :   name of the task
+Kind            :   query
+Description     :   the description of the task
+File            :   the input file to scan th log
+Unique          :   true/false 
+                    true=>get in memory only unique values of date/user
+                    false=>get into memore date/url/user information
 
+                    the available fields are Date, Url, User
 '''
 class Log:
     def __init__(self, jsondata):
