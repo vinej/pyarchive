@@ -6,7 +6,8 @@
             "Name" : "directory",
             "Kind" : "dir",  
             "Description" : "get list of file into dir",
-            "Path":"E:/data01/logs/*.zip"
+            "Path":"E:/data01/logs/*.zip",
+            "Recursive": "false"
         }
     ]
     ,

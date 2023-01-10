@@ -27,6 +27,7 @@ class Log:
         self.description = get_dict_value(jsondata,'Description')
         self.file = get_dict_value(jsondata,'File')
         self.unique = get_dict_value(jsondata,'Unique')
+        self.version = get_dict_value(jsondata,'Version')
     #def
 
     def validate(self, mapcon, position):  
@@ -59,6 +60,12 @@ class Log:
             sys.exit(27)
         #if
         self.unique = self.unique.lower()
+
+        if self.version == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'Version')
+            sys.exit(27)
+        #if
+        self.unique = self.unique.lower()
 	#def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):
@@ -79,17 +86,24 @@ class Log:
         else:
             columns = ["date","url","user"]
 
-        for line in open(self.file).readlines():
+        for line in open(self.file, encoding="utf-8").readlines():
             sline = str(line)
             if sline[0] == "#":
                 continue
                 
             aline = sline.split(" ")
 
-            user = aline[9]
-            date = aline[0]
-            time = aline[1]
-            url = aline[6]
+            if self.version == "7":
+                user = aline[9]
+                date = aline[0]
+                time = aline[1]
+                url = aline[6]
+            else:               
+                user = aline[7]
+                date = aline[0]
+                time = aline[1]
+                url = aline[4]         
+
 
             if user == "-" : # no user
                 continue
@@ -111,7 +125,7 @@ class Log:
         m = Memory(columns, rows)
         mapmem[self.name] = m
 
-        logging.info(gmsg.get(3), self.kind, self.name)
+        logging.info(gmsg.get(3), self.kind, self.file)
     #def
 #class
 

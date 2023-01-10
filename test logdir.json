@@ -17,7 +17,8 @@
             "Kind" : "log",
             "Description" : "read log info",
             "File" : "[[directory.file]]",
-            "Unique" : "true"
+            "Unique" : "true",
+            "Version": "10"
 
         },
         {
