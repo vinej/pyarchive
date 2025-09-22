@@ -8,6 +8,7 @@ from task.sync import Sync
 from task.log import Log
 from task.dir import Dir
 from task.unzip import Unzip
+from task.gzip import Gzip
 
 from output.util import get_dict_value
 import logging
@@ -92,6 +93,8 @@ class Task:
             return Unzip(onetask) 
         elif kind == "curl":
             return Curl(onetask)
+        elif kind == "gzip":
+            return Gzip(onetask)
         else:
             raise Exception("Invalid Kind for a loop :" + kind)
         #if 
