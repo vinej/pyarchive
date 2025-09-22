@@ -7,6 +7,8 @@ import gzip
 import shutil
 import os
 
+from task.base import BaseTask
+
 '''
 The gzip class is used to unzip *.gz file into diurectory with the same file less .gz
 
@@ -17,7 +19,7 @@ Description     :   the description of the task
 File            :   the input file to unzip
 Directory       :   destination directory to unzip files
 '''
-class Gzip:
+class Gzip(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

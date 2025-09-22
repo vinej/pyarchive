@@ -9,6 +9,8 @@ from output.util import read_xml
 
 from message.message import gmsg
 import logging
+
+from task.base import BaseTask
 '''
 Name:               name of the task
 Kind:               curl
@@ -45,7 +47,7 @@ Parser:             one of html,css,text,json,csv,xml
             "Parser" : "json"
         }
 '''
-class Curl:
+class Curl(BaseTask):
     def __init__(self, jsondata):
         self.name =  get_dict_value(jsondata,'Name')
         self.kind =  get_dict_value(jsondata,'Kind')

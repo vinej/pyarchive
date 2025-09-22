@@ -5,6 +5,8 @@ from message.message import gmsg
 import sys
 from zipfile import ZipFile
 
+from task.base import BaseTask
+
 '''
 The Unzip class is used to unzip a zip into a diurectory
 
@@ -15,7 +17,7 @@ Description     :   the description of the task
 File            :   the input file to unzip
 Directory       :   destination directory to unzip files
 '''
-class Unzip:
+class Unzip(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

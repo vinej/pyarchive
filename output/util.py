@@ -3,13 +3,14 @@
     return None if the object does not exist
 '''
 def get_dict_value(data, name):
+    if not isinstance(data, dict):
+        return None
     if name in data:
         return data[name]
     elif name.lower() in data:
         return data[name.lower()]
     else:
         return None
-    #if
 #def
 
 def get_global_names(value):

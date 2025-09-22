@@ -2,6 +2,7 @@ from output.memory import Memory
 from output.util import get_dict_value
 import logging
 from message.message import gmsg
+from task.base import BaseTask
 import sys
 
 '''
@@ -14,7 +15,7 @@ Kind        :   array
 Description :   the description of the task
 Command     :   contains the list of values separated by a pipe |
 '''
-class Array:
+class Array(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

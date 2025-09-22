@@ -6,6 +6,8 @@ import logging
 from message.message import gmsg
 import sys
 
+from task.base import BaseTask
+
 '''
 The Csv class is used to read csv file into memory
 
@@ -16,7 +18,7 @@ Kind        :   csv
 Description :   the description of the task
 File        :   the input csv file
 '''
-class Csv:
+class Csv(BaseTask):
     def __init__(self, jsondata):
         self.name =  get_dict_value(jsondata,'Name')
         self.kind =  get_dict_value(jsondata,'Kind')

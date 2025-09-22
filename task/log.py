@@ -6,6 +6,8 @@ import logging
 from message.message import gmsg
 import sys
 
+from task.base import BaseTask
+
 '''
 The Log class is used to create a simple a table from a list of definition
 
@@ -20,7 +22,7 @@ Unique          :   true/false
 
                     the available fields are Date, Url, User
 '''
-class Log:
+class Log(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

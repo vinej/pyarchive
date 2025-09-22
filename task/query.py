@@ -7,6 +7,7 @@ import logging
 from message.message import gmsg
 import sys
 from output.exceltemplate import ExcelTemplate
+from task.base import BaseTask
 
 '''
 The Parameter class is used by the query to create dynamic parameters to the SQL queries and save then into different excel file
@@ -44,7 +45,7 @@ Excluded        :   the list of columns to exclude from the ouput
 Anonymized      :   the list of columns to anonymize
 Parameters      :   a list of parameters' objects used to execute the query
 '''
-class Query:
+class Query(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

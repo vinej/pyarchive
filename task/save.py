@@ -5,6 +5,8 @@ import logging
 from message.message import gmsg
 from output.output import Output
 import sys
+
+from task.base import BaseTask
 '''
 The class Save is used to save the data in memory to files with differents options
 Name            :   the name of the task
@@ -17,7 +19,7 @@ ExcelTemplate   :   for a excel ouput, use a excel template
 Excluded        :   a list of excluded columns
 Anonymized      :   a list of columns to anonymized
 '''
-class Save:
+class Save(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

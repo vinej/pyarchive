@@ -6,18 +6,18 @@
             "Name" : "directory",
             "Kind" : "dir",  
             "Description" : "get list of file into dir",
-            "Path":"C:/pcuae/databases/MainDb/games/*.gz",
+            "Path":"E:/data01/logs/*.zip",
             "Recursive": "false"
         }
     ]
     ,
     "Tasks" : [
         {
-            "Name" : "gzip",
-            "Kind" : "gzip",
+            "Name" : "unzip",
+            "Kind" : "unzip",
             "Description" : "unzip the file into the directory",
             "File" : "[[directory.file]]",
-            "Directory": "c:/crt"
+            "Directory": "c:/logs"
         }
     ]
 }

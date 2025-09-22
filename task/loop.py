@@ -1,14 +1,6 @@
 from output.memory import Memory
 from task.array import Array
-from task.csv import Csv
-from task.query import Query
-from task.curl import Curl
-from task.dir import Dir
-from task.log import Log
-from task.create import Create
-from task.sync import Sync
-from task.unzip import Unzip
-
+from task.task import TASK_REGISTRY, Task
 
 from output.exceltemplate import ExcelTemplate
 from output.util import get_dict_value
@@ -23,107 +15,37 @@ import json
     maptask:    map of all tasks
 
 parameter
-    data    :    a json object with Tasks object
+    jsondata    :    a json object with Tasks object
 '''
-class Loop:
+class Loop(Task):
     def __init__(self, jsondata):
-        self.mapmem = {}
-        self.mapref = {}
-        self.vtasks = []
-        self.maptask = []
-        mapjsontask = jsondata['Loops']
-        if mapjsontask is not None:
-            for t in mapjsontask:
-                self.maptask.append(t)
-        #for
-    #def
+        super().__init__({'Tasks': jsondata['Loops'] if 'Loops' in jsondata and jsondata['Loops'] is not None else []})
 
-    '''
-        run all tasks
-
-        parameter: mapcon a map of all current connections
-    '''
     def run(self, mapcon):
         i = 1
         for vt in self.vtasks:
-            # the run method is called of the task object
             vt.run(self.mapmem, self.mapref, mapcon, i, None)
-            i = i + 1
-        #for
-    #def
+            i += 1
 
-    '''
-    Run a task of type reference to update data in memory
-    '''
     def run_task(self, mapcon, task, position, g_rows):
         task.run(self.mapmem, self.mapref, mapcon, position, g_rows)
-    #def
 
-
-    '''
-        validate the tasks information before running
-    '''
-    def validate(self, mapcon):
-        i = 1
-        for t in self.maptask:
-            # create and get a task object depinding of the kind property
-            ct = self.get_task(t, i)
-            #validate the task
-            ct.validate(mapcon, i)
-            # add the task into vtasks list
-            self.vtasks.append(ct)
-            i = i + 1
-        #for
-    #def
-
-    '''
-    Create a fixed 5 layers vtask. 
-    '''
     def set_layer_mapmem(self, qte):
         count = 1
-        jsondata = """ { 
-            "Name" : "fake",
-            "Kind" : "array",  
-            "Description" : "fake",
-            "Command" : "fake"
-        } """
+        jsondata = """{
+            "Name": "fake",
+            "Kind": "array",
+            "Description": "fake",
+            "Command": "fake"
+        }"""
         while len(self.mapmem) < qte:
-            self.mapmem["fake"+str(count)] = Memory( ["fake"], [{"fake": ""}])
+            self.mapmem["fake" + str(count)] = Memory(["fake"], [{"fake": ""}])
+            #ar = self.kind_map['array'](json.loads(jsondata))
+            #ar = self.get_task('array', 1)(json.loads(jsondata))
             ar = Array(json.loads(jsondata))
-            ar.name = ar.name+str(count)
-            self.vtasks.append( ar )
-            count = count + 1
-        #while
-    #def
-
-    # get a specific task a postion x
-    def get_task(self, onetask, position):
-        kind = get_dict_value(onetask, 'Kind')
-        if kind == None:
-            logging.fatal(gmsg.get(27), position, onetask.name, 'Kind')
-        #if
-        kind = kind.lower()
-        if kind == 'array':
-            return Array(onetask)
-        elif kind == 'csv':
-            return Csv(onetask)
-        elif kind == 'query':
-            return Query(onetask)
-        elif kind == 'curl':
-            return Curl(onetask)
-        elif kind == 'dir':
-            return Dir(onetask)
-        elif kind == 'log':
-            return Log(onetask)
-        elif kind == 'create':
-            return Create(onetask)       
-        elif kind == 'unzip':
-            return Unzip(onetask) 
-        elif kind == 'sync':
-            return Sync(onetask) 
-        else:
-            raise Exception("Invalid Kind for a GlobalParameter :" + kind)
-        #if 
-    #def
+            #ar = self.get_task(Array, 1)
+            ar.name = ar.name + str(count)
+            self.vtasks.append(ar)
+            count += 1
 #class
 

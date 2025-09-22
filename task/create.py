@@ -4,6 +4,7 @@ from output.util import get_dict_value
 import logging
 from message.message import gmsg
 import sys
+from task.base import BaseTask
 
 '''
 The Create class is used to create a simple a table from a list of definition
@@ -16,7 +17,7 @@ Description :   the description of the task
 Source      :   the list of definition to use
 Connection  :   connection to create the table
 '''
-class Create:
+class Create(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

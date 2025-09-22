@@ -7,6 +7,8 @@ from message.message import gmsg
 import sys
 import glob
 
+from task.base import BaseTask
+
 '''
 The Dir class is used to read in memory files contain into a directory (with sub dir if recursive = true)
 
@@ -18,7 +20,7 @@ Description     :   the description of the task
 path            :   the path to read, can contains pattern like *.log
 recursive       :   true/false to read sub directories
 '''
-class Dir:
+class Dir(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')

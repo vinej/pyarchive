@@ -6,6 +6,8 @@ import logging
 from message.message import gmsg
 import sys
 
+from task.base import BaseTask
+
 '''
 The Sync class synchronize 2 table/view from a source table/view with a dest table/view
 The json object properties
@@ -21,7 +23,7 @@ updatedate      :   the field used as last update date to update records
 primarykey      :   the primary key fo the sync table
 source          :   the mem source that contain the colum definition of the source table
 '''
-class Sync:
+class Sync(BaseTask):
     def __init__(self, jsondata):
         self.name = get_dict_value(jsondata,'Name')
         self.kind = get_dict_value(jsondata,'Kind')
