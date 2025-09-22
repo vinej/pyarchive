@@ -3,6 +3,7 @@ import logging
 from message.message import gmsg
 from task.array import Array
 from task.csv import Csv
+from task.fillpdf import FillPdf
 from task.query import Query
 from task.sync import Sync
 from task.dir import Dir
@@ -12,6 +13,7 @@ from task.save import Save
 from task.unzip import Unzip
 from task.curl import Curl
 from task.gzip import Gzip
+from task.pdf import Pdf
 
 '''
     Master object to run all task
@@ -40,6 +42,8 @@ register_task('save', Save)
 register_task('unzip', Unzip)
 register_task('curl', Curl)
 register_task('gzip', Gzip)
+register_task('pdf', Pdf)
+register_task('fillpdf', FillPdf)
 
 class Task:
     def __init__(self, jsondata):

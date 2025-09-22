@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["test_gzip.json"]
+            "args": ["C:/Users/jyv/Documents/GitHub/pyarchive/test/test_pdf.json"]
         }
     ]
 }
