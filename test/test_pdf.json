@@ -7,9 +7,10 @@
             "Name" : "pdf",
             "Kind" : "pdf",  
             "Description":"pdf",
-            "Output" : "C:/Users/jyv/Documents/GitHub/out2.pdf",
+            "Output" : "C:/Users/jyv/Documents/GitHub/out3.pdf",
             "Template": "C:/Users/jyv/Documents/GitHub/t2033-fill-25e.pdf",
-            "Type": "file"
+            "Type": "file",
+            "Dict" : { "LastName": "JYV" }
         }
     ]
 }

@@ -6,6 +6,8 @@ from task.base import BaseTask
 import sys
 from pypdf import PdfReader, PdfWriter
 from pypdf import generic as pypdf_generic
+#from pdfrw import PdfReader, PdfDict, PdfName, PdfObject, PdfWriter
+from itertools import groupby
 
 '''
 The Pdf class is used to read pdf form`s field in memory
@@ -18,6 +20,7 @@ Description :   the description of the task
 Template    :   the PDF used as template
 Output      :   the output PDF file
 Type        :   the type of the output, can be file or memory
+Dict        :   the dictionary of field to fill in the pdf form
 '''
 class Pdf(BaseTask):
     def __init__(self, jsondata):
@@ -27,7 +30,15 @@ class Pdf(BaseTask):
         self.template = get_dict_value(jsondata,'Template')
         self.output = get_dict_value(jsondata,'Output')
         self.type = get_dict_value(jsondata,'Type')
+        self.dict = get_dict_value(jsondata,'Dict')
     #def
+
+    ANNOT_KEY = '/Annots'
+    ANNOT_FIELD_KEY = '/T'
+    ANNOT_VAL_KEY = '/V'
+    ANNOT_RECT_KEY = '/Rect'
+    SUBTYPE_KEY = '/Subtype'
+    WIDGET_SUBTYPE_KEY = '/Widget'
 
     def validate(self, mapcon, position):  
         _ = mapcon # not use here
@@ -45,6 +56,44 @@ class Pdf(BaseTask):
 
 	#def
 
+    def split_by_mixcase_groupby(self, text):
+        return " ".join(["".join(g) for k, g in groupby(text, key=str.isupper)])
+    #def
+
+    def find_annotations_keys(self, pages):
+
+        out_keys = []
+
+        for page in pages:
+            annotations = page[self.ANNOT_KEY]
+            for annotation in annotations:
+                if annotation[self.SUBTYPE_KEY] == self.WIDGET_SUBTYPE_KEY:
+                    if annotation[self.ANNOT_FIELD_KEY]:
+                        out_keys.append(annotation[self.ANNOT_FIELD_KEY])
+
+        return out_keys
+    #def
+
+    def fix_dict(self, outkeys):
+
+        mykeys = self.dict.keys()
+        tmp = {}
+
+        for key in mykeys:
+            for akey in outkeys:
+                if key.lower() in akey.lower():
+                    tmp[akey] = self.dict[key]
+        
+        for key in mykeys:
+            skey = self.split_by_mixcase_groupby(key)
+            for akey in outkeys:
+                if skey.lower() in akey.lower():
+                    # do not add exsiting key
+                    if skey.lower() != akey.lower():
+                        tmp[akey] = self.dict[key]
+
+        self.dict.update(tmp)
+    #def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):
         logging.info(gmsg.get(4), self.kind, self.name)
@@ -53,86 +102,31 @@ class Pdf(BaseTask):
         _ = mapref # not used for now
         _ = g_rows
 
+        pdfOut = replace_global_parameter(self.output, g_rows)
+
+        merger = PdfWriter()
+
         reader = PdfReader(replace_global_parameter(self.template, g_rows))
-        writer = PdfWriter(clone_from=reader)               # <--- 
-        writer.set_need_appearances_writer(True)
-        #fields = reader.get_fields()
+        reader.add_form_topname(self.name)
+        writer = PdfWriter(clone_from=reader)
 
-        '''
-        field_object.get('/T', '')
+        keys = self.find_annotations_keys(writer.pages)
 
-        fields = reader.get_fields()
-        field_values = {}
+        self.fix_dict(keys)
 
-        for page_nr, page in enumerate(writer.pages):
-            form_fields = page.get('/Annots')
-            if form_fields:
-                for field in form_fields.get_object():
-                    field_object = field.get_object()
+        # Update form fields for each page in the current PDF
+        for page in writer.pages:
+            print("page",page.page_number)
+            writer.update_page_form_field_values(
+                page,
+                self.dict,
+                auto_regenerate = False
+            )
+    
+        merger.append(writer)
 
-                    # any other logic
-                    if 'LastName' in field_object.get('/T', ''):
-                        field_object[pypdf_generic.NameObject('/V')] = pypdf_generic.create_string_object("jyv")
-            
-   
-        '''
-        #for field_name in fields.keys():
-        #    keyval = fields[field_name]
-        #    if (keyval.field_type is None) :
-        #        continue
-
-            #if keyval.field_type == '/Btn':  # Button field (e.g., checkbox, radio button)
-            #    field_values[field_name] = 'Yes' if keyval.get('/V') == '/Yes' else 'Off'
-        #    if keyval.field_type == '/Tx' and 'LastName'  in field_name and 'Page1[0]' in field_name:  # Text field
-        #        field_values[field_name] = 'jyv'
-            #$elif keyval.field_type == '/Ch':  # Choice field (e.g., dropdown, listbox)
-            #field_values[field_name] = keyval.get('/V', 'jyv')
-            #lif keyval.field_type == '/Sig':  # Signature field
-            #   field_values[field_name] = keyval.get('/V', 'jyv')  
-        #    else:
-        #        continue
-            
-        #for page in reader.pages:
-        #    writer.add_page(page)
-
-        #writer.clone_reader_document_root(reader)
-
-        #writer.update_page_form_field_values(writer.pages[0], field_values)
-        #fields_to_change = {"Last Name.": "jyv"}
-
-
-        # Make changes per page
-        # <--    change the looping
-        data_dict = { 'LastName[0]': 'jyv' }
-
-        try:
-            for page in writer.pages:
-                annotations = page['/Annots']
-                if annotations != None:
-                    for annotation in annotations:
-                        if annotation['/Subtype'] == '/Widget':
-                            if annotation['/T']:
-                                key = annotation['/T']
-                                if key in data_dict.keys():
-                                    annotation.update({
-                                        pypdf_generic.NameObject("/V"): pypdf_generic.create_string_object(data_dict[key])
-                                        #pypdf_generic.NameObject("/Ff"): pypdf_generic.NumberObject(1)  # Set the ReadOnly flag
-                                    })
-
-
-        except Exception as e:
-            logging.critical(gmsg.get(3), "Error", e)
-
-
-        #for page in enumerate(writer.pages):
-        #    writer.update_page_form_field_values( page, { 'LastName[0]', 'jyb'}, auto_regenerate=False)
-
-
-        # <-- simpler
-        writer.write(replace_global_parameter(self.output, g_rows))
-        #with open(replace_global_parameter(self.output, g_rows), "wb") as f:
-        #    writer.write(f)
-
+        # Write the merged PDF to the output file
+        merger.write(pdfOut )
         logging.info(gmsg.get(3), self.kind, self.name)
     #def
 #class
