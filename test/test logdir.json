@@ -1,0 +1,33 @@
+{
+    "Connections" : [],
+    "Loops":
+    [
+        { 
+            "Name" : "directory",
+            "Kind" : "dir",  
+            "Description" : "get list of file into dir",
+            "Path":"c:/iis_log/*.log",
+            "Recursive": "False"
+        }
+    ]
+    ,
+    "Tasks" : [    
+        {
+            "Name" : "log",
+            "Kind" : "log",
+            "Description" : "read log info",
+            "File" : "[[directory.file]]",
+            "Unique" : "true",
+            "Version": "7"
+
+        },
+        {
+            "Name" : "save",
+            "Kind" : "save",
+            "Description" : "save log file into csv",
+            "Source" : "log",
+            "Output" : "csv",
+            "File" : "[[directory.file]].csv"
+        }
+    ]
+}

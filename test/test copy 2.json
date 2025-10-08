@@ -1,0 +1,30 @@
+{
+    "Connections" : [],
+    "Loops":
+    [
+        { 
+            "Name" : "project",
+            "Kind" : "array",  
+            "Description" : "read list of projects into memory",
+            "Command" : "prj1|prj2"
+        }
+    ]
+    ,
+    "Tasks" : [
+        { 
+            "Name" : "csv1",
+            "Kind" : "csv",  
+            "Description" : "read list of users into memory",
+            "File" : "users.csv"
+        },
+        {
+            "Name"          :   "template2",
+            "Kind"          :   "save",  
+            "Source"        :   "csv1",
+            "Description"   :   "test template2",
+            "Output"        :   "excel",
+            "File"          :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/out_[[project.project]]_template2.xlsx",
+            "ExcelTemplate" :   "C:/Users/jyvin/OneDrive/Documents/GitHub/pyarchive/template2.xlsx"
+        }
+    ]
+    }

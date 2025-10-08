@@ -1,0 +1,23 @@
+{
+    "Connections" : [],
+    "Loops":
+    [
+        { 
+            "Name" : "directory",
+            "Kind" : "dir",  
+            "Description" : "get list of file into dir",
+            "Path":"C:/pcuae/databases/MainDb/games/*.gz",
+            "Recursive": "false"
+        }
+    ]
+    ,
+    "Tasks" : [
+        {
+            "Name" : "gzip",
+            "Kind" : "gzip",
+            "Description" : "unzip the file into the directory",
+            "File" : "[[directory.file]]",
+            "Directory": "c:/crt"
+        }
+    ]
+}

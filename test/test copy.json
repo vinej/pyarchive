@@ -1,0 +1,14 @@
+{
+    "Connections" : [],
+    "Loops":[],
+    "Tasks" : [
+        { 
+            "Name" : "Copy IIS",
+            "Kind" : "copy",  
+            "Description" : "copy file from server to local",
+            "Source" : "\\SLI1406\\Backup",
+            "Destination" : "C:\\iis_zip\\221029",
+            "Pattern" : "*.*"
+        }
+    ]
+}

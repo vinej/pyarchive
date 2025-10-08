@@ -1,0 +1,201 @@
+[2022-03-18 05:01:16,391] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:01:16,392] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:01:16,458] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:506:Could not resolve host. The given remote host could not be resolved. cmd: 
+curl www.google.comm
+[2022-03-18 05:01:16,461] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:02:25,553] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:02:25,554] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:02:38,497] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''int' object has no attribute 'keys''
+[2022-03-18 05:05:07,336] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:05:07,337] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:07:21,617] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:07:21,618] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:08:56,543] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'object of type 'builtin_function_or_method' has no len()'
+[2022-03-18 05:11:58,311] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:11:58,312] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:13:15,280] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:13:15,281] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:15:46,709] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:15:46,710] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:15:46,834] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:16:08,270] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:16:08,271] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:16:08,400] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:16:21,154] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:16:21,155] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:16:45,702] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:20:20,045] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:20:20,046] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:20:35,887] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''bytes' object has no attribute 'getchildren''
+[2022-03-18 05:21:42,517] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:21:42,518] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:21:48,010] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: '[Errno 22] Invalid argument: b'<users>\r\n\t<user>\r\n        \t<name>jyv</name>\r\n\t\t<age>62</age>\t\r\n\r\n\t</user>\r\n\t<user>\r\n        \t<name>jyv</name>\r\n\t\t<age>62</age>\r\n\r\n\t</user>\r\n</users>''
+[2022-03-18 05:23:19,717] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:23:19,718] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:23:32,216] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''xml.etree.ElementTree.Element' object has no attribute 'getroot''
+[2022-03-18 05:24:54,979] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:24:54,980] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:26:00,593] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''xml.etree.ElementTree.Element' object has no attribute 'getroot''
+[2022-03-18 05:26:22,954] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:26:22,955] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:26:29,704] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''xml.etree.ElementTree.Element' object has no attribute 'getchildren''
+[2022-03-18 05:28:35,475] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:28:35,476] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:29:23,227] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:31:55,232] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:31:55,233] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:32:02,249] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:32:02,252] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''list' object has no attribute 'rows''
+[2022-03-18 05:33:26,634] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:33:26,635] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:33:45,698] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:33:45,702] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''list' object has no attribute 'rows''
+[2022-03-18 05:34:18,067] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:34:18,068] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:34:34,126] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:35:01,195] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''list' object has no attribute 'rows''
+[2022-03-18 05:37:31,591] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:37:31,592] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:37:31,736] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Memory.__init__() missing 1 required positional argument: 'rows''
+[2022-03-18 05:38:37,464] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:38:37,465] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:38:57,575] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Memory.__init__() missing 1 required positional argument: 'rows''
+[2022-03-18 05:40:12,758] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:40:12,758] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:40:12,880] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:40:12,891] INFO     root         save:88 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-18 05:40:12,891] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:45:33,544] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:45:33,545] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:45:33,675] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:537:FILE could not read file. Failed to open the file. Permissions? cmd: 
+curl file:///test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:45:33,677] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:46:10,955] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:46:10,955] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:46:11,089] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:537:FILE could not read file. Failed to open the file. Permissions? cmd: 
+curl file:///./test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:46:11,091] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:46:49,395] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:46:49,395] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:46:49,497] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:537:FILE could not read file. Failed to open the file. Permissions? cmd: 
+curl file:///~/test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:46:49,498] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:47:50,986] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:47:50,986] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:47:57,919] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:506:Could not resolve host. The given remote host could not be resolved. cmd: 
+curl file///c:test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:47:57,920] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:49:09,948] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:49:09,948] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:49:10,093] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:506:Could not resolve host. The given remote host could not be resolved. cmd: 
+curl file://./test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:49:10,095] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:50:08,539] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:50:08,539] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:50:08,658] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:503:URL malformed. The syntax was not correct. cmd: 
+curl file:./test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:50:08,659] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:51:18,808] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:51:18,808] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:51:18,947] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:537:FILE could not read file. Failed to open the file. Permissions? cmd: 
+curl file:///./test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:51:18,948] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:52:14,513] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:52:14,513] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:52:14,645] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:506:Could not resolve host. The given remote host could not be resolved. cmd: 
+curl file://./test_json.json -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:52:14,647] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:52:52,230] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:52:52,230] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:52:52,350] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:52:52,358] INFO     root         save:88 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-18 05:52:52,358] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:53:04,676] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:53:04,676] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:53:04,800] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:53:04,808] INFO     root         save:88 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-18 05:53:04,809] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:53:47,890] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:53:47,890] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:53:48,017] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:53:48,025] INFO     root         save:88 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-18 05:53:48,025] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-18 05:54:53,517] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:54:53,517] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:54:53,629] CRITICAL root         curl:74 check_error Curl error: 
+Msg#:503:URL malformed. The syntax was not correct. cmd: 
+curl "file:./test_json.json" -H "X-Custom-Header: value" -H "Content-Type: application/json"
+[2022-03-18 05:54:53,630] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Curl error'
+[2022-03-18 05:55:13,047] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-18 05:55:13,047] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-18 05:55:13,232] INFO     root         save:81 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-18 05:55:13,240] INFO     root         save:88 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-18 05:55:13,240] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-21 06:54:26,063] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:54:26,064] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:54:26,254] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'save' is starting
+[2022-03-21 06:54:26,264] INFO     root         save:96 run Msg#:3:Task of kind 'save' with name 'save' is completed
+[2022-03-21 06:54:26,265] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-21 06:55:57,032] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:55:57,032] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:55:57,033] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: '[Errno 2] No such file or directory: 'test copy2.json''
+[2022-03-21 06:56:15,448] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:56:15,449] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:56:15,449] CRITICAL root         save:59 validate Msg#:27:JSON: The task at position '2' with the name 'template2' does not contains the field 'Source'
+[2022-03-21 06:57:16,647] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:57:16,647] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:57:16,648] CRITICAL root         save:59 validate Msg#:27:JSON: The task at position '2' with the name 'template2' does not contains the field 'Source'
+[2022-03-21 06:57:32,814] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:57:32,815] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:57:32,815] INFO     root         array:60 run Msg#:4:Task of kind 'array' with name 'project' is starting
+[2022-03-21 06:57:32,815] INFO     root         array:75 run Msg#:3:Task of kind 'array' with name 'project' is completed
+[2022-03-21 06:57:32,816] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 06:57:32,816] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 06:57:32,816] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 06:57:32,824] INFO     root         save:96 run Msg#:3:Task of kind 'save' with name 'template2' is completed
+[2022-03-21 06:57:32,825] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 06:57:32,825] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 06:57:32,825] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 06:57:32,832] INFO     root         save:96 run Msg#:3:Task of kind 'save' with name 'template2' is completed
+[2022-03-21 06:57:32,832] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-21 06:58:35,673] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 06:58:35,674] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 06:58:35,674] INFO     root         array:60 run Msg#:4:Task of kind 'array' with name 'project' is starting
+[2022-03-21 06:58:35,674] INFO     root         array:75 run Msg#:3:Task of kind 'array' with name 'project' is completed
+[2022-03-21 06:58:35,675] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 06:58:35,675] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 06:58:35,675] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 06:58:35,677] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'ExcelTemplate.exe() takes 2 positional arguments but 3 were given'
+[2022-03-21 07:00:15,299] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 07:00:15,300] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 07:00:15,300] INFO     root         array:60 run Msg#:4:Task of kind 'array' with name 'project' is starting
+[2022-03-21 07:00:15,301] INFO     root         array:75 run Msg#:3:Task of kind 'array' with name 'project' is completed
+[2022-03-21 07:00:15,301] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 07:00:15,301] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 07:00:15,302] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 07:00:15,303] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: ''ExcelTemplate' object has no attribute 'template''
+[2022-03-21 07:00:55,100] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 07:00:55,100] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 07:00:55,101] INFO     root         array:60 run Msg#:4:Task of kind 'array' with name 'project' is starting
+[2022-03-21 07:00:55,101] INFO     root         array:75 run Msg#:3:Task of kind 'array' with name 'project' is completed
+[2022-03-21 07:00:55,101] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 07:00:55,102] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 07:00:55,102] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 07:00:55,112] INFO     root         save:96 run Msg#:3:Task of kind 'save' with name 'template2' is completed
+[2022-03-21 07:00:55,113] INFO     root         csv:35 run Msg#:4:Task of kind 'csv' with name 'csv1' is starting
+[2022-03-21 07:00:55,113] INFO     root         csv:63 run Msg#:3:Task of kind 'csv' with name 'csv1' is completed
+[2022-03-21 07:00:55,114] INFO     root         save:85 run Msg#:4:Task of kind 'save' with name 'template2' is starting
+[2022-03-21 07:00:55,123] INFO     root         save:96 run Msg#:3:Task of kind 'save' with name 'template2' is completed
+[2022-03-21 07:00:55,123] INFO     root         main:86 main Msg#:57:Pyarchive completed with success
+[2022-03-21 07:10:01,732] INFO     root         main:29 set_logging Msg#:5:Configuration of the logging into file 'pyarchive.log' is completed
+[2022-03-21 07:10:01,733] INFO     root         main:50 main Msg#:56:Pyarchive started
+[2022-03-21 07:10:01,734] CRITICAL root         main:89 main Msg#:1:Runtime unexpected exception: 'Invalidid parameters'

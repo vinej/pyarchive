@@ -1,0 +1,14 @@
+{
+    "Connections" : [],
+    "Loops":[],
+    "Tasks" : [
+        { 
+            "Name" : "ad1",
+            "Kind" : "ad",  
+            "Description" : "update ad names",
+            "Source" : "c:/iis_log/test.csv",
+            "Destination" : "c:/iis_log/test_ad.csv",
+            "IsUrl" : "n"
+        }
+    ]
+}

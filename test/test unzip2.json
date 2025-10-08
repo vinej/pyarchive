@@ -1,0 +1,23 @@
+{
+    "Connections" : [],
+    "Loops":
+    [
+        { 
+            "Name" : "directory",
+            "Kind" : "dir",  
+            "Description" : "get list of file into dir",
+            "Path":"c:/iis_log/2018/*.zip",
+            "Recursive": "false"
+        }
+    ]
+    ,
+    "Tasks" : [
+        {
+            "Name" : "unzip",
+            "Kind" : "unzip",
+            "Description" : "unzip the file into the directory",
+            "File" : "[[directory.file]]",
+            "Directory": "c:/iis_log"
+        }
+    ]
+}
