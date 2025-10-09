@@ -76,7 +76,7 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
     To access information from other tasks on the same file you use this patterm
         [[task_name.column_name]]
 
-4: Loops: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
+4: Loops: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop (like for each)
 
         The internal loops are like that
 
@@ -94,7 +94,7 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
         - an output type 'reference' means that the task is not executed right away the first time. The task is put in memory to be re-run with parameters updated with
         - values from previous tasks
 
-        the list of values is created from a Task of type array, csv,query or curl
+        the list of values is created from a Task of type array,dir,csv,query or curl
         the parameter variables uses [[loopname.columnname]] in the Tasks definition section to access the current row and field of the current iteration (loop)
         by example, this option can be used to run all tasks for project 'prj1' and 'prj2'
 
@@ -133,7 +133,10 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
         Kind        :   array
         Description :   the description of the task
         Command     :   contains the list of values separated by a pipe |
+                        OR a filename with rows. One value by row.
+        Type        :   pipe / file  (default is pipe)
         Output      :   memory / reference
+
 
         the array data can be access with  name
 

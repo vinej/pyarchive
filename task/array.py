@@ -14,6 +14,8 @@ Name        :   the name of the task
 Kind        :   array
 Description :   the description of the task
 Command     :   contains the list of values separated by a pipe |
+                or the file name if type = file is used. One value per line.
+Type        :   pipe (default), file
 '''
 class Array(BaseTask):
     def __init__(self, jsondata):
@@ -21,6 +23,7 @@ class Array(BaseTask):
         self.kind = get_dict_value(jsondata,'Kind')
         self.description = get_dict_value(jsondata,'Description')
         self.command = get_dict_value(jsondata,'Command')
+        self.type = get_dict_value(jsondata,'Type')
         self.output = 'memory'
     #def
 
@@ -44,6 +47,10 @@ class Array(BaseTask):
             sys.exit(27)
         #if
 
+        if self.type == None:
+            self.type = 'pipe'
+        #if
+
         if self.output == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Output')
             sys.exit(27)
@@ -62,6 +69,7 @@ class Array(BaseTask):
         self.description = replace_global_parameter(self.description, g_rows)
         self.command = replace_global_parameter(self.command, g_rows)
         self.output = replace_global_parameter(self.output, g_rows)
+        self.type = replace_global_parameter(self.type, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
@@ -69,15 +77,36 @@ class Array(BaseTask):
         _ = mapref # not used for now
         _ = g_rows
         columns = [self.name]
-        arows = self.command.split('|')
-        rows = []
-        for value in arows:
-            onerow = {}
-            onerow[self.name] = value
-            rows.append(onerow)
-        #
-        m = Memory(columns, rows)
-        mapmem[self.name] = m
+
+        if self.type.lower() == 'file':
+            try:
+                rows = []
+                with open(self.command, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        linestrip = line.strip()
+                        if linestrip:  # Avoid empty lines
+                            onerow = {}
+                            onerow[self.name] = linestrip
+                            rows.append(onerow)
+                    #for
+                #with
+                m = Memory(columns, rows)
+                mapmem[self.name] = m
+            except Exception as e:
+                logging.fatal(gmsg.get(30), self.command, str(e))
+                sys.exit(30)
+            #try
+        else: #pipe
+            arows = self.command.split('|')
+            rows = []
+            for value in arows:
+                onerow = {}
+                onerow[self.name] = value
+                rows.append(onerow)
+            #for
+            m = Memory(columns, rows)
+            mapmem[self.name] = m
+        #if
 
         logging.info(gmsg.get(3), self.kind, self.name)
     #def

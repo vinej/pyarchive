@@ -1,0 +1,22 @@
+{
+    "Connections" : [],
+    "Loops":[],
+    "Tasks" : [
+        { 
+            "Name" : "array1",
+            "Kind" : "array",  
+            "Description" : "test array pipe",
+            "Command" : "a|b|c",
+            "Type" : "pipe",
+            "Output" : "memory"
+        },
+        {
+            "Name" : "save1",
+            "Kind" : "save",
+            "Description" : "save list into a file",
+            "Source" : "array1",
+            "Output" : "csv",
+            "File" : "C:/pyarchive/pyarchive2/test/array_test.csv"
+        }
+    ]
+}
