@@ -6,7 +6,7 @@
             "Name" : "directory",
             "Kind" : "dir",  
             "Description" : "get list of file into dir",
-            "Path":"c:/iis_log/2018/*.zip",
+            "Path":"c:/iis_log/2019/*.zip",
             "Recursive": "false"
         }
     ]
@@ -17,7 +17,7 @@
             "Kind" : "unzip",
             "Description" : "unzip the file into the directory",
             "File" : "[[directory.file]]",
-            "Directory": "c:/iis_log"
+            "Directory": "c:/iis_log/2019"
         }
     ]
 }

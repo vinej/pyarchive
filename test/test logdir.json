@@ -6,7 +6,7 @@
             "Name" : "directory",
             "Kind" : "dir",  
             "Description" : "get list of file into dir",
-            "Path":"c:/iis_log/*.log",
+            "Path":"c:/iis_log/2019/*.log",
             "Recursive": "False"
         }
     ]

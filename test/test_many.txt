@@ -1,0 +1,2 @@
+C:/pyarchive/pyarchive2/test/test unzip2.json
+C:/pyarchive/pyarchive2/test/test logdir.json

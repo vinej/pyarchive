@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["C:/pyarchive/test/test ad.json"]
+            "args": ["C:/pyarchive/pyarchive2/test/test_many.txt"]
         }
     ]
 }
