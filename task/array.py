@@ -1,5 +1,5 @@
 from output.memory import Memory
-from output.util import get_dict_value
+from output.util import get_dict_value, replace_global_parameter
 import logging
 from message.message import gmsg
 from task.base import BaseTask
@@ -58,6 +58,11 @@ class Array(BaseTask):
 	#def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):
+        
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.command = replace_global_parameter(self.command, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
+
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
         _ = position  # not used for now

@@ -5,6 +5,9 @@ PYArchive is a tool in python to archive in csv/excel files data from databases.
         1- install pip
         2- pip install pyodbc
         3- pip install openpyxl
+        4- pip install pypdf
+        5- pip install fillpdf
+        6- pip install ldap3
 ```
 
 This small utility could be used to archive data from differents sources (csv,excel,db).
@@ -67,8 +70,13 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
             }
         ],....
 
+3: memory output
 
-2: Loops: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
+    When the output is memory, the information from a task could be used by other tasks.
+    To access information from other tasks on the same file you use this patterm
+        [[task_name.column_name]]
+
+4: Loops: This option is used to run all tasks many time from a list of values with a maximum of 5 levels of loop.
 
         The internal loops are like that
 
@@ -102,7 +110,7 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
         ],...
         see the task definition below
 
-3: Tasks: tasks are commands run sequentialy from task definition below. There is 5 kinds of task:
+5: Tasks: tasks are commands run sequentialy from task definition below. There is 5 kinds of task:
 
     The available tasks are:
         array       :   create a simple list of scalar values in memory. the name of the array is also the name of the column created in memory
@@ -110,12 +118,24 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
         query       :   execute a SQL query or a stored procedure and save the result
         save        :   save into a csv/excel file information created by previous tasks in memory
         curl        :   launch a curl command (not completed yet, on progress)
+        ad          :   add first name, last name to a csv from the account name
+        fillpdf     :   read a pdf file, fillup fields and save it.
+        dir         :   get files from a directory
+        copy        :   copy files from one folder to another
+        create      :   create table into sql
+        log         :   read IIS logs an put date,user,url into a csv file
+        gzip        :   unzio gzip files  (.gz)
+        sync        :   synchronized 2 sql tables
+        unzip       :   unzip files  (*.zip)
 
     Array definition
         Name        :   the name of the task
         Kind        :   array
         Description :   the description of the task
         Command     :   contains the list of values separated by a pipe |
+        Output      :   memory / reference
+
+        the array data can be access with  name
 
     Csv definition
         Name        :   the name of the task

@@ -39,8 +39,10 @@ class Copy(BaseTask):
     def run(self, mapmem, mapref, mapcon, position, g_rows):
         # replace the global parameter
 
+        self.description = replace_global_parameter(self.description, g_rows)
         self.source = replace_global_parameter(self.source, g_rows)
         self.destination = replace_global_parameter(self.destination, g_rows)
+        self.pattern = replace_global_parameter(self.pattern, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now

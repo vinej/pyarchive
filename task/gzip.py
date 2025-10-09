@@ -61,6 +61,11 @@ class Gzip(BaseTask):
 	#def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):
+
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.file = replace_global_parameter(self.file, g_rows)
+        self.directory = replace_global_parameter(self.directory, g_rows)
+
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
         _ = g_rows

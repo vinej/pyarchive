@@ -32,6 +32,7 @@ class Csv(BaseTask):
         # replace the global parameter
         self.file = replace_global_parameter(self.file, g_rows)
         self.description = replace_global_parameter(self.description, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now

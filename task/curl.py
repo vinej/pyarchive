@@ -80,6 +80,14 @@ class Curl(BaseTask):
 
     # run the Csv task
     def run(self, mapmem, mapref, mapcon, position, g_rows):
+
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.options = replace_global_parameter(self.options, g_rows)
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.parser = replace_global_parameter(self.parser, g_rows)
+        self.hierarchy = replace_global_parameter(self.hierarchy, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
+
         #for o in self.options:
         #    o.option = replace_global_parameter(o.option, g_row) + "b"
         #print(self.options)

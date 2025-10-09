@@ -79,6 +79,8 @@ class Log(BaseTask):
 
         self.description = replace_global_parameter(self.description, g_rows)
         self.file = replace_global_parameter(self.file, g_rows)
+        self.unique = replace_global_parameter(self.unique, g_rows)
+        self.version = replace_global_parameter(self.version, g_rows)
         # read the directory
 
         rows = []

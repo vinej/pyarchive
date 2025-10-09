@@ -10,7 +10,7 @@ from pypdf import generic as pypdf_generic
 from itertools import groupby
 
 '''
-The Pdf class is used to read pdf form`s field in memory
+The Pdf class is used to read and update pdf form`s
 
 The json object properties
 
@@ -103,6 +103,11 @@ class Pdf(BaseTask):
         _ = g_rows
 
         pdfOut = replace_global_parameter(self.output, g_rows)
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.template = replace_global_parameter(self.template, g_rows)
+        self.type = replace_global_parameter(self.type, g_rows)
+        self.dict = replace_global_parameter(self.dict, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows)
 
         merger = PdfWriter()
 

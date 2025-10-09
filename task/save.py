@@ -83,6 +83,8 @@ class Save(BaseTask):
         self.exceltemplate = replace_global_parameter(self.exceltemplate, g_rows)
         self.excluded = replace_global_parameter(self.excluded, g_rows)
         self.anonymized = replace_global_parameter(self.anonymized, g_rows)
+        self.source = replace_global_parameter(self.source, g_rows)
+
         # started
         logging.info(gmsg.get(4), self.kind, self.name)
         # get the object to save into a file

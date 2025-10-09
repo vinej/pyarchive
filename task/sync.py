@@ -108,7 +108,8 @@ class Sync(BaseTask):
         self.updatedate = replace_global_parameter(self.updatedate, g_rows)
         self.primarykey = replace_global_parameter(self.primarykey, g_rows)
         self.source = replace_global_parameter(self.source, g_rows)
-
+        self.description = replace_global_parameter(self.description, g_rows)
+        
         # get new records
         syncdate = str(open(self.filesync).readline())
 

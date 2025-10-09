@@ -29,15 +29,17 @@ class Ad(BaseTask):
         self.destination =  get_dict_value(jsondata, 'Destination')
         self.isurl = get_dict_value(jsondata,'IsUrl')
 
-        self.AD_SERVER = 'WUSD033D002MP.wsatkins.com'  # e.g., 'dc01.company.local'
-        self.AD_USER = 'wsatkins\\vinej'  # e.g., 'COMPANY\\jdoe'
-        self.AD_PASSWORD = '...'
-        self.SEARCH_BASE = 'DC=wsatkins,DC=com'  # Adjust to your AD structure
+        self.AD_DOMAIN = get_dict_value(jsondata,'AD_DOMAIN')       # wsatkins
+        self.AD_SERVER = get_dict_value(jsondata,'AD_SERVER')       #'WUSD033D002MP.wsatkins.com'  # e.g., 'dc01.company.local'
+        self.AD_USER = get_dict_value(jsondata,'AD_USER')           #'wsatkins\\vinej'  # e.g., 'COMPANY\\jdoe'
+        self.AD_PASSWORD = get_dict_value(jsondata,'AD_PASSWORD')   # '...'
+        self.SEARCH_BASE = get_dict_value(jsondata,'SEARCH_BASE')   #'DC=wsatkins,DC=com'  # Adjust to your AD structure
 
-        self.AD_SERVER2 = 'SLI5030.sli.bz'  # e.g., 'dc01.company.local'
-        self.AD_USER2 = 'sli\\vinej'  # e.g., 'COMPANY\\jdoe'
-        self.AD_PASSWORD2 = '...'
-        self.SEARCH_BASE2 = 'DC=sli,DC=bz'  # Adjust to your AD structure
+        self.AD_DOMAIN = get_dict_value(jsondata,'AD_DOMAIN2')      # sli
+        self.AD_SERVER2 = get_dict_value(jsondata,'AD_SERVER')      #'SLI5030.sli.bz'  # e.g., 'dc01.company.local'
+        self.AD_USER2 = get_dict_value(jsondata,'AD_USER')          #'sli\\vinej'  # e.g., 'COMPANY\\jdoe'
+        self.AD_PASSWORD2 = get_dict_value(jsondata,'AD_PASSWORD')  #'...'
+        self.SEARCH_BASE2 = get_dict_value(jsondata,'SEARCH_BASE')  #'DC=sli,DC=bz'  # Adjust to your AD structure
 
         self.server = None
         self.conn = None
@@ -52,10 +54,25 @@ class Ad(BaseTask):
 
     # run the Csv task
     def run(self, mapmem, mapref, mapcon, position, g_rows):
+        
         # replace the global parameter
+        self.description = replace_global_parameter(self.description, g_rows)
 
         self.source = replace_global_parameter(self.source, g_rows)
         self.destination = replace_global_parameter(self.destination, g_rows)
+        self.isurl = replace_global_parameter(self.isurl, g_rows)
+
+        self.AD_DOMAIN = replace_global_parameter(self.AD_DOMAIN, g_rows)
+        self.AD_SERVER = replace_global_parameter(self.AD_SERVER, g_rows)
+        self.AD_USER = replace_global_parameter(self.AD_USER, g_rows)
+        self.AD_PASSWORD = replace_global_parameter(self.AD_PASSWORD, g_rows)
+        self.SEARCH_BASE = replace_global_parameter(self.SEARCH_BASE, g_rows)
+
+        self.AD_DOMAIN2 = replace_global_parameter(self.AD_DOMAIN, g_rows)
+        self.AD_SERVER2 = replace_global_parameter(self.AD_SERVER, g_rows)
+        self.AD_USER2 = replace_global_parameter(self.AD_USER, g_rows)
+        self.AD_PASSWORD2 = replace_global_parameter(self.AD_PASSWORD, g_rows)
+        self.SEARCH_BASE2 = replace_global_parameter(self.SEARCH_BASE, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapmem
@@ -80,15 +97,15 @@ class Ad(BaseTask):
     def get_user_info(self,ad_account):
         only_account = self.remove_domain(ad_account)
 
-        if 'sli\\' in ad_account.lower() :
-            conn = self.get_connection("sli")
+        if self.AD_DOMAIN2 in ad_account.lower() :
+            conn = self.get_connection(self.AD_DOMAIN2)
             conn.search(
                 search_base=self.SEARCH_BASE2,
                 search_filter=f'(sAMAccountName={only_account})',
                 attributes=['givenName', 'sn' ]
             )
         else:
-            conn = self.get_connection("wsatkins")
+            conn = self.get_connection(self.AD_DOMAIN)
             conn.search(
                 search_base=self.SEARCH_BASE,
                 search_filter=f'(sAMAccountName={only_account})',
@@ -105,7 +122,7 @@ class Ad(BaseTask):
     #def
 
     def get_connection(self, domain) :
-        if domain == 'sli' :
+        if domain == self.AD_DOMAIN2 :
             if self.server2 is None: 
                 self.server2 = Server(self.AD_SERVER2, get_info=ALL)
                 self.conn2 = Connection(self.server2, user=self.AD_USER2, password=self.AD_PASSWORD2, authentication=NTLM, auto_bind=True)
@@ -118,9 +135,6 @@ class Ad(BaseTask):
             #if
             return self.conn
         #if
-    #def
-
-
     #def
 
     def enrich_csv(self, input_csv, output_csv):

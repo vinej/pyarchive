@@ -44,6 +44,12 @@ class FillPdf(BaseTask):
 	#def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):
+
+        self.description = replace_global_parameter(self.description, g_rows)
+        self.template = replace_global_parameter(self.template, g_rows)
+        self.type = replace_global_parameter(self.type, g_rows)
+        self.output = replace_global_parameter(self.output, g_rows) 
+
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapcon    # not used for now
         _ = position  # not used for now
