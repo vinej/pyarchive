@@ -27,6 +27,7 @@ class Dir(BaseTask):
         self.description = get_dict_value(jsondata,'Description')
         self.path = get_dict_value(jsondata,'Path')
         self.recursive = get_dict_value(jsondata,'Recursive')
+        self.output = get_dict_value(jsondata,'Output')
     #def
 
     def validate(self, mapcon, position):  
@@ -59,6 +60,15 @@ class Dir(BaseTask):
             sys.exit(27)
         #if
         self.recursive = self.recursive.lower() 
+
+        if self.output == None:
+            self.output = 'memory'
+
+        if self.output != 'memory':
+            logging.errro(gmsg.get(28), position, self.name, 'Output')
+            logging.fatal(gmsg.get(29))
+            sys.exit(28)
+        #if
 	#def
 
     def run(self, mapmem, mapref, mapcon, position, g_rows):

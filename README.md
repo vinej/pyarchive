@@ -17,44 +17,19 @@ The utility takes a json file as parameter.
 Note:  main.exe is a window executable created with pyinstaller
 
 ```
-The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
+The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
 
 
 1: Globals: (not impkemented yet)
 
-            is list of parameters that can be used into all other section as [[globalname.paramname]]
-            The parameters must be defined by environement, because often we test scripts in developement first
-            after in pre-production and at the end in production. the goal is to be able to change only the
-            property "env" when we want to run the script for another environement
+    Globals are tasks that will be run once before  other sections (Connections, Loops, Tasks)
+    It's used to read into memory data that will be used by all other tasks
 
-        "Globals" :
-            "env": "DV",
-            "DV":
-                [
-                    {
-                        "Name" : "cpdb",
-                        "Value" : "db[env]cp01"
-                        "Descriprion" : "the corporate database in DV"
-                    }
-                ],
-            "PP":
-                [
-                    {
-                        "Name" : "",
-                        "Value" : "db[env]cp01"
-                        "Descriprion" : "the corporate database in DV"
-                    }
-                ],
-            "PR":
-                [
-                    {
-                        "Name" : "databaSE",
-                        "Value" : "db[env]cp"
-                        "Descriprion" : "the corporate database in DV"
-                    }
-                ]
-            ,...
-            
+    Note: loading a csv file in memory as the first task could be used like globals, but the file will be
+        read many times if you use Loops. Without a loop it the way to do it.
+
+    Globals are needed when you need global parameters and you use Loops
+         
 
 2: Connections: is an array of connections to the database used by the GlobalParameter and Tasks sections.
         The object definition:  
@@ -135,16 +110,25 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
         Command     :   contains the list of values separated by a pipe |
                         OR a filename with rows. One value by row.
         Type        :   pipe / file  (default is pipe)
-        Output      :   memory / reference
+        Output      :   memory (default) / reference
+        -> array's data  can be access from other tasks with  [[name_of_the_task.array]]
 
-
-        the array data can be access with  name
+    Dir definition
+        Name        :   the name of the task
+        Kind        :   dir
+        Description :   the description of the task
+        Path        :   the full path to read files from a directory
+        Recursive   :   true / false,  : true means that all subdirectory will be read
+        Output      :   memory (default)
+        -> file's names can be access from other tasks with  [[name_of_the_task.file]]
 
     Csv definition
         Name        :   the name of the task
         Kind        :   csv
         Description :   the description of the task
-        File        :   the full path of the csv file
+        File        :   the full path of the csv file to read into memory
+        Output      :   memory (default)
+        -> data from csv can be access from other tasks with  [[name_of_the_task.column_from_csv]]
 
     Query definition
         Name            :   name of the task
@@ -217,7 +201,9 @@ The json parameter file has 3 sections : Globals, Connections, Loops and Tasks
 
                             NOTE: into the curl options, " must be escape for \"
                             NOTE: for html,text,css, only one colum, is created with the name of the task's name
-
+        -> data can be access from other tasks with  [[name_of_the_task.column]]
+        -> loclumns names are related to the parser type and the content
+        
         { 
             "Name" : "google",
             "Kind" : "curl",  
@@ -328,7 +314,7 @@ an example with GlobalParameter and ExcelTemplate
             "Name" : "users",
             "Kind" : "csv",  
             "Description" : "read list of users into memory",
-            "File" : "users_[[project.project]].csv"
+            "File" : "users_[[project.array]].csv"
         },
         {
             "Name"          :   "template",

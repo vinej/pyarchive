@@ -52,8 +52,7 @@ class Array(BaseTask):
         #if
 
         if self.output == None:
-            logging.fatal(gmsg.get(27), position, self.name, 'Output')
-            sys.exit(27)
+            self.output = 'memory'
         #if
         self.output = self.output.lower()
 
@@ -76,7 +75,7 @@ class Array(BaseTask):
         _ = position  # not used for now
         _ = mapref # not used for now
         _ = g_rows
-        columns = [self.name]
+        columns = ["array"]
 
         if self.type.lower() == 'file':
             try:
