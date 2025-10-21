@@ -28,18 +28,19 @@ class Ad(BaseTask):
         self.source =  get_dict_value(jsondata, 'Source')
         self.destination =  get_dict_value(jsondata, 'Destination')
         self.isurl = get_dict_value(jsondata,'IsUrl')
+        self.isdate = get_dict_value(jsondata,'IsDate') 
 
-        self.AD_DOMAIN = get_dict_value(jsondata,'AD_DOMAIN')       # wsatkins
-        self.AD_SERVER = get_dict_value(jsondata,'AD_SERVER')       #'WUSD033D002MP.wsatkins.com'  # e.g., 'dc01.company.local'
-        self.AD_USER = get_dict_value(jsondata,'AD_USER')           #'wsatkins\\vinej'  # e.g., 'COMPANY\\jdoe'
-        self.AD_PASSWORD = get_dict_value(jsondata,'AD_PASSWORD')   # '...'
-        self.SEARCH_BASE = get_dict_value(jsondata,'SEARCH_BASE')   #'DC=wsatkins,DC=com'  # Adjust to your AD structure
+        self.AD_DOMAIN = ''      
+        self.AD_SERVER = ''     
+        self.AD_USER = ''         
+        self.AD_PASSWORD = ''  
+        self.SEARCH_BASE = ''
 
-        self.AD_DOMAIN = get_dict_value(jsondata,'AD_DOMAIN2')      # sli
-        self.AD_SERVER2 = get_dict_value(jsondata,'AD_SERVER')      #'SLI5030.sli.bz'  # e.g., 'dc01.company.local'
-        self.AD_USER2 = get_dict_value(jsondata,'AD_USER')          #'sli\\vinej'  # e.g., 'COMPANY\\jdoe'
-        self.AD_PASSWORD2 = get_dict_value(jsondata,'AD_PASSWORD')  #'...'
-        self.SEARCH_BASE2 = get_dict_value(jsondata,'SEARCH_BASE')  #'DC=sli,DC=bz'  # Adjust to your AD structure
+        self.AD_DOMAIN2 = ''    
+        self.AD_SERVER2 = ''      
+        self.AD_USER2 = ''        
+        self.AD_PASSWORD2 = ''  
+        self.SEARCH_BASE2 = '' 
 
         self.server = None
         self.conn = None
@@ -61,6 +62,7 @@ class Ad(BaseTask):
         self.source = replace_global_parameter(self.source, g_rows)
         self.destination = replace_global_parameter(self.destination, g_rows)
         self.isurl = replace_global_parameter(self.isurl, g_rows)
+        self.isdate = replace_global_parameter(self.isdate, g_rows) 
 
         self.AD_DOMAIN = replace_global_parameter(self.AD_DOMAIN, g_rows)
         self.AD_SERVER = replace_global_parameter(self.AD_SERVER, g_rows)
@@ -68,11 +70,11 @@ class Ad(BaseTask):
         self.AD_PASSWORD = replace_global_parameter(self.AD_PASSWORD, g_rows)
         self.SEARCH_BASE = replace_global_parameter(self.SEARCH_BASE, g_rows)
 
-        self.AD_DOMAIN2 = replace_global_parameter(self.AD_DOMAIN, g_rows)
-        self.AD_SERVER2 = replace_global_parameter(self.AD_SERVER, g_rows)
-        self.AD_USER2 = replace_global_parameter(self.AD_USER, g_rows)
-        self.AD_PASSWORD2 = replace_global_parameter(self.AD_PASSWORD, g_rows)
-        self.SEARCH_BASE2 = replace_global_parameter(self.SEARCH_BASE, g_rows)
+        self.AD_DOMAIN2 = replace_global_parameter(self.AD_DOMAIN2, g_rows)
+        self.AD_SERVER2 = replace_global_parameter(self.AD_SERVER2, g_rows)
+        self.AD_USER2 = replace_global_parameter(self.AD_USER2, g_rows)
+        self.AD_PASSWORD2 = replace_global_parameter(self.AD_PASSWORD2, g_rows)
+        self.SEARCH_BASE2 = replace_global_parameter(self.SEARCH_BASE2, g_rows)
 
         logging.info(gmsg.get(4), self.kind, self.name)
         _ = mapmem
@@ -142,12 +144,18 @@ class Ad(BaseTask):
              open(output_csv, 'w', newline='', encoding='utf-8') as outfile:
 
             reader = csv.DictReader(infile)
-            fieldnames = ['date', 'user', 'first_name', 'last_name']
+            if self.isdate and self.isurl:
+                fieldnames = ['date', 'user', 'first_name', 'last_name', 'url' ]
+            elif self.isdate :
+                fieldnames = ['date', 'user', 'first_name', 'last_name']    
+            else :
+                fieldnames = ['user', 'first_name', 'last_name']    
+            #if
             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
             writer.writeheader()
 
             for row in reader:
-                if self.isurl == 'y' :
+                if self.isurl :
                     user = row['user']
                     date = row['date']
                     url = row['url']
@@ -173,7 +181,8 @@ class Ad(BaseTask):
                     })
                 else :
                     user = row['user']
-                    date = row['date']
+                    if self.isdate :
+                        date = row['date']
 
                     if user in self.accounts:
                         first_name = self.firstnames[user]
@@ -187,13 +196,23 @@ class Ad(BaseTask):
 
                     logging.info(gmsg.get(3), "AD",  self.remove_domain(user))
 
-                    writer.writerow({
-                        'date': date,
-                        'user': user,
-                        'first_name': first_name,
-                        'last_name': last_name
-                    })
-            
+                    if self.isdate :
+                        writer.writerow({
+                            'date': date,
+                            'user': user,
+                            'first_name': first_name,
+                            'last_name': last_name
+                        })  
+                    else :  
+                        writer.writerow({
+                            'user': user,
+                            'first_name': first_name,
+                            'last_name': last_name
+                        })
+                    #if
+                #if
+            #for    
+        #with          
     #def
 
     # validate the Csv task
@@ -218,6 +237,16 @@ class Ad(BaseTask):
 
         if self.destination == None:
             logging.fatal(gmsg.get(27), position, self.name, 'Destination')
+            sys.exit(27)
+        #if
+
+        if self.isdate == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'IsDate')
+            sys.exit(27)
+        #if
+
+        if self.isurl == None:
+            logging.fatal(gmsg.get(27), position, self.name, 'IsUrl')
             sys.exit(27)
         #if
 	#def

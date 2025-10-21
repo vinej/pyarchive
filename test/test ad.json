@@ -6,9 +6,10 @@
             "Name" : "ad1",
             "Kind" : "ad",  
             "Description" : "update ad names",
-            "Source" : "c:/iis_log/full_2018.csv",
-            "Destination" : "c:/iis_log/full_2018_ad.csv",
-            "IsUrl" : "n"
+            "Source" : "C:/pyarchive/pyarchive2/invak.txt",
+            "Destination" : "C:/pyarchive/pyarchive2/invak2.txt",
+            "IsUrl" : false,
+            "IsDate" : false
         }
     ]
 }
