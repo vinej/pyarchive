@@ -106,7 +106,7 @@ class Excel(BaseTask):
         while action_idx < max_action-1 :
             action_idx += 1
             cnt = cnt + 1
-            if cnt == 100:
+            if cnt == 1000:
                 print(f'idx = {action_idx}, row = {row_idx}')
                 cnt = 0
             #if
