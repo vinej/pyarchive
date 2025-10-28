@@ -1,0 +1,15 @@
+{
+    "Connections" : [],
+    "Loops":[],
+    "Tasks" : [
+        { 
+            "Name" : "Excel1",
+            "Kind" : "excel",  
+            "Description" : "test excel",
+            "Source" : "c:/test/accpac.xlsx",
+            "Output" : "c:/test/ouput.csv",
+            "Header" : "vendor,name,cur,invoice,code,date,acc,pytype,pyid,pycode,topay,paid,bal",
+            "Actions" : "c:/test/actions.txt"
+        }
+    ]
+}

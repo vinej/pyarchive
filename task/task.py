@@ -16,6 +16,7 @@ from task.gzip import Gzip
 #from task.pdf import Pdf
 from task.copy import Copy
 from task.ad import Ad
+from task.excel import Excel
 
 '''
     Master object to run all task
@@ -48,6 +49,7 @@ register_task('gzip', Gzip)
 #register_task('fillpdf', FillPdf)
 register_task('copy', Copy)
 register_task('ad', Ad)
+register_task('excel', Excel)
 
 class Task:
     def __init__(self, jsondata):
