@@ -1,0 +1,15 @@
+{
+    "Connections" : [],
+    "Loops":[],
+    "Tasks" : [
+        { 
+            "Name" : "Excel1",
+            "Kind" : "excel",  
+            "Description" : "test excel",
+            "Source" : "c:/test/accpac_pmplus_compare_no_py.xlsx",
+            "Output" : "c:/test/out_accpac_vendor.csv",
+            "Header" : "vendor,topay,paid,bal",
+            "Actions" : "C:/pyarchive/pyarchive2/test/actions4.txt"
+        }
+    ]
+}

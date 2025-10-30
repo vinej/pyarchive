@@ -1,0 +1,60 @@
+label,lbl_vendor
+  if,empty|lbl_end
+  put,vendor|-|0
+  put,cur|-|1
+  right,1
+  put,name
+  left,1
+  down,1
+label,lbl_invoice
+  if,Vendor Total:|lbl_next_vendor
+  put,invoice
+  right,1
+  put,code
+  right,3
+  put,date
+  right,2
+  put,acc
+  down,1
+  put,pytype
+  right,1
+  put,pyid
+  right,1
+  put,pycode
+  up,1
+  put,topay
+  down,1
+  right,1
+  put,paid
+  down,1
+label,lbl_check_paid
+  if,empty|lbl_save_row
+  add,paid
+  down,1
+  goto,lbl_check_paid
+label,lbl_save_row
+  up,1
+  right,1
+  put,bal
+  up,1
+  left,10
+  save
+label,lbl_next
+  down,1
+  if,empty|lbl_next
+  if,Vendor Total:|lbl_next_vendor
+  create,vendor|name|cur
+  goto,lbl_invoice
+label,lbl_next_vendor
+  down,2
+  goto,lbl_vendor
+label,lbl_end
+  end
+
+
+
+
+
+
+
+

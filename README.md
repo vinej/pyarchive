@@ -102,6 +102,7 @@ The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
         gzip        :   unzio gzip files  (.gz)
         sync        :   synchronized 2 sql tables
         unzip       :   unzip files  (*.zip)
+        excel       :   scan an excel file to create csv file with actions
 
     Array definition
         Name        :   the name of the task
@@ -238,6 +239,12 @@ The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
             ],
             "Parser" : "xml"
         }
+    Excel definition
+        Name            :   the name of the task
+        Kind            :   save
+        to come
+
+    
 
 ========
 Examples

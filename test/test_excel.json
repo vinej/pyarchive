@@ -9,7 +9,7 @@
             "Source" : "c:/test/accpac.xlsx",
             "Output" : "c:/test/ouput.csv",
             "Header" : "vendor,name,cur,invoice,code,date,acc,pytype,pyid,pycode,topay,paid,bal",
-            "Actions" : "c:/test/actions.txt"
+            "Actions" : "c:/test/actions3.txt"
         }
     ]
 }

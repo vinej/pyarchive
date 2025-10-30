@@ -1,0 +1,101 @@
+label,lbl_vendor
+  if,empty|lbl_end
+  put,vendor|-|0
+  put,cur|-|1
+  right,1
+  put,name
+  left,1
+  down,1
+label,lbl_invoice
+  if,Vendor Total:|lbl_next_vendor
+  put,invoice
+  right,1
+  put,code
+  if,CR|lbl_cr
+label,lbl_not_cr
+  right,3
+  put,date
+  right,2
+  put,acc
+  down,1
+  put,pytype
+  right,1
+  put,pyid
+  right,1
+  put,pycode
+  up,1
+  put,topay
+  down,1
+  right,1
+  put,paid
+  right,1
+  put,bal
+  left,10
+  save
+label,lbl_next
+  down,1
+  if,empty|lbl_empty_down
+  if,Vendor Total:|lbl_next_vendor
+  create
+  goto,lbl_invoice
+label,lbl_empty_down
+  right,1
+  if,empty|lbl_another_amount
+  goto,lbl_next
+label,lbl_next_vendor
+  down,2
+  goto,lbl_vendor
+label,lbl_another_amount
+  right,3
+  put,date
+  right,2
+  put,pytype
+  right,1
+  put,pyid
+  right,1
+  put,pycode
+  right,1
+  put,paid
+  right,1
+  put,bal
+  left,10
+  save
+  goto,lbl_next
+label,lbl_cr
+  down,1
+  if,empty|lbl_not_cr1
+  up,1
+  right,3
+  put,date
+  right,2
+  put,acc
+  right,2
+  put,topay
+  right,1
+  put,paid
+  left,9
+  save
+  down,1
+  goto,lbl_invoice
+label,lbl_not_cr1
+  up,1
+  goto,lbl_not_cr
+label,lbl_is_py
+  left,1
+  down,1
+label,lbl_is_py2
+  if,empty|lbl_is_py_down_again
+  goto,lbl_invoice
+label,lbl_is_py_down_again
+  down,1
+  goto,lbl_is_py2
+label,lbl_end
+  end
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+  sheet,accpac
+  down,2
+label,lbl_vendor
+  set,topay|0
+  set,paid|0
+  set,bal|0
+label,lbl_vendor
+  put,vendor
+label,lbl_next_invoice
+  right,12
+  add,topay
+  right,1
+  add,paid
+  right,1
+  add,bal
+  left,14
+  down,1
+label,lbl_compare_vendor
+  cmp,vendor|lbl_next_invoice
+  save
+  if,empty|lbl_end
+  create
+  goto,lbl_vendor
+label,lbl_end
+  end
+
+
+
+
+
+
+
+

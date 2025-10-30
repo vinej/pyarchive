@@ -106,7 +106,7 @@ class Excel(BaseTask):
         while action_idx < max_action-1 :
             action_idx += 1
             cnt = cnt + 1
-            if cnt == 1000:
+            if cnt == 10000:
                 print(f'idx = {action_idx}, row = {row_idx}')
                 cnt = 0
             #if
@@ -118,29 +118,53 @@ class Excel(BaseTask):
             else:
                 cmd = action.strip().lower()
                 arg = None
+            #if
+
             if cmd == 'label':
                 # do nothing
                 continue
-            if cmd == 'goto':
+            elif cmd == 'sheet':
+                sheet = wb[arg]
+            elif cmd == 'cmp':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                #if
+                if str(current_row[arg]) == cell_value :
+                    action_idx = int(labels[sgoto])
+                #if
+            elif cmd == 'goto':
                 action_idx = int(labels[arg])
-                continue
-            if cmd == 'down':
+            elif cmd == 'down':
                 row_idx += int(arg)
-                continue
             elif cmd == 'up':
                 row_idx -= int(arg)
-                continue
             elif cmd == 'right':
                 col_idx += int(arg)                
-                continue
             elif cmd == 'left':
                 col_idx -= int(arg)
-                continue
             elif cmd == 'create':
-                current_vendor = current_row.get('vendor','')   
+                dictcol = {}
+                columns = []
+                if arg is not None:
+                    columns = arg.split('|')
+                    for c in columns:
+                        dictcol[c] = current_row.get(c,'') 
+                    #for
+                #if
                 current_row = {col: '' for col in headers}
-                current_row['vendor'] = current_vendor
-                continue
+                if arg is not None:
+                    for c in columns:
+                        current_row[c] = dictcol[c] 
+                    #for
+                #if
             elif cmd == 'put':
                 idx = -1
                 sep = ''
@@ -165,32 +189,53 @@ class Excel(BaseTask):
                 else:
                     current_row[arg] = cell_value
                 #if
-                continue
             elif cmd == 'add':
                 if arg not in headers:
                     raise ValueError(f"Column '{arg}' not in header")
+                
                 cell_value = sheet.cell(row=row_idx, column=col_idx).value
-                current_row[arg] += (','+cell_value)
+                if current_row[arg] is None or current_row[arg] == '':
+                    current_row[arg] = cell_value
+                else:
+                    try :
+                        current_row[arg] =  float(current_row[arg]) + float(cell_value)
+                    except:
+                        current_row[arg] = cell_value
+                    #try
+                #if
+            elif cmd == 'set':
+                if '|' in arg :
+                    arg,val = arg.split('|',1)  
+                else:
+                    raise ValueError(f"set command requires '|' in argument")
+                #if
+                if arg not in headers:
+                    raise ValueError(f"Column '{arg}' not in header")
+                
+                current_row[arg] = val
             elif cmd == 'save':
                 output_rows.append(current_row.copy())
-                continue
             elif cmd == 'end':
                 #output_rows.append(current_row.copy())
                 break
             elif cmd == 'if':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
                 cell_value = sheet.cell(row=row_idx, column=col_idx).value
                 if cell_value is not None:
                     cell_value = str(cell_value).strip()
                 else:
                     cell_value = ''
                 #if
-                cmp, sgoto = arg.split('|',1)
+
                 if cmp == 'empty' :
                     cmp = ''
                 #if
                 if cell_value == cmp :
                     action_idx = int(labels[sgoto])
-                continue
+                #if
             else:
                 raise ValueError(f"Unknown command: {cmd}")
         #while
