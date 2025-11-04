@@ -253,20 +253,51 @@ The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
         Available actions
             label,name          : create a label that could be used by GOTO, CMP or IF
             sheet,name          : set the current sheet name. Needed if the excel file has many tabs
-            cmp,col|label       : compare the current cell value with the current row value of a column. If equal transfer the execution of the program to the label
+
+            cmp,col|label       : compare the current cell value with the current row value of a column. If equal, transfer the execution of the program to the label
+                                        compare with strings first after with numbers
+            cmpnot,col|label       : compare the current cell value with the current row value of a column. If not equal, transfer the execution of the program to the label
+                                        compare with strings first after with numbers
+            cmplt,col|label       : compare the current cell value with the current row value of a column. If less than, transfer the execution of the program to the label
+                                        compare with numbers first after with strings
+            cmplte,col|label       : compare the current cell value with the current row value of a column. If less than euqal, transfer the execution of the program to the 
+                                        compare with numbers first after with strings
+            cmpgt,col|label       : compare the current cell value with the current row value of a column. If greater than, transfer the execution of the program to the label
+                                        compare with numbers first after with strings
+            cmpgte,col|label       : compare the current cell value with the current row value of a column. If greater than, transfer the execution of the program to the label
+                                        compare with numbers first after with strings
+
             goto,label          : transfer the execution of the program to the label
             down,number         : move the current cell down by the number
             left,number         : move the current cell left by the number
             right,number        : move the current cell right by the number
             up,number           : move the current cell up by the number
-            create,col|col...   : create a new current row for output and put the value of current columns into it
+            new,col|col...      : create a new current row for output and put the value of current columns into it
             put,col_name        : put into the  column's name the current cell value
             add,col_name        : add to the column's nmae the current cell value. cells values must be numbers
+            sub
             set,col_name|value  : set the value of the col_name
-            save                : save the current row (add it into the list for output into the CSV file)
+            commit              : commit the current row into the CSV (add it into the list for output into the CSV file)
             end                 : end the program and save the CSV file to the output file
+            
             if,value|label      : if the current celle value = value, transfer the execution of the program to the label.
                                     note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with string first after with number
+            ifnot,value|label   : if the current celle value != value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with strings first after with numbers
+            ifgt,value|label    : if the current celle value > value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with numbers first after with strings
+            ifgte,value|label   : if the current celle value >= value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with numbers first after with strings
+            iflt,value|label   : if the current celle value <> value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with numbers first after with strings
+            iflte,value|label   : if the current celle value <=> value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+                                          compare with numbers first after with strings
 
         Example of a program of actions. This program will do a sum by vendor. The Excel range must be pre-sorted
 

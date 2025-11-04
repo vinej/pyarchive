@@ -38,12 +38,12 @@ label,lbl_save_row
   put,bal
   up,1
   left,10
-  save
+  commit
 label,lbl_next
   down,1
   if,empty|lbl_next
   if,Vendor Total:|lbl_next_vendor
-  create,vendor|name|cur
+  new,vendor|name|cur
   goto,lbl_invoice
 label,lbl_next_vendor
   down,2

@@ -31,12 +31,12 @@ label,lbl_not_cr
   right,1
   put,bal
   left,10
-  save
+  commit
 label,lbl_next
   down,1
   if,empty|lbl_empty_down
   if,Vendor Total:|lbl_next_vendor
-  create
+  new
   goto,lbl_invoice
 label,lbl_empty_down
   right,1
@@ -59,7 +59,7 @@ label,lbl_another_amount
   right,1
   put,bal
   left,10
-  save
+  commit
   goto,lbl_next
 label,lbl_cr
   down,1
@@ -74,7 +74,7 @@ label,lbl_cr
   right,1
   put,paid
   left,9
-  save
+  commit
   down,1
   goto,lbl_invoice
 label,lbl_not_cr1

@@ -139,7 +139,124 @@ class Excel(BaseTask):
                 #if
                 if str(current_row[arg]) == cell_value :
                     action_idx = int(labels[sgoto])
+                else :
+                    # try it with converted to float
+                    try :
+                        if float(current_row[arg]) == float(cell_value):
+                            action_idx = int(labels[sgoto])
+                        #if
+                    except:
+                        continue
+                    #try
                 #if
+            elif cmd == 'cmpnot':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                #if
+                if str(current_row[arg]) != cell_value :
+                    action_idx = int(labels[sgoto])
+                else :
+                    # try it with converted to float
+                    try :
+                        if float(current_row[arg]) != float(cell_value):
+                            action_idx = int(labels[sgoto])
+                        #if
+                    except:
+                        continue
+                    #try
+                #if
+            elif cmd == 'cmplt':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                # try it with converted to float first
+                try :
+                    if float(current_row[arg]) < float(cell_value):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if str(current_row[arg]) < cell_value :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'cmplte':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                #if
+                try :
+                    if float(current_row[arg]) <= float(cell_value):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if str(current_row[arg]) <= cell_value :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'cmpgt':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                #if
+                try :
+                    if float(current_row[arg]) > float(cell_value):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if str(current_row[arg]) > cell_value :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'cmpgte':
+                # do nothing
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                arg, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()  
+                else:
+                    cell_value = ''  
+                #if
+                try :
+                    if float(current_row[arg]) >= float(cell_value):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if str(current_row[arg]) >= cell_value :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
             elif cmd == 'goto':
                 action_idx = int(labels[arg])
             elif cmd == 'down':
@@ -150,7 +267,7 @@ class Excel(BaseTask):
                 col_idx += int(arg)                
             elif cmd == 'left':
                 col_idx -= int(arg)
-            elif cmd == 'create':
+            elif cmd == 'new':
                 dictcol = {}
                 columns = []
                 if arg is not None:
@@ -203,6 +320,20 @@ class Excel(BaseTask):
                         current_row[arg] = cell_value
                     #try
                 #if
+            elif cmd == 'sub':
+                if arg not in headers:
+                    raise ValueError(f"Column '{arg}' not in header")
+                
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if current_row[arg] is None or current_row[arg] == '':
+                    current_row[arg] = cell_value
+                else:
+                    try :
+                        current_row[arg] =  float(current_row[arg]) - float(cell_value)
+                    except:
+                        current_row[arg] = cell_value
+                    #try
+                #if
             elif cmd == 'set':
                 if '|' in arg :
                     arg,val = arg.split('|',1)  
@@ -213,7 +344,7 @@ class Excel(BaseTask):
                     raise ValueError(f"Column '{arg}' not in header")
                 
                 current_row[arg] = val
-            elif cmd == 'save':
+            elif cmd == 'commit':
                 output_rows.append(current_row.copy())
             elif cmd == 'end':
                 #output_rows.append(current_row.copy())
@@ -235,7 +366,137 @@ class Excel(BaseTask):
                 #if
                 if cell_value == cmp :
                     action_idx = int(labels[sgoto])
+                else:
+                    try:
+                        if float(cell_value) == float(cmp):
+                            action_idx = int(labels[sgoto])
+                        #if
+                    except:
+                        continue
+                    #try
                 #if
+            elif cmd == 'ifnot':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()
+                else:
+                    cell_value = ''
+                #if
+
+                if cmp == 'empty' :
+                    cmp = ''
+                #if
+                if cell_value != cmp :
+                    action_idx = int(labels[sgoto])
+                else:
+                    try:
+                        if float(cell_value) != float(cmp):
+                            action_idx = int(labels[sgoto])
+                        #if
+                    except:
+                        continue
+                    #try
+                #if
+            elif cmd == 'iflt':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()
+                else:
+                    cell_value = ''
+                #if
+
+                if cmp == 'empty' :
+                    cmp = ''
+                #if
+                try:
+                    if float(cell_value) < float(cmp):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if cell_value < cmp :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'iflte':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()
+                else:
+                    cell_value = ''
+                #if
+
+                if cmp == 'empty' :
+                    cmp = ''
+                #if
+                try:
+                    if float(cell_value) <= float(cmp):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if cell_value <= cmp :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'ifgt':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()
+                else:
+                    cell_value = ''
+                #if
+
+                if cmp == 'empty' :
+                    cmp = ''
+                #if
+                try:
+                    if float(cell_value) > float(cmp):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if cell_value > cmp :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
+            elif cmd == 'ifgte':
+                if "|" not in arg :
+                    raise ValueError(f"if command requires '|' in argument")
+                #if
+                cmp, sgoto = arg.split('|',1)
+                cell_value = sheet.cell(row=row_idx, column=col_idx).value
+                if cell_value is not None:
+                    cell_value = str(cell_value).strip()
+                else:
+                    cell_value = ''
+                #if
+
+                if cmp == 'empty' :
+                    cmp = ''
+                #if
+                try:
+                    if float(cell_value) >= float(cmp):
+                        action_idx = int(labels[sgoto])
+                    #if
+                except:
+                    if cell_value >= cmp :
+                        action_idx = int(labels[sgoto])
+                    #if
+                #try
             else:
                 raise ValueError(f"Unknown command: {cmd}")
         #while

@@ -17,9 +17,9 @@ label,lbl_next_invoice
   down,1
 label,lbl_compare_vendor
   cmp,vendor|lbl_next_invoice
-  save
+  commit
   if,empty|lbl_end
-  create
+  new
   goto,lbl_vendor
   left,3
   down,1
