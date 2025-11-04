@@ -102,7 +102,7 @@ The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
         gzip        :   unzio gzip files  (.gz)
         sync        :   synchronized 2 sql tables
         unzip       :   unzip files  (*.zip)
-        excel       :   scan an excel file to create csv file with actions
+        excel       :   mini language to scan an excel file to create a csv file. More simple than VBScript that could do the same
 
     Array definition
         Name        :   the name of the task
@@ -239,12 +239,62 @@ The json parameter file has 4 sections : Globals, Connections, Loops and Tasks
             ],
             "Parser" : "xml"
         }
+
     Excel definition
         Name            :   the name of the task
-        Kind            :   save
-        to come
+        Kind            :   excel
+        Description     :   mini excel language to create CSV file from complex Excel file or CSV files
+        Output          :   the csv output file
+        Header          :   the csv header, comma separated of column's names. Will be used by some excel actions
+        Actions         :   the file containing the list of actions to perform one action by line
+                            each action has a command and a parameter (argument) separated by a comma (command,arg)
+                            a parameter can have more information separated by the vertical bar  |
 
-    
+        Available actions
+            label,name          : create a label that could be used by GOTO, CMP or IF
+            sheet,name          : set the current sheet name. Needed if the excel file has many tabs
+            cmp,col|label       : compare the current cell value with the current row value of a column. If equal transfer the execution of the program to the label
+            goto,label          : transfer the execution of the program to the label
+            down,number         : move the current cell down by the number
+            left,number         : move the current cell left by the number
+            right,number        : move the current cell right by the number
+            up,number           : move the current cell up by the number
+            create,col|col...   : create a new current row for output and put the value of current columns into it
+            put,col_name        : put into the  column's name the current cell value
+            add,col_name        : add to the column's nmae the current cell value. cells values must be numbers
+            set,col_name|value  : set the value of the col_name
+            save                : save the current row (add it into the list for output into the CSV file)
+            end                 : end the program and save the CSV file to the output file
+            if,value|label      : if the current celle value = value, transfer the execution of the program to the label.
+                                    note: keyword empty could be used to compare with '', "" or None    ex: if,empty|lbl_test
+
+        Example of a program of actions. This program will do a sum by vendor. The Excel range must be pre-sorted
+
+            sheet,accpac
+            down,2
+        label,lbl_vendor
+            set,topay|0
+            set,paid|0
+            set,bal|0
+        label,lbl_vendor
+            put,vendor
+        label,lbl_next_invoice
+            right,12
+            add,topay
+            right,1
+            add,paid
+            right,1
+            add,bal
+            left,14
+            down,1
+        label,lbl_compare_vendor
+            cmp,vendor|lbl_next_invoice
+            save
+            if,empty|lbl_end
+            create
+            goto,lbl_vendor
+            label,lbl_end
+            end
 
 ========
 Examples
